@@ -19,3 +19,5 @@ yarn-debug.log*
 /public/*.dump
 /public/*.sql
 /public/*.dump
+/public/*.sql
+/public/*.dump
