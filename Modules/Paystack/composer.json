@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/paystack",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Paystack\\": "",
+            "Modules\\Paystack\\App\\": "app/",
+            "Modules\\Paystack\\Database\\Factories\\": "database/factories/",
+            "Modules\\Paystack\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Paystack\\Tests\\": "tests/"
+        }
+    }
+}

@@ -1,0 +1,154 @@
+:root {
+  --primary-color: #5465ff;
+  --bg-sidebar: #00162e;
+  --font-family: "Poppins", sans-serif;
+
+  --bs-tooltip-font-size: calc(12px + (14 - 12) * ((100vw - 320px) / (1920 - 320)));
+}
+
+/* fonts */
+$font-serif: sans-serif;
+$font-Poppins: Poppins;
+
+/* colors */
+$white: #ffffff;
+$white-dark: #eeeeee;
+$grey-light: #7a8591;
+$black: #000000;
+$dark-font: #222222;
+$dark-color1: #2a3142;
+$grey: #777777;
+$light-semi-gray: #eff0f1;
+$light-gray: #e8ebf2;
+$dark-gray: #898989;
+$tab-border: #7a8591;
+$grey-shade: #7f786d;
+$border-color: #38352f;
+$border-color-2: $white-dark;
+$notify-color: #fe3d3d;
+$transparent-color: transparent;
+$input-bg: #edeff1;
+$gray-color: #e5e8ea;
+$input-grp-bg: #e9ecef;
+
+/* Theme colors variables */
+$primary-color: #5465ff;
+$secondary-color: #ff6161;
+$success-color: #27af4d;
+$info-color: #00a8ff;
+$warning-color: #ffbc58;
+$danger-color: #ff4b4b;
+$tertairy-color: #ad46ff;
+$light-color: #f7f8f9;
+$dark-color: #00162e;
+
+/* General variables */
+$theme-body-font-color: #313131;
+$border-radius: 6px;
+$bg-gray: #f6f7f7;
+$bg-gray-1: #dee2e6;
+
+/* Booking Status Variable */
+$pending-color: #fdb448;
+$accepted-color: #48bffd;
+$assigned-color: $tertairy-color;
+$on-the-way-color: #ff7456;
+$decline-color: $danger-color;
+$cancel-color: $danger-color;
+$on-going-color: $on-the-way-color;
+$on-hold-color: #ff1d53;
+$start-again-color: $on-hold-color;
+$completed-color: $success-color;
+$pending-approval-color: #5498ff;
+
+/* Header settings */
+$main-header-position: fixed;
+$main-header-top: 0;
+$main-header-z-index: 8;
+$header-size: 80px;
+
+/* main header left settings */
+$main-header-left-bg-color: $transparent-color;
+$main-header-padding: 12px;
+$main-header-z-index: 8;
+$main-header-padding: 0 25px;
+$main-header-right-toggle-color: $primary-color;
+$main-header-right-nav-icon-size: 22px;
+$main-header-right-nav-icon-color: $primary-color;
+
+/* sidebar main settings */
+$sidebar-width: 255px;
+$sidebar-position: fixed;
+$sidebar-background-color: $dark-color;
+$sidebar-shadow: 0 0 11px rgba(143, 164, 232, 0.08);
+$sidebar-z-index: 9;
+$sidebar-transition: 0.3s;
+$sidebar-radius: 0 20px 20px 0;
+$sidebar-font-color: #f7f7f7;
+
+/* Sidebar main menu setting */
+$sidebar-menu-padding: 20px;
+$sidebar-menu-list-style: none;
+$sidebar-menu-list-margin: 0;
+$sidebar-icon-margin: 14px;
+$sidebar-icon-stroke-width: 2px;
+$sidebar-font-size: 14px;
+$sidebar-letter-spacing: 0.5px;
+$sidebar-txt-transform: capitalize;
+$sidebar-font-weight: 400;
+$sidebar-padding-top-bottom: 14px;
+$sidebar-text-transform: capitalize;
+
+/* page settings */
+$page-body-padding: calc(16px + (27 - 16) * ((100vw - 320px) / (1920 - 320))) calc(4px + (15 - 4) * ((100vw - 320px) / (1920 - 320)));
+
+/* General tag settings */
+$body-bg-color: rgba(246, 246, 246, 0.6);
+$body-font-size: 14px;
+$ul-padding-left: 0px;
+$ul-padding-right: 0px;
+$all-focus-outline-color: $primary-color;
+$paragraph-font-size: 13px;
+$paragraph-line-height: 1;
+$paragraph-letter-spacing: 0.7px;
+
+/* Card settings */
+$card-padding: 20px;
+$card-border-width: 0px;
+$card-border-color: $light-color;
+$card-border-radius: 8px;
+$card-box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05);
+$card-header-font-weight: 600;
+$card-header-bg-color: $white;
+$card-header-font-size: 20px;
+$card-header-font-transform: capitalize;
+$card-header-font-color: $dark-color;
+$card-header-span-size: 12px;
+$card-header-span-color: $grey;
+$card-body-bg-color: $transparent-color;
+
+/* buttons setting */
+$btn-font-size: 14px;
+$btn-padding: calc(7px + 2 * (100vw - 320px) / 1600) calc(14px + 6 * (100vw - 320px) / 1600);
+
+/* Tables settings */
+$table-font: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+$table-font-wt: 400;
+$table-radius: 8px;
+$td-padding: calc(12px + (18 - 12) * ((100vw - 320px) / (1920 - 320))) calc(16px + (20 - 16) * ((100vw - 320px) / (1920 - 320)));
+$th-padding: calc(12px + (16 - 12) * ((100vw - 320px) / (1920 - 320))) calc(16px + (20 - 16) * ((100vw - 320px) / (1920 - 320)));
+
+/* dark layout variable */
+$dark-body: #1a1c28;
+$dark-body-font: #f1f1f1;
+$dark-top: #232323;
+$dark-border: #404040;
+$dark-link: #cbcbcb;
+$dark-bg: #262935;
+$dark-stroke: #3a3d48;
+$dark-text: #808b97;
+$white-1: #f1f3f5;
+$white-2: #eaedef;
+$white-3: #e7eaec;
+$white-4: $bg-gray-1;
+$white-5: #cfd4da;

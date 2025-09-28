@@ -1,0 +1,11 @@
+{
+    "name": "Firebase",
+    "alias": "firebase",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Firebase\\Providers\\FirebaseServiceProvider"
+    ],
+    "files": []
+}

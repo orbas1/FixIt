@@ -1,0 +1,25 @@
+USER IMPORT FORMAT - INSTRUCTIONS
+
+Required Columns:
+-----------------
+1. name       => Full name of the user (Max: 255 characters)
+2. email      => Must be a valid email address (Must be unique, not soft-deleted)
+3. phone      => Phone number (Unique, Min: 5 characters, Max: 255)
+4. password   => Minimum 8 characters (will be hashed)
+5. role       => Role ID (e.g., 1 for Admin, 2 for Customer, etc.)
+6. code       => Optional user code (e.g., country code or reference code)
+7. status     => Status of the user (e.g., active/inactive) [REQUIRED]
+8. image      => URL to the user's profile image (Optional, must be png, jpg, or jpeg)
+
+Validation Rules:
+-----------------
+- All required fields must be filled.
+- Email and phone must be unique.
+- Image URLs must point to valid image types (png, jpg, jpeg).
+- Role must exist in the roles table.
+- Password must be at least 8 characters.
+
+Notes:
+------
+- Make sure the 'role' value corresponds to an existing role ID in the system.
+- Soft-deleted users are ignored in uniqueness validation.

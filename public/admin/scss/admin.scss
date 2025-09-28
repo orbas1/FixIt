@@ -1,0 +1,44 @@
+/* utils */
+@import "utils/variables";
+@import "utils/mixins";
+
+/* base */
+@import "base/typography";
+@import "base/reset";
+
+/* components */
+@import "components/accordion";
+@import "components/button";
+@import "components/badge";
+@import "components/calendar";
+@import "components/card";
+@import "components/ck_editor";
+@import "components/content_box";
+@import "components/dropdown";
+@import "components/form";
+@import "components/footer";
+@import "components/header";
+@import "components/login";
+@import "components/loader";
+@import "components/datatable";
+@import "components/map";
+@import "components/modal";
+@import "components/pagination";
+@import "components/role";
+@import "components/sidebar";
+@import "components/select2";
+@import "components/tabs";
+@import "components/tables";
+@import "components/tree";
+@import "components/vertical_tab";
+@import "components/service";
+@import 'themes/admin_style';
+
+/* pages */
+@import "pages/inner-page";
+@import "pages/pos";
+
+/* themes */
+@import "themes/responsive";
+@import "themes/rtl";
+@import "themes/dark";

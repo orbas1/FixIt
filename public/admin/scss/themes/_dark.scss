@@ -1,0 +1,2849 @@
+/**=====================
+    Dark css start
+==========================**/
+.dark {
+    background-color: $dark-body;
+    color: $dark-body-font;
+
+    h1 {
+        color: $white;
+    }
+
+    h2 {
+        color: $white-1;
+    }
+
+    h3 {
+        color: $white-2;
+    }
+
+    h4 {
+        color: $white-3;
+    }
+
+    h5 {
+        color: $white-4;
+    }
+
+    h6 {
+        color: $white-5;
+    }
+
+    p {
+        color: $white-5;
+    }
+
+    li {
+        color: $white-5;
+    }
+
+    hr {
+        border-color: #404040;
+    }
+
+    .text-muted {
+        color: #ddd !important;
+    }
+
+    .mobile-logo {
+        .dark-logo {
+            display: none;
+        }
+
+        .light-logo {
+            display: flex;
+        }
+    }
+
+    .form-control,
+    .select2-selection {
+        color: $dark-body-font;
+        background-color: $dark-body !important;
+        transition: all 0.3s ease;
+        border: 1px solid $dark-border !important;
+
+        &::-webkit-inner-spin-button {
+            filter: invert(1);
+        }
+    }
+
+    .form-control:disabled {
+        background-color: rgba($dark-body, 0.45) !important;
+    }
+
+    .service-list-item {
+        .details {
+            h5 {
+                a {
+                    color: #ddd;
+                }
+            }
+
+            .info {
+                color: #f1f1f1ad;
+            }
+        }
+    }
+
+    .pagination {
+        .page-item {
+            .page-link {
+                color: rgba($white, 0.8);
+
+                &[aria-label="« Previous"],
+                &[aria-label="Next »"] {
+                    color: rgba($white, 0.8) !important;
+                }
+            }
+
+            &[aria-label="Next »"],
+            &[aria-label="« Previous"] {
+                .page-link {
+                    color: rgba($white, 0.8) !important;
+                }
+            }
+        }
+
+        nav {
+            .flex-sm-fill {
+                p {
+                    &.small {
+                        color: #cfd4da !important;
+
+                        span {
+                            color: #f1f1f1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .user-details-dashboard {
+        .button-container {
+            .shortcode-button {
+                color: #808b97;
+
+                &.active {
+                    color: var(--primary-color);
+                }
+            }
+        }
+    }
+
+    .widget-card-2 {
+        h5 {
+            color: #ddd;
+        }
+
+        h3 {
+            color: $white;
+        }
+    }
+
+    .map-box {
+        .order-last {
+            border-color: #3a3d48;
+        }
+    }
+
+    .user-details-box {
+        .customer-name {
+            h3 {
+                color: $white;
+            }
+        }
+
+        .list-unstyled {
+            li {
+                +li {
+                    border-color: rgba(241, 241, 241, 0.3);
+                }
+
+                p {
+                    color: $white;
+
+                    span,
+                    .iconsax {
+                        color: #808b97;
+                        --Iconsax-Color: #808b97;
+                    }
+                }
+            }
+        }
+
+        .left-image,
+        .right-image {
+            filter: brightness(0.3);
+        }
+    }
+
+    .booking-report-table {
+        .table-responsive {
+            &:has(.report-loader-wrapper[style="display: block;"]) {
+                .table {
+                    tbody {
+                        &::before {
+                            background-color: rgba(38, 41, 53, 0.69);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    select {
+        color: $dark-body-font;
+        background-color: $dark-body;
+        border: $dark-border;
+        background-image: url(../images/select-white-arrow.svg) !important;
+        background-repeat: no-repeat;
+        background-position: center right 16px;
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
+    option {
+        background-color: $dark-body;
+        transition: all 0.3s ease;
+    }
+
+    .dark-light-mode {
+        .light-mode {
+            display: none !important;
+        }
+
+        .dark-mode {
+            display: flex !important;
+        }
+    }
+
+    .page-main-header {
+        .main-header-right {
+            .nav-right {
+                ul {
+                    li {
+                        color: $dark-body-font;
+
+                        h6 {
+                            color: $dark-body-font;
+                        }
+
+                        .profile-box {
+                            color: $dark-body-font;
+
+                            .initial-letter {
+                                color: $dark-body-font;
+                                background-color: rgba($dark-body-font, 0.08);
+                            }
+                        }
+
+                        border-right-color: rgba($white, 0.3);
+                    }
+                }
+
+                .profile-dropdown {
+                    li {
+                        a {
+                            svg {
+                                color: $dark-body-font;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            .mobile-sidebar {
+                i {
+                    --Iconsax-Color: #F1F1F1;
+                }
+            }
+
+            .search-input-btn {
+                color: #f1f1f1;
+
+                span {
+                    color: #f1f1f1c4;
+                    background-color: rgba(241, 241, 241, 0.08);
+                }
+            }
+        }
+    }
+
+    .jstree-loader {
+        background-color: $dark-bg;
+    }
+
+    .tab2-card {
+        .nav-tabs {
+            .nav-link {
+                color: $dark-link;
+                border-color: #404040;
+            }
+        }
+
+        &.card {
+            .form-control {
+                color: $dark-body-font;
+                background-color: $dark-body;
+                transition: all 0.3s ease;
+                border: 1px solid $dark-border;
+
+                &.flatpickr-input {
+                    background-color: $dark-body !important;
+                }
+            }
+        }
+    }
+
+    .initial-letter {
+        color: $dark-body-font;
+        background-color: rgba($dark-body-font, 0.08);
+    }
+
+    .quick-dropdown-box {
+        .onhover-show-div {
+            .dropdown-list {
+                a {
+                    border-color: #404040;
+
+                    .svg-box {
+                        color: #f1f1f1;
+                        background-color: rgba(241, 241, 241, 0.08);
+                        border-color: #404040;
+
+                        i {
+                            color: #f1f1f1;
+                        }
+                    }
+                }
+
+                li {
+                    &:nth-child(odd) {
+                        border-color: #404040;
+                    }
+                }
+            }
+        }
+    }
+
+    .payment-card {
+        .card-header {
+            .header-img {
+                img {
+                    background-color: #1a1c28;
+                    border-color: #404040;
+                }
+            }
+        }
+    }
+
+    #revenue-chart {
+        .apexcharts-canvas {
+            .apexcharts-text {
+                tspan {
+                    fill: #cfd4da;
+                }
+            }
+        }
+    }
+
+    #service-pie-chart {
+        .apexcharts-series {
+            path {
+                stroke: #1f212c;
+            }
+        }
+
+        .apexcharts-pie {
+            g {
+                circle {
+                    fill: #363944;
+                }
+            }
+
+            .apexcharts-datalabels-group {
+                .apexcharts-text {
+                    fill: #cfd4da;
+                }
+            }
+        }
+    }
+
+    .booking-details-box {
+        background-color: #262935;
+        box-shadow: 0px 4px 40px 0px rgba(119, 119, 119, 0.09);
+
+        &:hover {
+            box-shadow: 4px 5px 18px rgba(119, 119, 119, 0.12);
+        }
+
+        .booking-title {
+            h4 {
+                color: #f1f1f1;
+            }
+        }
+
+        .booking-details-list {
+            li {
+                color: #cfd4da;
+
+                +li {
+                    border-color: #404040;
+                }
+
+                span {
+                    color: #ddd;
+
+                    &.badge {
+                        color: $white;
+                    }
+                }
+            }
+        }
+
+        .booking-profile-box {
+            .profile-image-box {
+                &::before {
+                    background-color: rgba(241, 241, 241, 0.08);
+                }
+
+                h4 {
+                    color: #f1f1f1;
+                }
+
+                h5 {
+                    color: #ddd;
+
+                    span {
+                        color: #ddd;
+                    }
+                }
+            }
+
+            .profile-content-box {
+                border-color: #404040;
+
+                li {
+                    color: #cfd4da;
+
+                    span {
+                        color: #ddd;
+                    }
+                }
+            }
+        }
+    }
+
+    .table-responsive {
+        .provider-reviews-table {
+            tbody {
+                tr {
+                    td {
+
+                        .rating h6,
+                        p {
+                            color: #f1f1f1;
+                        }
+                    }
+                }
+            }
+        }
+
+        .consumer-reviews-table {
+            tbody {
+                tr {
+                    td {
+
+                        .rating h6,
+                        .reviews {
+                            color: #f1f1f1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .page-wrapper {
+        .page-main-header {
+            background-color: $dark-bg;
+        }
+
+        .page-body-wrapper {
+            background-color: $dark-body;
+
+            .page-body {
+                background-color: $dark-body;
+            }
+
+            .page-sidebar {
+                background-color: $dark-body;
+
+                .sidebar-menu {
+                    li {
+                        .sidebar-submenu {
+                            &::before {
+                                background-color: #64666e;
+                            }
+
+                            li {
+                                a {
+                                    &::before {
+                                        border-color: #64666e;
+                                    }
+
+                                    &.active {
+                                        &:after {
+                                            border-color: $white;
+                                            background-color: $white;
+                                        }
+                                    }
+                                }
+                            }
+
+                            >li {
+                                >a {
+                                    &:after {
+                                        background-color: #585a60;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    >li {
+                        >a {
+                            &.active {
+                                &::after {
+                                    background: linear-gradient(120deg, rgba(241, 241, 241, 0.08) 0%, rgba($white-dark, 0.012) 100%);
+                                }
+
+                                &::before {
+                                    background-color: rgba(241, 241, 241, 0.08);
+                                }
+                            }
+                        }
+                    }
+
+                    .fix-bottom-box {
+                        background-color: #1a1c28;
+
+                        .fix-bottom-list {
+                            li {
+                                .theme-option-box {
+                                    .dark-light-mode {
+                                        svg {
+                                            &.dark-mode {
+                                                background-color: transparent;
+                                                fill: transparent;
+                                            }
+
+                                            &.light-mode {
+                                                fill: $white;
+                                                background-color: var(--primary-color);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .fix-bottom-box {
+                    background-color: #1a1c28;
+
+                    .fix-bottom-list {
+                        li {
+                            .theme-option-box {
+                                .dark-light-mode {
+                                    svg {
+                                        &.dark-mode {
+                                            background-color: transparent;
+                                            fill: transparent;
+                                        }
+
+                                        &.light-mode {
+                                            fill: $white;
+                                            background-color: var(--primary-color);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .sidebar-button {
+                    color: #f1f1f1;
+                    background-color: rgb(88 90 96);
+                }
+            }
+
+            footer {
+                background-color: $dark-bg;
+
+                p {
+                    color: $white-5;
+                }
+            }
+        }
+
+        .main-header-right {
+            .nav-right {
+                ul {
+                    li {
+                        a {
+                            color: $dark-body-font;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .widget-card,
+    .booking-widget-card {
+        h3 {
+            color: $dark-body-font;
+        }
+    }
+
+    .booking-status-main {
+        .booking-status-card {
+            .booking-widget-card {
+                border-color: $dark-stroke;
+            }
+
+            &:nth-child(4) {
+                .booking-widget-card {
+                    border-bottom-color: rgba($white, 0.5);
+
+                    .booking-widget-icon {
+                        background-color: rgba($white, 0.08);
+
+                        svg {
+                            color: rgba($dark-body-font, 0.8);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .select2-container--open {
+
+        .select2-dropdown--above,
+        .select2-dropdown--below {
+            .select2-results {
+                .select2-results__options {
+                    .select2-results__option {
+                        color: rgba(241, 243, 245, 0.7);
+                    }
+                }
+            }
+        }
+    }
+
+    .booking-detail-2 {
+        .provider-details-box {
+            .list-unstyled {
+                li {
+                    p {
+                        color: #ddd;
+
+                        span {
+                            color: rgba(241, 243, 245, 0.7);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .card {
+        background-color: $dark-bg;
+
+        .card-header {
+            background-color: $dark-bg;
+            border-color: $dark-stroke;
+
+            h5 {
+                color: $dark-body-font;
+            }
+
+            span {
+                color: rgba(241, 243, 245, 0.7);
+            }
+
+            .status-div {
+                label {
+                    color: $dark-body-font;
+                }
+            }
+        }
+
+        .card-body {
+            background-color: $dark-bg;
+        }
+
+        .card-footer {
+            .btn {
+                &.cancel {
+                    background-color: rgba(88, 90, 96, 0.361);
+                    color: #cfd4da;
+
+                    &:hover {
+                        background-color: rgba(88, 90, 96, 0.45);
+                    }
+                }
+            }
+        }
+
+        &.time-slot-card {
+            .time-slot-main-box {
+                background-color: #1a1c28;
+                border-color: #404040;
+
+                .time-slot-box {
+                    background-color: #262935;
+                    border-color: #404040;
+                    color: #cfd4da;
+                }
+            }
+
+            +.time-slot-card {
+                border-color: #404040;
+            }
+
+            .position-relative {
+                label {
+                    color: #cfd4da;
+                }
+            }
+        }
+    }
+
+    .tab2-card {
+        .nav-tabs {
+            background-color: $dark-body;
+        }
+    }
+
+    .upload-image-box {
+        .upload-input {
+            background-color: #1a1c28;
+            border-color: #404040;
+
+            i {
+                color: #f1f1f1;
+            }
+        }
+    }
+
+    .payment-keys {
+        li {
+            span {
+                color: #f1f1f1;
+            }
+        }
+    }
+
+    .vertical-tabs {
+        .nav-pills {
+            .nav-link {
+                background-color: $dark-body;
+                color: rgba($dark-body-font, 0.7);
+                border-color: #404040;
+
+                &.active {
+                    background-color: var(--primary-color);
+                    color: $dark-body-font;
+                    border-color: transparent;
+                }
+            }
+        }
+
+        .tab-content {
+            border-color: #404040;
+
+            .button-box {
+                border-color: #404040;
+            }
+        }
+    }
+
+    .email-template-box {
+        .email-btn {
+            border-color: #404040;
+        }
+
+        .card-body {
+            background-color: #1a1c28;
+
+            .card-title {
+                border-color: #404040;
+                color: #ddd;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                color: $white;
+            }
+
+            ul {
+                ~p {
+                    color: #ddd;
+                }
+            }
+        }
+    }
+
+    .booking-detail,
+    .wallet-detail {
+        ul {
+            li {
+                p {
+                    color: rgba($dark-body-font, 0.5);
+                }
+            }
+        }
+
+        .send-req {
+            button {
+                color: $dark-body-font;
+            }
+        }
+    }
+
+    .booking-detail,
+    .wallet-detail {
+        ul {
+            li {
+                span {
+                    color: $dark-body-font;
+                }
+            }
+        }
+    }
+
+    .map-instruction {
+        .map-detail {
+            color: #ddd;
+        }
+    }
+
+    .theme-accordion {
+        .accordion-item {
+            border-color: #404040;
+
+            .accordion-header {
+                .accordion-button {
+                    color: rgba(241, 241, 241, 0.7);
+                    background-color: #1a1c28;
+
+                    &:not(.collapsed) {
+                        background-color: #1a1c28;
+
+                        &::after {
+                            color: #ddd;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .notification-mobile-box {
+        background-color: #1a1c28;
+        border-color: #404040;
+    }
+
+    .shortcode-dropdown-box {
+        .dropdown-btn {
+            background-color: #1a1c28;
+            border-color: #404040;
+            color: #ddd;
+        }
+
+        .dropdown-menu {
+            background-color: #1a1c28;
+            border-color: #404040;
+
+            li {
+                span {
+                    color: #ddd;
+
+                    &:hover {
+                        color: #ddd !important;
+                        background-color: rgba(247, 247, 247, 0.15);
+                    }
+                }
+            }
+        }
+    }
+
+    .auth-page {
+        .auth-card {
+            background-color: #262935;
+
+            .welcome {
+                h3 {
+                    color: #ddd;
+                }
+            }
+        }
+    }
+
+    .service-list-box,
+    .contentbox {
+        background-color: #262935;
+
+        .contentbox-title {
+            h3 {
+                color: $white;
+            }
+        }
+    }
+
+    .horizontal-tab {
+        .nav-item {
+            .nav-link {
+                color: #ddd;
+            }
+        }
+    }
+
+    .note {
+        color: #ddd;
+        border-color: #404040;
+    }
+
+    .location-list {
+        li {
+            .user-name {
+                h5 {
+                    color: #ddd;
+                }
+            }
+        }
+    }
+
+    .booking-table {
+        tbody {
+            tr {
+                td {
+                    .form-controll {
+                        color: #ddd;
+                    }
+                }
+            }
+        }
+    }
+
+    .user-info {
+        .user-name {
+            color: #ddd;
+        }
+
+        .user-email {
+            a {
+                color: #f1f1f1ad;
+            }
+        }
+    }
+
+    .booking-tabs {
+        &.tab2-card {
+            .nav-tabs {
+                background-color: #262935;
+            }
+        }
+    }
+
+    .language-switcher {
+        background-color: #1a1c28;
+        border-color: #404040;
+        color: #f1f1f1;
+
+        &.active,
+        &:hover {
+            background-color: transparent;
+            color: var(--primary-color);
+            border-color: transparent;
+        }
+    }
+
+    .table-responsive {
+        .dataTables_wrapper {
+
+            .dataTables_info,
+            .dataTables_length,
+            .dataTables_filter {
+                color: $dark-body-font;
+            }
+
+            .dataTables_length,
+            .dataTables_filter {
+
+                select,
+                input {
+                    background-color: $dark-body;
+                    border-color: $dark-border;
+                    color: $dark-body-font;
+                }
+            }
+
+            .dataTables_paginate {
+
+                .paginate_button,
+                .ellipsis {
+                    color: rgba($dark-body-font, 0.8) !important;
+
+                    &:hover {
+                        color: rgba($dark-body-font, 0.8) !important;
+                    }
+                }
+            }
+
+            .dataTables_processing {
+                background: rgba(38, 41, 53, 0.5);
+                color: $dark-body-font;
+            }
+        }
+
+        table {
+            tbody {
+                tr {
+                    &:nth-child(even) {
+                        background-color: $dark-body;
+
+                        td {
+                            background: $transparent-color;
+                        }
+                    }
+
+                    &:nth-child(odd) {
+                        background-color: $dark-bg;
+                        background-image: unset;
+
+                        td {
+                            background: $transparent-color;
+                        }
+                    }
+
+                    td {
+                        color: #ddd;
+
+                        .show-icon {
+                            background-color: rgba($dark-stroke, 0.6);
+
+                            img {
+                                filter: invert(0.6);
+                            }
+
+                            svg {
+                                color: rgba($dark-body-font, 0.6);
+                            }
+                        }
+
+                        .edit-icon,
+                        .show-icon,
+                        .lock-icon {
+                            background-color: rgba($dark-stroke, 0.6);
+
+                            img {
+                                filter: invert(0.6);
+                            }
+
+                            svg {
+                                color: #ddd;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.dataTable {
+                &.no-footer {
+                    border-bottom-color: $dark-stroke;
+                }
+            }
+        }
+
+        &.provider-box {
+            tbody {
+                tr {
+                    td {
+                        .location {
+                            svg {
+                                color: $dark-text;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &.booking-box {
+            tbody {
+                tr {
+                    td {
+                        .booking-data {
+                            h6 {
+                                color: $dark-text;
+                            }
+
+                            h5 {
+                                color: #ddd;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &.review-box {
+            border-color: $dark-stroke;
+
+            .table {
+                tbody {
+                    tr {
+                        background-color: $dark-bg !important;
+                        border-color: $dark-stroke;
+                    }
+                }
+            }
+        }
+
+        &.modal-table {
+            table {
+                tbody {
+                    tr {
+                        td {
+
+                            &:first-child {
+                                color: $dark-body-font;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    div {
+        &.dataTables_wrapper {
+            &:has(.dataTables_processing[style="display: block;"]) {
+                &::before {
+                    background-color: rgba(38, 41, 53, 0.69);
+                }
+            }
+        }
+    }
+
+    .blog-box {
+        .blog-content {
+            a {
+                color: $dark-body-font;
+            }
+
+            h6 {
+                color: $dark-text;
+            }
+        }
+    }
+
+    .onhover-show-div {
+        background-color: $dark-body;
+    }
+
+    .notification-dropdown {
+        li {
+
+            &:first-child,
+            &:last-child {
+                border-color: $dark-stroke;
+
+                h4 {
+                    border-color: $dark-stroke;
+                }
+            }
+        }
+    }
+
+    .search-list {
+        background-color: $dark-body;
+        transition: all 0.3s ease;
+        border: 1px solid $dark-border;
+
+        li {
+            a {
+                color: $dark-body-font;
+            }
+
+            .sidebar-header {
+                &:hover {
+                    background-color: rgba($dark-body-font, 0.04);
+                }
+            }
+
+            &:hover {
+                background-color: rgba($dark-body-font, 0.04);
+            }
+        }
+    }
+
+    .dataTables_wrapper {
+        .dataTables_processing {
+            &[style="display: block;"] {
+                ~.dataTable tbody {
+                    &::after {
+                        color: #cfd4da;
+                    }
+
+                    &::before {
+                        background-color: rgba(26, 28, 40, 0.8);
+                    }
+                }
+            }
+        }
+    }
+
+    .checkbox_animated,
+    .form-check .form-check-input {
+        &:after {
+            background-color: $dark-bg;
+            border-color: rgba($light-gray, 0.2);
+        }
+    }
+
+    .dashboard-short-form {
+        .custom-date-range {
+            background-color: #262935;
+        }
+    }
+
+    .welcome-box {
+        background-color: #262935;
+
+        &:hover {
+            box-shadow: 4px 5px 18px rgba(119, 119, 119, 0.12);
+        }
+
+        .user-image {
+            .check-icon {
+                outline: 3px solid #262935;
+            }
+
+            .initial-letter {
+                background-color: #1a1c28;
+            }
+        }
+
+        .user-details {
+            h3 {
+                color: #f1f1f1;
+            }
+
+            p {
+                color: #cfd4da;
+            }
+        }
+    }
+
+    .service-pie-chart {
+        .apexcharts-legend-text {
+            color: #f1f1f1 !important;
+        }
+    }
+
+    .welcome-box {
+        .person-info-list {
+            li {
+                color: #f1f1f1c4;
+
+                span {
+                    color: #cfd4da;
+                }
+            }
+        }
+    }
+
+    .booking-details-box {
+        .table-responsive {
+            table {
+                thead {
+                    tr {
+                        th {
+                            color: #f1f1f1;
+                            background-color: rgba(241, 241, 241, 0.08);
+                        }
+                    }
+                }
+
+                tbody {
+                    tr {
+                        td {
+                            border-color: #404040;
+
+                            .rating {
+                                h6 {
+                                    color: #f1f1f1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .booking-title {
+            h5 {
+                color: #ddddddbd;
+            }
+
+            .invoice-btn {
+                color: #cfd4da;
+            }
+        }
+
+        .booking-address-list {
+            li {
+                color: #f1f1f1;
+
+                &:nth-child(even) {
+                    background-color: #1a1c28;
+                }
+
+                span {
+                    color: #ddddddcf;
+                }
+            }
+        }
+
+        .booking-number-list {
+            li {
+                &::before {
+                    border-color: #404040;
+                }
+
+                .booking-number-box {
+                    .right-box {
+                        h6 {
+                            color: #f1f1f1;
+                            background-color: rgba(241, 241, 241, 0.08);
+                        }
+                    }
+
+                    .left-box {
+                        .name {
+                            color: #f1f1f1;
+                        }
+
+                        .content {
+                            color: #ddddddad;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .main-dashboard-box,
+    .provider-dashboard-main-box {
+        .dashboard-card {
+            background-color: #262935;
+            box-shadow: 0px 4px 40px 0px rgba(119, 119, 119, 0.09);
+
+            &:hover {
+                box-shadow: 4px 5px 18px rgba(119, 119, 119, 0.12);
+            }
+
+            .dashboard-box-list-2 {
+                &.row {
+                    >.col {
+                        +.col {
+                            border-color: #404040;
+                        }
+                    }
+                }
+
+                .dashboard-box {
+                    h5 {
+                        color: #dee2e6;
+                    }
+
+                    h3 {
+                        color: #eaedef;
+                    }
+                }
+            }
+        }
+
+        .table-responsive {
+            table {
+                thead {
+                    tr {
+                        th {
+                            color: #f1f1f1;
+                            background-color: rgba(241, 241, 241, 0.08);
+                        }
+                    }
+                }
+
+                tbody {
+                    tr {
+                        td {
+                            border-color: #404040;
+
+                            .rating {
+                                h6 {
+                                    color: #cfd4da;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .total-box {
+            background-color: #262935;
+            box-shadow: 0px 4px 40px 0px rgba(119, 119, 119, 0.09);
+
+            &:hover {
+                box-shadow: 4px 5px 18px rgba(119, 119, 119, 0.12);
+            }
+
+            .progress-box {
+                .progress {
+                    background-color: rgba(241, 241, 241, 0.08);
+
+                    &.progress-info {
+                        background-color: #324650;
+                    }
+                }
+            }
+        }
+
+        #booking-status-chart {
+
+            .apexcharts-legend.apx-legend-position-bottom.apexcharts-align-center,
+            #booking-status-chart .apexcharts-legend.apx-legend-position-top.apexcharts-align-center {
+                column-rule: 1px outset #404040;
+            }
+
+            .apexcharts-slices {
+                .apexcharts-series {
+                    path {
+                        stroke: rgb(28 30 42);
+                    }
+                }
+            }
+
+            .apexcharts-legend-text {
+                color: #cfd4da !important;
+            }
+
+            .apexcharts-datalabels-group {
+                .apexcharts-datalabel-value {
+                    color: #cfd4da !important;
+                    fill: #cfd4da !important;
+                }
+            }
+        }
+    }
+
+    .service-details-box {
+        .service-details {
+            h5 {
+                color: #f1f1f1;
+            }
+        }
+    }
+
+    .quick-dropdown-box {
+        .onhover-show-div {
+            .dropdown-list {
+                a {
+                    color: #cfd4da !important;
+                }
+            }
+        }
+    }
+
+    .main-dashboard-box {
+        .total-box {
+            background-color: #262935;
+            box-shadow: 0px 4px 40px 0px rgba(119, 119, 119, 0.09);
+
+            &:hover {
+                box-shadow: 4px 5px 18px rgba(119, 119, 119, 0.12);
+            }
+
+            .progress-box {
+                .progress {
+                    background-color: rgba(241, 241, 241, 0.08);
+
+                    &.progress-info {
+                        background-color: #324650;
+                    }
+                }
+            }
+        }
+
+        .short-box {
+            background-color: #262935;
+
+            &:hover {
+                box-shadow: 4px 5px 18px rgba(119, 119, 119, 0.21);
+            }
+
+            .form-label {
+                color: #f1f1f1;
+            }
+
+            .form-select {
+                background-color: #1a1c28;
+                border: 1px solid #404040;
+            }
+        }
+    }
+
+    .form-check {
+        &.form-radio {
+            .form-check-input {
+                &:after {
+                    border-color: $dark-border;
+                }
+            }
+        }
+    }
+
+    ::file-selector-button {
+        background-color: $dark-body;
+        color: $dark-body-font;
+    }
+
+    .form-control {
+        &:hover {
+            &:not(:disabled) {
+                &:not([readonly]) {
+                    &::file-selector-button {
+                        background-color: $dark-bg;
+                        color: $dark-body-font;
+                    }
+                }
+            }
+        }
+    }
+
+    .jstree-main-box {
+        .jstree-loader {
+
+            &[style="display: block;"],
+            &[style*=opacity],
+            &[style*=""] {
+                background-color: #1a1c28;
+            }
+        }
+    }
+
+    .form-group {
+        label {
+            color: $dark-body-font;
+        }
+    }
+
+    .select2-dropdown {
+        background-color: $dark-body;
+    }
+
+    .select2-search__field {
+        color: $dark-body-font !important;
+    }
+
+    .select2-results__option--highlighted {
+        background-color: rgba($white, 0.04) !important;
+        color: $dark-body-font !important;
+    }
+
+    .phone-detail {
+        .select2-selection {
+            &.select2-selection--single {
+                background-color: rgba($dark-stroke, 0.6) !important;
+                border-color: rgba($dark-stroke, 0.6) !important;
+
+                .select2-selection__rendered {
+                    color: $dark-body-font !important;
+
+                }
+            }
+        }
+    }
+
+    .modal {
+        .modal-content {
+            background-color: #262935;
+
+            .modal-header {
+                border-bottom-color: $dark-stroke;
+            }
+
+            .modal-body {
+                .modal-title {
+                    color: $dark-body-font;
+                }
+
+                p {
+                    color: $dark-text;
+                }
+
+                .main-img {
+                    background-color: $dark-bg;
+
+                    img {
+                        filter: invert(0.5);
+                    }
+
+                    svg {
+                        color: rgba($dark-body-font, 0.85);
+                    }
+                }
+
+                &.export-data {
+                    .main-img {
+                        background-color: #1a1c28;
+                    }
+
+                    .form-group {
+                        .form-select {
+                            color: #f1f1f1;
+                            background-color: #1a1c28;
+                            transition: all 0.3s ease;
+                            border: 1px solid #404040;
+                        }
+                    }
+                }
+            }
+
+            .modal-footer {
+                border-color: #404040;
+
+                .cancel {
+                    background-color: rgba(88, 90, 96, 0.361);
+                    color: #cfd4da;
+                    border: 1px solid transparent;
+                }
+            }
+        }
+
+        &.wallet-modal {
+            .modal-content {
+                .modal-body {
+                    .wallet {
+                        h5 {
+                            color: rgba($dark-body-font, 0.8);
+                        }
+
+                        h3 {
+                            color: $dark-body-font;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.search-modal {
+            .modal-content {
+                .modal-body {
+                    .search-suggestion-box {
+                        .search-input-box {
+                            .search-list {
+                                li {
+                                    background-color: #262935;
+                                    border-color: #404040;
+
+                                    a {
+                                        color: #cfd4da;
+                                    }
+
+                                    &:hover {
+                                        background-color: #2a2d38;
+
+                                        a {
+                                            color: #f1f1f1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &.import-modal {
+            .modal-content {
+                .modal-body {
+                    .form-group {
+                        .drop-area {
+                            border-color: #404040;
+                        }
+                    }
+
+                    &.upload-report {
+                        .upload-title {
+                            .d-flex {
+                                .import-icon {
+                                    background-color: #1a1c28;
+                                    color: #f1f1f1;
+                                    border-color: #404040;
+
+                                    svg {
+                                        stroke: #f1f1f1;
+                                    }
+                                }
+
+                                .upload-file {
+                                    label {
+                                        color: #f1f1f1a1;
+                                    }
+                                }
+                            }
+                        }
+
+                        .import-tab {
+                            .horizontal-tab {
+                                li {
+                                    .nav-link {
+                                        background-color: #1a1c28;
+                                        color: #f1f1f1;
+                                        border-color: #404040;
+
+                                        &.active {
+                                            background-color: transparent;
+                                            color: var(--primary-color);
+                                            border-color: var(--primary-color);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .file-upload-box {
+                            .drop-area {
+                                span {
+                                    color: #f1f1f1a1;
+                                }
+
+                                .btn {
+                                    border-color: #404040;
+                                    color: #f1f1f1;
+                                    background-color: #585a6066;
+                                }
+                            }
+                        }
+
+                        .common-content {
+                            color: #cfd4da;
+                        }
+
+                        ~.modal-footer {
+                            .btn {
+                                border-color: #404040;
+                                color: #f1f1f1;
+                                background-color: #585a6066;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &.address-modal {
+            .modal-body {
+                .category-list {
+                    .form-check {
+                        padding: 0;
+
+                        .form-check-input {
+                            margin: 0;
+                        }
+
+                        .form-check-label {
+                            border-color: #404040;
+                            color: #f1f1f1;
+
+                            .check-box {
+                                &::after {
+                                    background: transparent;
+                                    border-color: #404040;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .modal-footer {
+                .btn {
+                    &.btn-light.text-dark {
+                        background-color: #1a1c28;
+                        border: 1px solid #404040;
+                        color: #fff !important;
+                    }
+                }
+            }
+        }
+
+        &.booking-modal {
+            .modal-body {
+                .service-title {
+                    h4 {
+                        color: #f1f1f1;
+                    }
+                }
+
+                .consumer-addresses-list {
+                    &:has(.items-no-found) {
+                        background-color: #1a1c28;
+                        border: 1px solid #404040;
+
+                        p {
+                            color: #cfd4da;
+                        }
+                    }
+                }
+
+                .add-person-box {
+                    h4 {
+                        color: #f1f1f1;
+                    }
+
+                    .select-servicemen {
+                        background-color: #1a1c28;
+                        border-color: #404040;
+
+                        p {
+                            color: #cfd4da;
+                        }
+                    }
+
+                    .select-servicemen {
+                        .plus-minus {
+                            background-color: #262935;
+
+                            .feather {
+                                color: #cfd4da;
+                            }
+
+                            .feather-plus {
+                                background-color: var(--primary-color);
+                                color: #ffffff;
+                            }
+
+                            input {
+                                color: #cfd4da;
+                                background-color: #262935;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .select2 {
+        &.select2-container {
+            .select2-selection {
+
+                &.select2-selection--single,
+                &.select2-selection--multiple {
+                    .select2-selection__rendered {
+                        color: $dark-body-font !important;
+
+                        .selected-item {
+                            .detail {
+                                h6 {
+                                    color: #ddd;
+                                }
+                            }
+                        }
+                    }
+
+                    .select2-selection__arrow {
+                        b {
+                            border-color: rgba($white, 0.6);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .selected-item {
+        .detail {
+            p {
+                color: rgba(221, 221, 221, 0.6);
+            }
+
+            h6 {
+                color: #ddd;
+            }
+        }
+    }
+
+    .wallet-main {
+        .wallet-detail-content {
+            .amount {
+                .error-div {
+                    .input-group {
+                        .input-group-text {
+                            color: #ddd;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .more-option-dropdown {
+        .dropdown-toggle {
+            color: #f1f1f1;
+            background-color: rgba(58, 61, 72, 0.6);
+            border-color: #3a3d48;
+        }
+
+        .dropdown-menu {
+            background-color: #323540;
+            border-color: #3a3d48;
+
+            li {
+                +li {
+                    border-color: #3a3d48;
+                }
+
+                button {
+                    color: #f1f1f1ad;
+
+                    .feather {
+                        color: #f1f1f1ad;
+                    }
+
+                    &:hover,
+                    &:active,
+                    &.active {
+                        background-color: #1a1c28;
+
+                        .feather {
+                            color: var(--primary-color);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .serviceman-location {
+        >.position-relative {
+            .service-list-box {
+                background-color: #262935;
+
+                .inside {
+                    .search-box-group {
+                        border-color: #404040;
+                    }
+
+                    .location-close-btn {
+                        color: #cfd4da;
+                        background-color: rgba(241, 241, 241, 0.08);
+                    }
+
+                    .location-list {
+                        li {
+                            +li {
+                                border-color: #404040;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .user-details-dashboard {
+        .button-container {
+            border-color: rgba(247, 247, 247, 0.15);
+        }
+    }
+
+    .help-text {
+        color: #f1f1f1ad;
+    }
+
+    .select2-container--open {
+
+        .select2-dropdown--below,
+        .select2-dropdown--above {
+            border-color: $dark-stroke;
+            box-shadow: 0 1px 8px -1px rgba(120, 122, 128, 0.502);
+
+            .select2-search--dropdown {
+                .select2-search__field {
+                    border-color: $dark-stroke;
+                    background-color: #262935;
+                }
+            }
+        }
+    }
+
+    .permission {
+        .permission-section {
+            ul {
+                background-color: $dark-bg;
+                border-bottom-color: $dark-stroke;
+
+                li {
+                    label {
+                        color: $white-5;
+                    }
+                }
+            }
+        }
+    }
+
+    .switch {
+        .switch-state {
+            background-color: $dark-stroke;
+        }
+    }
+
+    .color-picker {
+        color: $dark-body-font;
+    }
+
+    .image-list {
+        .image-list-item {
+            border: 1px solid $dark-stroke;
+            background-color: #1a1c28;
+        }
+    }
+
+    .service-address {
+        background-color: $dark-body;
+
+        .service-add-detail {
+            .address {
+                .address-detail {
+                    h4 {
+                        color: $dark-body-font;
+                    }
+                }
+            }
+        }
+    }
+
+    .edit-icon {
+        background-color: rgba($dark-stroke, 0.6);
+
+
+        svg {
+            color: rgba($dark-body-font, 0.6);
+        }
+    }
+
+    .add-more {
+        .add-more-div {
+            background-color: rgba($dark-stroke, 0.6);
+
+            svg {
+                color: $white;
+            }
+        }
+    }
+
+    .form-group {
+        .input-group {
+            .input-group-text {
+                background-color: rgba($dark-stroke, 0.6) !important;
+                border-color: rgba($dark-stroke, 0.6) !important;
+                color: $dark-body-font;
+            }
+        }
+    }
+
+    .wallet-detail-content {
+        .wallet-amount {
+            h5 {
+                color: rgba($dark-body-font, 0.5);
+            }
+
+            .form-group {
+                .form-control[readonly] {
+                    color: $dark-body-font;
+                }
+            }
+
+        }
+    }
+
+    .footer,
+    .profile-btn {
+        .cancel {
+            background-color: $dark-stroke;
+            border-color: $dark-stroke;
+            color: $dark-body-font;
+        }
+    }
+
+    .data-not-found {
+        span {
+            color: $dark-body-font;
+        }
+    }
+
+    .faq-container {
+        .faqs-structure {
+            +.faqs-structure {
+                border-top-color: $dark-stroke;
+            }
+        }
+    }
+
+    .jstree-default {
+
+        .jstree-icon,
+        .jstree-node,
+        .jstree-search {
+            color: rgba($dark-body-font, 0.9);
+        }
+
+        .jstree-icon {
+            &.jstree-ocl {
+                filter: invert(1);
+            }
+        }
+    }
+
+    .actions {
+
+        .edit-icon,
+        .edit-child {
+            background-color: unset;
+            filter: invert(0.7);
+        }
+    }
+
+    .flatpickr-calendar {
+        background-color: $dark-body;
+        box-shadow: none;
+        border: 1px solid $dark-stroke;
+
+        .flatpickr-months {
+            .flatpickr-current-month {
+                input {
+                    &.cur-year {
+                        color: #f1f1f1;
+                    }
+                }
+            }
+
+            .flatpickr-prev-month,
+            .flatpickr-next-month {
+                background-color: $dark-bg;
+                color: $dark-body-font;
+                fill: $dark-body-font;
+            }
+
+            .flatpickr-monthDropdown-months,
+            .numInputWrapper {
+                background-color: $dark-bg;
+                color: $dark-body-font;
+            }
+        }
+
+        .flatpickr-innerContainer {
+            background-color: $dark-bg;
+            color: $dark-body-font;
+        }
+
+        .flatpickr-day {
+            color: rgba(247, 247, 247, 0.9);
+
+            &:hover {
+                color: var(--primary-color);
+            }
+
+            &.inRange {
+                border: none;
+                color: rgba($dark-body-font, 0.5);
+            }
+
+            &.selected,
+            &.startRange,
+            &.endRange {
+                border-color: transparent;
+
+                &:hover {
+                    color: $white;
+                }
+            }
+
+            &.prevMonthDay,
+            &.flatpickr-disabled,
+            &.flatpickr-disabled:hover,
+            &.nextMonthDay,
+            &.notAllowed,
+            &.notAllowed.prevMonthDay,
+            &.notAllowed.nextMonthDay {
+                color: #898989;
+            }
+        }
+    }
+
+    .booking-details-tabs {
+        .nav-tabs {
+            background-color: #262935;
+        }
+    }
+
+    .booking-status {
+        .booking-log {
+            .date-content {
+                background-color: rgba(26, 28, 40, 0.72);
+            }
+        }
+    }
+
+    .service-main {
+
+        .booking-detail,
+        .wallet-detail {
+            ul {
+                li {
+                    p {
+                        color: rgba(241, 243, 245, 0.7);
+                    }
+                }
+            }
+        }
+
+        .booking-details-box {
+            background-color: #1a1c28;
+            background-blend-mode: color-burn;
+
+            .left-box {
+                .details-box {
+                    a {
+                        color: #f1f1f1;
+                    }
+
+                    .rate {
+                        small {
+                            color: rgba(241, 243, 245, 0.7);
+                        }
+                    }
+                }
+            }
+
+            .right-box {
+                border-color: #3a3d48;
+
+                .list-unstyled {
+                    li {
+                        p {
+                            color: rgba(241, 243, 245, 0.7);
+
+                            span {
+                                color: #f1f1f1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .provider-details-box {
+            .list-unstyled {
+                li {
+                    p {
+                        color: #f1f1f1;
+                    }
+
+                    span {
+                        color: rgba(241, 243, 245, 0.7);
+                    }
+
+                    +li {
+                        border-color: #3a3d48;
+                    }
+                }
+            }
+        }
+
+        .booking-detail-2 {
+            .provider-details-box {
+                background-color: transparent;
+            }
+
+            .card-header {
+                .btn-popup {
+                    .link-btn {
+                        color: #ddd;
+                    }
+                }
+            }
+        }
+
+        .service-right-box {
+            background-color: #262935;
+
+            .service-title {
+                border-color: #3a3d48;
+            }
+
+            .form-control {
+                &:disabled {
+                    background-color: #1a1c28 !important;
+                }
+            }
+        }
+    }
+
+    .notify-content {
+        .notifi-head {
+            h5 {
+                color: #f1f1f1;
+            }
+        }
+
+        .notifi-footer {
+            h5 {
+                color: #dee2e6;
+            }
+        }
+
+        .notify-data {
+            background-color: #262935;
+
+            .message {
+                span {
+                    color: #dee2e6;
+                }
+            }
+        }
+    }
+
+    .flatpickr-day {
+
+        &.inRange,
+        &.prevMonthDay.inRange,
+        &.nextMonthDay.inRange,
+        &.today.inRange,
+        &.prevMonthDay.today.inRange,
+        &.nextMonthDay.today.inRange,
+        &:hover,
+        &.prevMonthDay:hover,
+        &.nextMonthDay:hover,
+        &:focus,
+        &.prevMonthDay:focus,
+        &.nextMonthDay:focus {
+            border-color: rgba(247, 247, 247, 0.15);
+        }
+    }
+
+    .notification-setting {
+        li {
+            background-color: $dark-body;
+
+            h4 {
+                color: rgba($dark-body-font, 0.8);
+            }
+
+            h5 {
+                color: rgba($white-5, 0.5);
+
+                i {
+                    --Iconsax-Color: #cfd4da80;
+                }
+            }
+
+            &.unread {
+                background-color: rgba($primary-color, 0.1);
+            }
+        }
+    }
+
+    .status-chechbox {
+        .switch-letter {
+            border-color: #3a3d48;
+        }
+    }
+
+    .advertisement-list-box {
+        background-color: #1a1c28;
+        border-color: #3a3d48;
+
+        .total-box {
+            border-color: #3a3d48;
+        }
+
+        .advertisement-list {
+            li {
+                color: #cfd4da;
+
+                +li {
+                    border-color: #3a3d48;
+                }
+            }
+        }
+    }
+
+    .wallet-deduction-message {
+        color: #ff6161;
+    }
+
+    .status-chechbox {
+        .switch-letter {
+            span {
+                &.box-1 {
+                    background-color: rgb(26 28 40);
+                }
+
+                &.box-2 {
+                    color: #cfd4da;
+                }
+            }
+        }
+    }
+
+    .status-chechbox {
+        .form-check-input {
+            &:checked {
+                ~span {
+                    &.box-1 {
+                        background-color: #262935;
+                        color: #cfd4da;
+                    }
+
+                    &.box-2 {
+                        background-color: #1a1c28;
+                    }
+                }
+            }
+        }
+    }
+
+    .tox {
+        &.tox-tinymce {
+            background-color: $dark-body;
+            color: $dark-body-font;
+            border-color: $dark-border !important;
+
+            .tox-statusbar {
+                background-color: $dark-body !important;
+                border-top-color: $dark-border !important;
+
+                .tox-statusbar__path-item {
+                    color: $dark-body-font;
+
+                }
+            }
+
+            .tox-toolbar-overlord {
+                .tox-toolbar {
+                    border-bottom: 1px solid $dark-border !important;
+                }
+            }
+
+            .tox-sidebar-wrap {
+                filter: invert(0.85);
+            }
+        }
+
+        .tox-collection--list,
+        .tox-collection--toolbar {
+            .tox-collection__item--active {
+                background-color: $dark-bg;
+                color: $dark-body-font;
+
+                &:not(.tox-collection__item--state-disabled) {
+                    color: $dark-body-font;
+                }
+            }
+        }
+
+        .tox-menu {
+            background-color: $dark-body;
+            color: $dark-body-font;
+            border-color: $dark-border !important;
+
+            .tox-collection__item {
+                color: $dark-body-font;
+
+                &.tox-collection__item--enabled {
+                    background-color: $dark-bg;
+                }
+            }
+        }
+
+        .tox-tbtn {
+            color: rgba($dark-body-font, 0.6);
+
+            svg {
+                color: rgba($dark-body-font, 0.6);
+                fill: rgba($dark-body-font, 0.6);
+            }
+
+            &:hover,
+            &:focus {
+                background: $dark-bg;
+                color: $dark-body-font !important;
+
+                svg {
+                    color: rgba($dark-body-font, 0.6);
+                    fill: rgba($dark-body-font, 0.6) !important;
+                }
+            }
+        }
+
+        .tox-tbtn--enabled {
+            &:hover {
+                background: rgba($dark-stroke, 0.2);
+            }
+        }
+
+        .tox-tbtn--enabled,
+        .tox-tbtn--enabled:hover {
+            background: rgba($dark-stroke, 0.2);
+        }
+
+        &:not([dir=rtl]) {
+            .tox-toolbar__group {
+                &:not(:last-of-type) {
+                    border-right: 1px solid $dark-border !important;
+                }
+            }
+        }
+    }
+
+    .apexcharts-text {
+        tspan {
+            fill: $dark-body-font;
+        }
+    }
+
+    .apexcharts-svg {
+        .apexcharts-inner {
+            .apexcharts-xaxis-tick {
+                stroke: rgba($light-gray, 0.3);
+            }
+
+            .apexcharts-grid {
+                .apexcharts-gridlines-horizontal {
+                    .apexcharts-gridline {
+                        stroke: #404040;
+                    }
+                }
+            }
+
+            .apexcharts-grid-borders {
+                .apexcharts-gridline {
+                    stroke: rgba($light-gray, 0.3);
+                }
+            }
+        }
+    }
+
+    .image-list-item {
+        color: $dark-body-font;
+    }
+
+    #toast-container {
+        .toast {
+            background-color: $dark-body !important;
+        }
+    }
+
+    .modal {
+        .modal-header {
+            h5 {
+                color: $dark-body-font;
+            }
+        }
+    }
+
+    .screen-box {
+        .box {
+            label {
+                p {
+                    color: #cfd4da;
+                }
+
+                .screen-img {
+                    background-color: #1a1c28;
+                    color: rgba(241, 241, 241, 0.7);
+                    border-color: #404040;
+                }
+            }
+        }
+    }
+
+    .horizontal-tab {
+        .nav-item {
+            .nav-link {
+                background-color: #1a1c28;
+                border-color: #404040;
+
+                &.active {
+                    background-color: var(--primary-color);
+                    border: 1px solid var(--primary-color);
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+
+    .vertical-tabs {
+        .nav-pills {
+            border-color: #404040;
+        }
+    }
+
+    .start-time,
+    .end-time {
+        input[type="time"i] {
+            &::-webkit-calendar-picker-indicator {
+                filter: invert(1);
+            }
+        }
+    }
+
+    .instruction-box {
+        .list-box {
+            h5 {
+                color: rgba($dark-body-font, 0.9);
+            }
+
+            ul {
+                li {
+                    color: rgba($dark-body-font, 0.9);
+                }
+            }
+        }
+    }
+
+    .main-dashboard-box {
+        .total-box {
+            .top-box {
+                h4 {
+                    color: #f1f1f1;
+                }
+            }
+        }
+    }
+
+    .servicemen-box {
+        background-color: #262935;
+        border: 1px solid #404040;
+
+        .service-bottom-box {
+            border-color: #404040;
+
+            .footer-detail {
+                p {
+                    color: #f1f1f1;
+                }
+            }
+        }
+
+        .servicemen-details {
+            h3 {
+                del {
+                    color: #cfd4da;
+                }
+            }
+
+            .service-list {
+                li {
+                    &.time {
+                        color: #27af4d;
+                    }
+
+                    +li {
+                        border-color: #404040;
+                    }
+                }
+            }
+
+            h4 {
+                font-weight: 500;
+                color: #cfd4da;
+            }
+        }
+    }
+
+    .pos-section {
+        .contentbox {
+            .contentbox-title {
+                .contentbox-subtitle {
+                    .slider-buttons {
+
+                        .swiper-button-next,
+                        .swiper-button-prev {
+                            background-color: #262935;
+                            border-color: #404040;
+                            color: #cfd4da;
+                        }
+                    }
+                }
+            }
+        }
+
+        .pos-category-box {
+            .nav-link {
+                &.active {
+                    .category-box {
+                        .category-image {
+                            background-color: rgba(241, 241, 241, 0.8);
+                        }
+                    }
+                }
+            }
+        }
+
+        .category-box {
+            background-color: #262935;
+            border: 1px solid #404040;
+
+            .category-image {
+                background-color: rgba(241, 241, 241, 0.08);
+            }
+
+            h5 {
+                color: #cfd4da;
+            }
+        }
+
+        .details-servicemen-box {
+            .discount-box {
+                border-color: #404040;
+
+                .position-relative {
+                    .feather {
+                        color: #cfd4da;
+                    }
+                }
+            }
+
+            .radio-buttons-box {
+                .form-check-label {
+                    color: #cfd4da;
+                }
+
+                .form-check {
+                    background-color: #1a1c28;
+                    border: 1px solid #404040;
+                }
+            }
+
+            .servicemen-list-box {
+                background-color: #1a1c28;
+                border: 1px solid #404040;
+            }
+
+            .payment-list {
+                background-color: #1a1c28;
+                border: 1px solid #404040;
+
+                li {
+                    color: #cfd4da;
+
+                    &:last-child {
+                        border-color: #404040;
+                        color: #ffffff;
+                    }
+                }
+            }
+
+            .payment-summery {
+                border-color: #404040;
+            }
+        }
+    }
+
+    .screen-title {
+        border-color: #3a3d48;
+    }
+
+    @media (max-width: 575.98px) {
+        .page-main-header {
+            .main-header-right {
+                .nav-right {
+                    >ul {
+                        .quick-onhover-dropdown {
+                            .quick-dropdown-box {
+                                .new-btn {
+                                    i {
+                                        color: #f1f1f1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 1199.98px) and (min-width: 991.98px) {
+        .page-main-header {
+            .main-header-right {
+                .nav-right {
+                    >ul {
+                        .quick-onhover-dropdown {
+                            .quick-dropdown-box {
+                                .new-btn {
+                                    i {
+                                        color: #f1f1f1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .page-main-header {
+            .main-header-right {
+                .nav-right {
+                    >ul {
+                        .quick-onhover-dropdown {
+                            .quick-dropdown-box {
+                                .new-btn {
+                                    i {
+                                        color: #f1f1f1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

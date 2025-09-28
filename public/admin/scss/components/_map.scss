@@ -1,0 +1,264 @@
+/*=====================
+ map css start
+==========================*/
+#map-container {
+    height: 100%;
+    width: 100%;
+}
+
+#coords {
+    margin-top: 10px;
+}
+
+.map-instruction {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    h4 {
+        font-weight: 600;
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        font-size: 14px;
+        color: $dark-color;
+        margin: 0;
+        font-weight: 500;
+    }
+
+    .map-detail {
+        display: flex;
+        align-items: start;
+        gap: 8px;
+        color: rgba($dark-color, 0.75);
+
+        svg {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            margin-top: 3px;
+        }
+    }
+
+    .notify-img {
+        height: 100%;
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+.ui-menu {
+    &.ui-widget {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba($primary-color, 0.10);
+        border-radius: $border-radius;
+        box-shadow: 0 6px 10px 4px rgba($dark-color, 0.10);
+        max-height: 333px;
+        overflow: auto;
+        padding: 0;
+        background-color: $white;
+        width: 39% !important;
+        z-index: 13;
+
+        .ui-menu-item {
+            font-size: 15px;
+            white-space: wrap;
+            word-break: break-all;
+            border-bottom: 1px solid rgba($primary-color, 0.10);
+            position: relative;
+            cursor: pointer;
+            padding: calc(8px + (12 - 8) * ((100vw - 320px) / (1920 - 320))) calc(12px + (15 - 12) * ((100vw - 320px) / (1920 - 320)));
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: rgba($dark-color, 0.04);
+        }
+
+        &::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            height: 4px;
+        }
+    }
+}
+
+.location-list {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    overflow: auto;
+    gap: 16px;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: calc(8px + (12 - 8) * ((100vw - 320px) / (1920 - 320)));
+        flex-wrap: wrap;
+
+        +li {
+            padding-top: 16px;
+            border-top: 1px solid rgba($gray-color, 0.5);
+        }
+
+        .user-image {
+            width: calc(44px + (56 - 44) * ((100vw - 320px) / (1920 - 320)));
+            height: calc(44px + (56 - 44) * ((100vw - 320px) / (1920 - 320)));
+            border-radius: 4px;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .user-name {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            width: calc(100% - calc(8px + (12 - 8) * ((100vw - 320px) / (1920 - 320))) - calc(44px + (56 - 44) * ((100vw - 320px) / (1920 - 320))));
+
+            h5 {
+                font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+                line-height: 1.4;
+                font-weight: 500;
+                color: rgba($dark-color, 0.8);
+            }
+
+            .rate-box {
+                margin-top: 2px;
+                font-size: 14px;
+                font-weight: 500;
+
+                @media (max-width: 420px) {
+                    font-weight: 400;
+                }
+
+                i {
+                    color: $warning-color;
+                }
+            }
+        }
+
+        .btn {
+            padding: calc(6px + (8 - 6) * ((100vw - 320px) / (1920 - 320))) calc(11px + (15 - 11) * ((100vw - 320px) / (1920 - 320)));
+            letter-spacing: 0.5px;
+        }
+
+        .user-box {
+            gap: 10px;
+
+            img {
+                position: relative;
+            }
+
+            span[class*=driver-] {
+                min-width: 6px;
+                width: 6px;
+                height: 6px;
+                border-radius: 100%;
+                z-index: 1;
+                animation: round 1.3s ease-in-out infinite;
+                font-size: 0;
+                display: inline-block;
+                position: absolute;
+                top: 5px;
+                right: 3px;
+            }
+
+            .rate-box {
+                padding: 2px 4px;
+            }
+        }
+    }
+}
+
+.gm-style {
+    .gm-style-iw {
+        border: none;
+        padding: 15px !important;
+    }
+
+    .gm-ui-hover-effect {
+        width: 28px !important;
+        height: 28px !important;
+        position: absolute !important;
+        top: 8px;
+        right: 10px;
+        background-color: var(--primary-color) !important;
+        opacity: 1;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+
+        >span {
+            margin: 0 !important;
+            background-color: #ffff;
+            width: 18px !important;
+            height: 18px !important;
+        }
+    }
+
+    img {
+        max-width: none;
+        width: 72px;
+        aspect-ratio: auto 72 / 72;
+        height: 72px;
+        border-radius: 9px !important;
+    }
+
+    p {
+        font-weight: 500;
+
+        strong {
+            color: $theme-body-font-color;
+            font-weight: 500;
+        }
+
+        +p {
+            margin-top: 6px !important;
+        }
+    }
+
+    h3 {
+        margin: 5px 0 8px !important;
+        font-size: 17px !important;
+        font-weight: 500 !important;
+        color: var(--primary-color) !important;
+    }
+
+    .gm-style-iw-ch {
+        &:empty {
+            display: none;
+        }
+    }
+
+    .gm-style-iw-d {
+        padding: 0;
+        max-height: unset !important;
+        overflow: unset !important;
+
+        >div {
+            >div {
+                font-family: var(--font-family) !important;
+            }
+        }
+    }
+}
+
+/*=====================
+ map css end
+==========================*/

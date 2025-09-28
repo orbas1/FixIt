@@ -1,0 +1,176 @@
+/**=====================
+      Dropdown CSS Start
+==========================**/
+
+.dropdown {
+    .dropdown-menu {
+        margin: 0;
+        padding: 10px;
+        width: max-content !important;
+        min-width: 13rem;
+        left: 0;
+
+        .form-check-label {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+
+        .form-check {
+            margin-bottom: 4px;
+        }
+    }
+}
+
+.btn-group {
+    .dropdown-menu {
+        top: 55px;
+        margin: 0;
+        padding: 10px;
+        width: max-content !important;
+        min-width: 13rem;
+
+        #table-filter-status-wrapper,
+        #coupons-filter-status-wrapper {
+            padding: 0 !important;
+
+            label {
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .form-select {
+                width: 100%;
+
+                option:hover {
+                    background-color: yellow;
+                }
+            }
+        }
+
+        button {
+            &.dropdown-item {
+                font-size: 14px;
+                font-weight: 500;
+                background-color: var(--primary-color);
+                border-radius: 8px;
+                padding: 12px;
+                color: $white;
+                margin-top: 10px;
+
+                &:hover {
+                    color: var(--primary-color) !important;
+                    background-color: rgba($primary-color, 0.10);
+                }
+            }
+        }
+
+        .dropdown-divider {
+            display: none;
+        }
+    }
+}
+
+.dropdown-item {
+    &:hover {
+        color: var(--primary-color) !important;
+        background-color: rgba($primary-color, 0.10);
+    }
+}
+
+.select-service-dropdown {
+    .select2.select2-container {
+        .select2-selection {
+
+            &.select2-selection--multiple,
+            &.select2-selection--single {
+                height: auto;
+
+                .selected-item {
+                    img {
+                        width: 35px;
+                        height: 35px;
+                        object-fit: cover;
+                    }
+
+                    .detail {
+                        h6 {
+                            font-weight: 400;
+                            color: #333;
+                        }
+                    }
+                }
+            }
+
+            &.select2-selection--single {
+                .select2-selection__rendered {
+                    padding: 8px 11px;
+                }
+            }
+        }
+    }
+}
+
+.shortcode-dropdown-box {
+    .dropdown-btn {
+        border-radius: 6px;
+        line-height: 1.3;
+        padding: 12px 19px;
+        font-size: 15px;
+        font-weight: 400;
+        position: relative;
+        background-color: rgba(237, 239, 241, 0.4);
+        border: 1px solid $white-dark;
+        display: flex;
+        color: rgba($dark-color, 0.8);
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: unset;
+
+        &:active {
+            background-color: rgba(237, 239, 241, 0.4);
+            border: 1px solid $input-bg;
+        }
+
+        &::after {
+            content: "\ea4e";
+            @include icon;
+            margin-left: calc(13px + (17 - 13) * ((100vw - 320px) / (1920 - 320)));
+            font-size: calc(18px + (20 - 18) * ((100vw - 320px) / (1920 - 320)));
+            line-height: 1;
+        }
+    }
+
+    .dropdown-menu {
+        padding: 0;
+        width: 100% !important;
+        background-color: $white;
+        min-width: unset;
+        border: 1px solid $white-dark;
+
+        li {
+            display: block;
+
+            +li {
+                border-top: 1px solid $white-dark;
+            }
+
+            .dropdown-item {
+                font-size: 15px;
+                cursor: pointer;
+                line-height: 1.3;
+                padding: 10px 15px;
+                color: #777777;
+
+                &:hover {
+                    color: #00162E !important;
+                    background-color: #f8f9f9;
+                }
+            }
+        }
+    }
+}
+
+/**=====================
+      Dropdown CSS End
+==========================**/

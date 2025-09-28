@@ -1,0 +1,23 @@
+{
+    "Coupon": true,
+    "Subscription": true,
+    "Stripe": true,
+    "PayPal": true,
+    "RazorPay": true,
+    "Mollie": true,
+    "PhonePe": true,
+    "BKash": true,
+    "Flutterwave": true,
+    "Instamojo": true,
+    "Paystack": true,
+    "Sslcommerz": true,
+    "Ccavenue": true,
+    "Twilio": true,
+    "Msg91": false,
+    "Midtrans": true,
+    "Iyzico": true,
+    "Firebase": true,
+    "Alphanet": true,
+    "TwoFactor": true,
+    "Nexmo": true
+}

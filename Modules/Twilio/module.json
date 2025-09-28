@@ -1,0 +1,11 @@
+{
+    "name": "Twilio",
+    "alias": "twilio",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Twilio\\Providers\\TwilioServiceProvider"
+    ],
+    "files": []
+}

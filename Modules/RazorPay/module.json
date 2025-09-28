@@ -1,0 +1,11 @@
+{
+    "name": "RazorPay",
+    "alias": "razorpay",
+    "description": "Integrate RazorPay to offer efficient and reliable payment solutions tailored for Indian businesses.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\RazorPay\\Providers\\RazorPayServiceProvider"
+    ],
+    "files": []
+}

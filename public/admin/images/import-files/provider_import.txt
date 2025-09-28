@@ -1,0 +1,40 @@
+PROVIDER IMPORT FORMAT - INSTRUCTIONS
+
+Required Columns:
+-----------------
+1. name                 => Full name of the provider (string, max 255)
+2. email                => Email of the provider (must be unique, valid email format)
+3. code                 => Country/area code or any custom code (required)
+4. phone                => Phone number (6 to 15 digits, must be unique)
+5. password             => Minimum 8 characters
+6. status               => Status of the user (e.g., 1 for active, 0 for inactive)
+7. type                 => Type of user (e.g., individual or 'company' from UserTypeEnum)
+8. role_id              => Role ID to be assigned to the provider (must exist in `roles` table)
+
+Optional Columns:
+-----------------
+- company_name          => Required only if type is 'company'
+- company_email         => Required only if type is 'company'
+- company_code          => Required only if type is 'company'
+- company_phone         => Required only if type is 'company'
+- company_description   => Optional
+- experience_interval   => Optional (e.g., years, months)
+- experience_duration   => Optional (numeric)
+- description           => Optional description of the provider
+- image                 => Optional image URL to be stored in 'image' media collection
+- zones                 => Optional, comma-separated list of zone IDs (e.g., "1,2,3")
+
+Validation Rules:
+-----------------
+- Email must be unique and properly formatted.
+- Phone must be 6 to 15 digits, and unique.
+- Password must be at least 8 characters.
+- Status is required (commonly 0 or 1).
+- Role ID must exist in `roles` table.
+- If `type` is 'company', the associated company fields must be present.
+
+Notes:
+------
+- Zones will be attached if `zones` field is provided and not null.
+- An image will be downloaded from the URL and saved in the media collection 'image'.
+- If any validation fails, an exception will be thrown.

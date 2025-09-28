@@ -1,0 +1,112 @@
+/**=====================
+     Vertical tab css start
+==========================**/
+.vertical-tabs {
+  position: sticky;
+  top: 110px;
+
+  .nav-pills {
+    border: none;
+    position: sticky !important;
+    top: 87px;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    border-right: 1px dashed $white-dark;
+    padding-right: 24px;
+    margin-right: 24px;
+
+    .nav-link {
+      margin: 0 0 6px;
+      position: relative;
+      border-radius: 6px;
+      width: 100%;
+      text-align: left;
+      padding: 12px 25px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      color: rgba($dark-color, 0.6);
+      font-size: calc(14px + 0.00125 * (100vw - 320px));
+      font-weight: 500;
+      text-transform: capitalize;
+      background-color: rgba($input-bg, 0.4);
+      border: 1px solid $input-bg;
+
+      &:focus-visible {
+        box-shadow: unset;
+      }
+
+      &+.nav-link {
+        margin-top: 8px;
+      }
+
+      &.active {
+        background-color: var(--primary-color);
+        color: $white;
+
+        i {
+          --Iconsax-Color: #ffff;
+        }
+      }
+
+      svg {
+        width: 18px !important;
+        height: 18px !important;
+      }
+
+      i {
+        font-size: 18px;
+      }
+    }
+  }
+
+  .tab-content {
+    height: 100%;
+
+    .tab-content {
+      border-left: none;
+      padding-left: 0;
+    }
+
+    .button-box {
+      border-top: 1px dashed $input-bg;
+      margin-top: calc(20px + (25 - 20) * ((100vw - 320px) / (1920 - 320)));
+    }
+
+    .btn {
+      display: flex;
+      margin-left: auto;
+      margin-top: calc(20px + (24 - 20) * ((100vw - 320px) / (1920 - 320)));
+      padding: calc(9px + (11 - 9) * ((100vw - 320px) / (1920 - 320))) calc(24px + (29 - 24) * ((100vw - 320px) / (1920 - 320)));
+      font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+    }
+  }
+
+  .col-md-2 {
+    width: 25%;
+  }
+
+  .col-md-10 {
+    width: 75%;
+  }
+
+  .submit-form {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: max-content;
+    margin-left: auto;
+    margin-top: 24px;
+
+    input {
+      background: $transparent-color;
+      border: none;
+      box-shadow: none;
+      color: $white;
+    }
+  }
+}
+
+/**=====================
+     Vertical tab css end
+==========================**/

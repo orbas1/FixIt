@@ -1,0 +1,88 @@
+/*=====================
+ Badge css start
+==========================*/
+
+$background-name: primary,
+secondary,
+success,
+danger,
+info,
+light,
+dark,
+warning;
+$background-color: var(--primary-color),
+$secondary-color,
+$success-color,
+$danger-color,
+$info-color,
+$light-color,
+$dark-color,
+$warning-color;
+
+@each $var in $background-name {
+  $i: index($background-name, $var);
+
+  .badge-version-#{$var} {
+    background-color: rgba(nth($background-color, $i), 0.1) !important;
+    color: nth($background-color, $i);
+    border: 1px solid nth($background-color, $i);
+  }
+}
+
+.badge-version-primary {
+  background-color: transparent !important;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-color);
+    opacity: 0.1;
+    z-index: -1;
+  }
+}
+
+/* Badges */
+[class*="badge-version-"] {
+  &.badge {
+    border-radius: 0.3125rem;
+    padding: 5px 10px;
+    display: inline-block;
+    width: max-content;
+    height: auto;
+    font-weight: bold;
+    letter-spacing: 0.75px;
+    line-height: 1.1;
+  }
+}
+
+.badge-booking {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 5px 14px;
+  color: var(--primary-color);
+  position: relative;
+  line-height: 1.3;
+  border-radius: 5px;
+  display: inline-flex;
+  z-index: 0;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-color);
+    opacity: 0.1;
+    z-index: -1;
+  }
+}

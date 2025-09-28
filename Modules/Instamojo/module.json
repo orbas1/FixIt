@@ -1,0 +1,11 @@
+{
+    "name": "Instamojo",
+    "alias": "instamojo",
+    "description": "Streamlines payment collection through Instamojo, a popular gateway for Indian merchants and startups.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Instamojo\\Providers\\InstamojoServiceProvider"
+    ],
+    "files": []
+}

@@ -1,0 +1,58 @@
+/**=====================
+     Category scss
+==========================**/
+
+.category-img {
+     border-radius: calc(6px + (10 - 6) * ((100vw - 320px) / (1920 - 320)));
+     position: relative;
+     overflow: hidden;
+
+     &:hover {
+          &::after {
+               animation: shine 1.15s;
+          }
+     }
+}
+
+.category-span {
+     text-align: center;
+     -webkit-line-clamp: 1;
+     -webkit-box-orient: vertical;
+     display: -webkit-box;
+     overflow: hidden;
+     margin-top: calc(8px + (16 - 8) * ((100vw - 320px) / (1920 - 320)));
+     font-size: calc(14px + (20 - 14) * ((100vw - 320px) / (1920 - 320)));
+     font-weight: 500;
+     color: $title-color;
+}
+
+.accordion {
+     .accordion-item {
+          border: none;
+
+          .accordion-button {
+               background-color: transparent;
+               width: max-content;
+               padding: 0;
+               border: none;
+               box-shadow: none;
+
+               &:not(.collapsed) {
+                    &:after {
+                         background-image: url(@/svg/arrow.svg);
+                    }
+               }
+          }
+     }
+
+     &.categories-accordion {
+          .accordion-item {
+               .accordion-header {
+                    .title {
+                         width: 100%;
+                         cursor: pointer;
+                    }
+               }
+          }
+     }
+}

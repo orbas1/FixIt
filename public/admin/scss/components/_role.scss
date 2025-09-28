@@ -1,0 +1,121 @@
+/**=====================
+Role CSS Start
+==========================**/
+
+.roles {
+    .card-header {
+        padding: 0 0 20px;
+
+        @media (max-width: 575px) {
+            padding: 0 0 15px !important;
+        }
+    }
+
+    .card-body {
+        padding: 20px 0 0;
+
+        @media (max-width: 575px) {
+            padding: 15px 0 0 !important;
+        }
+    }
+}
+
+.permission {
+    position: relative;
+
+    .card-header {
+        border: none;
+        display: block;
+        padding: 20px 0;
+
+        @media (max-width: 575px) {
+            padding: 15px 0 !important;
+        }
+
+        h5 {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        span {
+            color: $notify-color;
+        }
+    }
+
+    .permission-section {
+        display: flex;
+        flex-direction: column;
+
+        ul {
+            background-color: $white;
+            padding: calc(12px + (18 - 12) * ((100vw - 320px) / (1920 - 320))) 12px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            overflow: auto;
+            border-bottom: 1px solid rgba($input-bg, 0.8);
+            margin-bottom: 0 !important;
+
+            @media (max-width: 1399px) {
+                column-count: 1
+            }
+        }
+
+        li {
+            width: 14%;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            text-transform: capitalize;
+
+            &:first-child {
+                font-weight: 600;
+                width: 20%;
+            }
+
+            @media (max-width: 768px) {
+                &:first-child {
+                    width: max-content;
+                }
+
+                width: max-content;
+            }
+
+            h5 {
+                font-weight: 500;
+                margin-bottom: 0;
+                text-transform: capitalize;
+                width: calc(150px + (200 - 150) * ((100vw - 320px) / (1920 - 320)));
+                font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+            }
+
+            .form-group {
+                width: calc(100% - 180px);
+            }
+
+            label {
+                text-transform: capitalize;
+                font-size: 14px;
+                cursor: pointer;
+                margin-bottom: 0;
+                white-space: nowrap;
+                color: rgba($dark-color, 0.80);
+                width: 100%;
+
+                +label {
+                    margin-left: 26px;
+                }
+            }
+        }
+    }
+
+    .footer {
+        padding: 20px 0 0;
+        margin-top: 0;
+    }
+}
+
+/**=====================
+Role CSS End
+==========================**/

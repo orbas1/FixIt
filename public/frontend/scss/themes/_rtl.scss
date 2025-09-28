@@ -1,0 +1,35 @@
+/*=====================
+    RTL CSS start
+==========================*/
+[dir="rtl"] {
+    direction: rtl;
+
+
+    /* general css */
+    .input-group> :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+        margin-right: calc(var(--bs-border-width)* -1);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: inherit;
+        border-bottom-left-radius: inherit;
+        margin-left: inherit;
+    }
+
+    .feature-slider {
+        direction: ltr;
+    }
+
+    .slick-slider {
+        direction: ltr;
+    }
+
+    .slick-list {
+        .slick-track {
+            .slick-slide {
+                >div {
+                    direction: rtl;
+                }
+            }
+        }
+    }
+}

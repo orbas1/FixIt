@@ -1,0 +1,252 @@
+/**=====================
+    Footer scss
+==========================**/
+.footer-section {
+    background-color: $title-color;
+    padding: calc(30px + (50 - 30) * ((100vw - 320px) / (1920 - 320))) 0;
+
+    .copyright {
+        @include flex_common ($dis: flex, $align: center, $justify: space-between);
+        gap: 10px;
+        border-bottom: 1px solid rgba($white, 0.15);
+        padding-bottom: 12px;
+        margin-bottom: calc(14px + (30 - 14) * ((100vw - 320px) / (1920 - 320)));
+
+        @media (max-width: 575.98px) {
+            flex-direction: column;
+            align-items: start;
+
+            [dir="rtl"] & {
+                align-items: end;
+            }
+        }
+
+        .footer-logo {
+            @media (max-width: 575.98px) {
+                width: 100%;
+                margin-bottom: 6px;
+
+                [dir="rtl"] & {
+                    text-align: right;
+                }
+            }
+
+            img {
+                height: calc(30px + (40 - 30) * ((100vw - 320px) / (1920 - 320)));
+            }
+        }
+
+        p {
+            color: $white;
+            margin: 0;
+            font-size: calc(15px + (16 - 15) * ((100vw - 320px) / (1200 - 320)));
+            white-space: nowrap;
+
+            @media (max-width: 575.98px) {
+                [dir="rtl"] & {
+                    text-align: right;
+                    width: 100%;
+                }
+            }
+
+        }
+
+        .iconsax {
+            padding-right: 5px;
+            --Iconsax-Color: #fff;
+            --Iconsax-Size: calc(18px + (22 - 18) * ((100vw - 320px) / (1200 - 320)));
+        }
+    }
+
+    i {
+        --Iconsax-Size: 22px;
+        --Iconsax-Color: var(--primary-color);
+    }
+
+    .heading-footer {
+        font-weight: 400;
+        line-height: 26px;
+        color: $white;
+        margin-bottom: 14px;
+        @include flex_common_1 ($dis: flex, $align: center);
+        gap: 8px;
+        font-size: calc(16px + (20 - 16) * ((100vw - 320px) / (1920 - 320)));
+
+        @media (max-width: 575.98px) {
+            margin-bottom: 6px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba($white, 0.15);
+            padding-bottom: 6px;
+        }
+
+        svg {
+            width: 23px;
+            height: 11px;
+        }
+
+        .down-arrow {
+            margin-left: auto;
+            --Iconsax-Color: #fff;
+            transition: transform 0.15s ease-in-out;
+
+            [dir="rtl"] & {
+                margin-left: unset;
+                margin-right: auto;
+            }
+        }
+    }
+
+    ul {
+        margin-left: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+
+        [dir="rtl"] & {
+            margin-left: unset;
+            margin-right: 30px;
+        }
+
+        @media (max-width: 575.98px) {
+            gap: 6px;
+        }
+
+        li {
+            color: rgba($white, 0.7);
+            font-size: calc(16px + (18 - 16) * ((100vw - 320px) / (1920 - 320)));
+
+            .nav-link {
+                display: inline-block;
+                color: rgba($white, 0.7);
+                padding: 0;
+                position: relative;
+                transition: all 0.25s ease-in-out;
+                box-shadow: none;
+
+                &:hover {
+                    color: rgba($white, 1);
+                    padding-left: 14px;
+                    font-weight: 500;
+
+                    [dir="rtl"] & {
+                        padding-left: unset;
+                        padding-right: 14px;
+                    }
+
+                    &::before {
+                        transform: translateY(-50%) scale(1);
+                        opacity: 1;
+                        visibility: visible;
+                        left: 0;
+
+                        [dir="rtl"] & {
+                            left: unset;
+                            right: 0;
+                        }
+                    }
+
+                    @media (max-width: 575.98px) {
+                        padding-left: unset;
+
+                        [dir="rtl"] & {
+                            padding-left: 14px;
+                            padding-right: unset;
+                        }
+
+                        &::before {
+                            left: -23px;
+
+                            [dir="rtl"] & {
+                                left: unset;
+                                right: -23px;
+                            }
+                        }
+                    }
+                }
+
+                &::before {
+                    transition: all 0.25s ease-in-out;
+                    @include pos;
+                    top: 50%;
+                    transform: translateY(-50%) scale(0);
+                    left: 13px;
+                    width: 3px;
+                    height: 3px;
+                    background-color: $white;
+                    opacity: 0;
+                    visibility: hidden;
+
+                    [dir="rtl"] & {
+                        left: unset;
+                        right: 13px;
+                    }
+
+                    @media (max-width: 575.98px) {
+                        opacity: 1;
+                        visibility: visible;
+                        left: -23px;
+                        transform: translateY(-50%) scale(1);
+                        background-color: rgba($white, 0.15);
+                        height: 2px;
+                        width: 12px;
+
+                        [dir="rtl"] & {
+                            left: unset;
+                            right: -23px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .btn {
+        border-radius: calc(8px + (13 - 8) * ((100vw - 320px) / (1920 - 320)));
+        width: max-content;
+        padding: 10px calc(40px + (50 - 40) * ((100vw - 320px) / (1920 - 320)));
+        margin-top: calc(20px + (40 - 20) * ((100vw - 320px) / (1920 - 320)));
+        margin-left: 30px;
+        font-size: calc(16px + (18 - 16) * ((100vw - 320px) / (1920 - 320)));
+        background-color: var(--font-color);
+        color: #222;
+
+        [dir="rtl"] & {
+            margin-left: unset;
+            margin-right: 30px;
+        }
+
+        .iconsax {
+            --Iconsax-Color: #222;
+        }
+
+        &:hover {
+            background-color: transparent;
+            border-color: var(--font-color);
+            color: var(--font-color);
+
+            .iconsax {
+                --Iconsax-Color: var(--font-color);
+            }
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        &.nav-folderized {
+            .nav {
+                &.open {
+                    .down-arrow {
+                        transform: scale(-1);
+                    }
+
+                    ul {
+                        display: flex;
+                    }
+                }
+
+                ul {
+                    display: none;
+                }
+            }
+        }
+    }
+}

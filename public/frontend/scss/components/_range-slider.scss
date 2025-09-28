@@ -1,0 +1,162 @@
+/**=====================
+     Range Slider scss
+==========================**/
+
+.irs--round {
+    font-family: "DM Sans", serif !important;
+    background-color: $white;
+    padding: 16px;
+    border-radius: 8px;
+    height: 80px;
+    .irs {
+        font-family: "DM Sans", serif !important;
+    }
+    .irs-line {
+        top: 10px;
+        background-color: $gray-color;
+        height: 5px;
+    }
+
+    .irs-handle {
+        top: 21px;
+        width: 14px;
+        height: 14px;
+        border: none;
+        background-color: rgba($title-color, 0.8);
+        border-radius: 100%;
+        cursor: pointer;
+
+        &:hover,
+        &.state_hover {
+            background-color: rgba($title-color, 0.8);
+        }
+    }
+
+    .irs-from,
+    .irs-to,
+    .irs-single {
+        bottom: -40px;
+        top: unset;
+        background-color: transparent;
+        color: rgba($title-color, 0.8);
+        font-weight: 500;
+        padding: 0;
+
+        &:before {
+            display: none;
+        }
+    }
+
+    .irs-bar {
+        height: 5px;
+        background-color: rgba($title-color, 0.65);
+        top: 26px;
+    }
+}
+
+#distance {
+    .distance {
+        @include flex_common_1 ($dis: flex, $align: center);
+        gap: 10px;
+        flex-wrap: wrap;
+
+        .form-group {
+            margin: 0;
+        }
+    }
+
+    .irs {
+        font-family: "DM Sans", serif !important;
+
+        .irs-line {
+            height: 4px;
+        }
+
+        .irs-handle {
+            &.single {
+                display: none;
+            }
+        }
+
+        &.irs--modern {
+            .irs-grid-pol {
+                color: $gray-color;
+
+                &.small {
+                    display: none;
+                }
+            }
+
+            .irs-single {
+                background-repeat: no-repeat;
+                background-position: center;
+                z-index: 0;
+                font-size: 30px;
+                padding: 0;
+                border-radius: 0;
+                width: 10px;
+                color: transparent;
+                top: -4px;
+                overflow: hidden;
+                cursor: pointer;
+
+                &:before {
+                    @include pos;
+                    background-color: $title-color;
+                    border: none;
+                    left: 0px;
+                    bottom: 6px;
+                    height: 7px;
+                    width: 7px;
+                    border-radius: 30px 0 0 30px;
+
+                    [dir="rtl"] & {
+                        left: unset;
+                        right: 0px;
+                        border-radius: 0 30px 30px 0;
+                    }
+
+                }
+
+                &::after {
+                    @include pos;
+                    background-color: $title-color;
+                    right: -3px;
+                    bottom: 6px;
+                    height: 7px;
+                    width: 7px;
+                    border-radius: 0 30px 30px 0;
+
+                    [dir="rtl"] & {
+                        right: unset;
+                        left: -3px;
+                        border-radius: 30px 0 0 30px;
+                    }
+                }
+            }
+        }
+
+        .irs-bar {
+            background: $title-color;
+            height: 4px;
+        }
+
+        .irs-line {
+            background-color: $gray-color;
+        }
+
+        .irs-grid {
+            height: 29px;
+
+            .irs-grid-text {
+                color: $title-color;
+                white-space: wrap;
+                width: min-content;
+                bottom: -12px;
+                line-height: 1;
+                font-size: 14px;
+                font-weight: 500;
+            }
+        }
+    }
+}

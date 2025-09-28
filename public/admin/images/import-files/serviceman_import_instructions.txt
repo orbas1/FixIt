@@ -1,0 +1,41 @@
+Serviceman Import Instructions
+==============================
+
+Required Columns:
+-----------------
+- name : (string) Required. Max 255 characters.
+- email : (string) Required. Must be a valid email format. Must be unique in `users` table (excluding soft-deleted users).
+- code : (string) Required. Country or area code (e.g., "+1", "+91").
+- phone : (string) Required. Digits only. Length must be between 6 and 15. Must be unique in `users` table (excluding soft-deleted users).
+- password : (string) Required. Minimum 8 characters. Will be hashed automatically.
+- status : (string) Required. Example values: "active", "inactive".
+- role : (integer) Required. Must be an existing role ID from the `roles` table.
+
+Optional Columns:
+-----------------
+- provider_id : (integer) Optional. Must be a valid user ID of a provider if given.
+- image : (string) Optional. A valid URL pointing to an image. Will be attached to `image` media collection.
+
+Media Fields (optional):
+------------------------
+- image : (string) Valid URL of the profile image to be imported using `addMediaFromUrl`.
+
+Validation Rules:
+-----------------
+- name: required, string, max:255
+- email: required, email format, unique in users (excluding soft deletes)
+- code: required
+- phone: required, digits between 6-15, unique in users (excluding soft deletes)
+- password: required, min:8 characters
+- status: required
+- role: required, must exist in roles table
+
+Error Handling:
+---------------
+- If any validation rule fails, import will return a descriptive validation error.
+- On any unexpected error, import will throw a 422 exception using custom `ExceptionHandler`.
+
+Output:
+-------
+- Successfully imported users can be retrieved using `getImportedUsers()` method.
+- Each user is assigned a role and optionally a profile image.

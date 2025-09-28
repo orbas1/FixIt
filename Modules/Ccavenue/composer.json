@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/ccavenue",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Ccavenue\\": "",
+            "Modules\\Ccavenue\\App\\": "app/",
+            "Modules\\Ccavenue\\Database\\Factories\\": "database/factories/",
+            "Modules\\Ccavenue\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Ccavenue\\Tests\\": "tests/"
+        }
+    }
+}

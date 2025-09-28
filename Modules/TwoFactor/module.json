@@ -1,0 +1,11 @@
+{
+    "name": "TwoFactor",
+    "alias": "twofactor",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\TwoFactor\\Providers\\TwoFactorServiceProvider"
+    ],
+    "files": []
+}

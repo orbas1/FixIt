@@ -1,0 +1,11 @@
+{
+    "name": "Nexmo",
+    "alias": "nexmo",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Nexmo\\Providers\\NexmoServiceProvider"
+    ],
+    "files": []
+}

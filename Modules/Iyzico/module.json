@@ -1,0 +1,11 @@
+    {
+    "name": "Iyzico",
+    "alias": "iyzico",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Iyzico\\Providers\\IyzicoServiceProvider"
+    ],
+    "files": []
+}

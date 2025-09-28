@@ -1,0 +1,57 @@
+:root {
+    --primary-color: #5465FF;
+}
+
+$primary-color: #5465FF;
+$secondary-color: #ff7456;
+$success-color: #27AF4D;
+$warning-color: #FDB448;
+$danger-color: #FF4B4B;
+$info-color: #48bffd;
+$white: #ffffff;
+$black: #000000;
+$title-color: #00162E;
+$light-color: #808B97;
+$gray-color: #E5E8EA;
+$section-bg: #F5F6F7;
+$login-card: 530px;
+$login-br: 15px;
+
+/* Booking Status Variable */
+$pending-color: #FDB448;
+$accepted-color: #48BFFD;
+$assigned-color: #AD46FF;
+$on-the-way-color: #FF7456;
+$decline-color: #FF4B4B;
+$cancel-color: #FF4B4B;
+$on-going-color: #FF7456;
+$on-hold-color: #008996;
+$start-again-color: #c507af;
+$completed-color: #27AF4D;
+$pending-approval-color: #5498FF;
+
+/* font family */
+$dm-sons: 'DM Sans';
+
+/* breakpoints */
+$min-breakpoints: (md:768px, lg: 992px,
+    xl: 1200px,
+    2xl: 1366px,
+);
+
+$max-breakpoints: (2xs: 360px,
+    xs: 480px,
+    sm: 575px,
+    md: 767px,
+    lg: 991px,
+    xl: 1199px,
+    2xl: 1366px,
+    3xl: 1460px,
+    4xl: 1660px,
+);
+
+
+$min-font-size: 16px;
+$max-font-size: 18px;
+$min-width: 320px;
+$max-width: 1920px;

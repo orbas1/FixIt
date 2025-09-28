@@ -1,0 +1,11 @@
+{
+    "name": "Sslcommerz",
+    "alias": "sslcommerz",
+    "description": "Integrates Sslcommerz, offering smooth and secure payment solutions for businesses in Bangladesh.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Sslcommerz\\Providers\\SslcommerzServiceProvider"
+    ],
+    "files": []
+}

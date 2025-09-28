@@ -1,0 +1,25 @@
+ADD-ON SERVICE IMPORT FORMAT - INSTRUCTIONS
+
+Required Columns:
+-----------------
+1. thumbnail   => Required image file (jpeg or png; Max size: 2MB)
+2. title       => Required title of the add-on service (Max: 255 characters)
+3. price       => Required numeric value for the price (Minimum: 1)
+4. parent_id   => Required ID of the parent service (Must exist in services table)
+5. user_id     => Optional ID of the user creating the add-on (if needed)
+6. image       => Optional URL for the thumbnail image (jpeg, jpg, or png)
+
+Validation Rules:
+-----------------
+- thumbnail must be an image (jpeg, png) and not exceed 2MB in size.
+- title is required and must be a string, maximum 255 characters.
+- price must be numeric and at least 1.
+- parent_id must exist in the `services` table.
+
+Notes:
+------
+- The `image` column can be used to provide an image URL for the thumbnail (useful for remote files).
+- The image will be added to the media collection as `thumbnail` and tagged with the default language.
+- The title will be stored with translation support based on the default locale setting.
+- Any validation or import error will throw a formatted exception.
+- Make sure all referenced `parent_id`s exist in the `services` table.

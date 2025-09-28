@@ -1,0 +1,11 @@
+{
+    "name": "PhonePe",
+    "alias": "phonepe",
+    "description": "Allows users to process payments using PhonePe, a popular UPI-based payment system in India.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\PhonePe\\Providers\\PhonePeServiceProvider"
+    ],
+    "files": []
+}

@@ -1,0 +1,168 @@
+/**=====================
+    Dropdown scss
+==========================**/
+
+.dropdown {
+  .onhover-show-div {
+    transition: all 0.3s linear;
+    position: absolute;
+    z-index: 3;
+    background-color: $white;
+    box-shadow: 0 0 7px 0px rgba($black, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate3d(0, -5%, 0);
+    top: 35px;
+    right: 14px;
+    padding: 14px;
+    border-radius: 4px;
+
+    [dir="rtl"] & {
+      left: 14px;
+      right: unset;
+    }
+
+    li {
+      display: block;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &:hover {
+        a {
+          color: var(--primary-color);
+        }
+      }
+
+      +li {
+        margin-top: 5px;
+      }
+    }
+  }
+
+  &:hover {
+    .onhover-show-div {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+  }
+
+  &.select-dropdown-div {
+    .select-btn {
+      background: $white;
+      color: $title-color;
+      border: none;
+      padding: 12px;
+      gap: 12px;
+      height: calc(38px + (44 - 38) * ((100vw - 320px) / (1920 - 320)));
+      border-radius: 8px;
+      width: 100%;
+      @include flex_common ($dis: flex, $align: center, $justify: space-between);
+
+      i {
+        --Iconsax-Size: 18px !important;
+      }
+
+      span {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        line-height: 1;
+        font-size: 15px;
+
+        img {
+          width: 22px;
+        }
+      }
+    }
+
+    .select-show-div {
+      transition: all ease-in-out .3s;
+      position: absolute;
+      z-index: 3;
+      background-color: $white;
+      transform: translate3d(0, -5%, 0);
+      top: 60px;
+      right: 0;
+      padding: 14px;
+      border-radius: 4px;
+      opacity: 0;
+      visibility: hidden;
+      width: 100%;
+
+      [dir="rtl"] & {
+        left: 0;
+        right: unset;
+      }
+
+      &.active {
+        opacity: 1;
+        visibility: visible;
+        transition: all ease-in-out .3s;
+      }
+
+      .select-show-div-item {
+        width: 100%;
+        cursor: pointer;
+
+        span {
+          @include flex_common_1 ($dis: flex, $align: center);
+          gap: 8px;
+          font-size: 15px;
+
+          img {
+            width: 22px;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Select Dropdown */
+.select-dropdown {
+  @include flex_common ($dis: flex, $align: center, $justify: space-between);
+  gap: 10px;
+
+  .onhover-show-div {
+    min-width: 120px;
+    right: 14px;
+    padding: 14px;
+
+    [dir="rtl"] & {
+      left: 14px;
+      right: unset;
+    }
+
+    li {
+      display: block;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &:hover {
+        color: var(--primary-color);
+        transform: translateX(5px);
+
+        [dir="rtl"] & {
+          transform: translateX(-5px);
+        }
+      }
+
+      +li {
+        margin-top: 5px;
+      }
+    }
+  }
+
+  .form-group {
+    @include flex_common_1 ($dis: flex, $align: center);
+    gap: 16px;
+
+    label {
+      color: $light-color;
+      font-size: 16px;
+    }
+  }
+
+
+}

@@ -1,0 +1,122 @@
+.dataTables_wrapper {
+  .dataTables_processing {
+    &[style="display: block;"] {
+      display: none !important;
+
+      ~ .dataTable {
+        tbody {
+          position: relative;
+
+          &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(237, 239, 241, 0.5);
+            backdrop-filter: blur(1.3px);
+          }
+
+          &::after {
+            content: "Processing...";
+            position: absolute;
+            top: 50%;
+            z-index: 2;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 17px;
+            font-weight: 500;
+          }
+
+          &:empty {
+            height: 83px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.table-responsive {
+  table {
+    &.dataTable {
+      thead {
+        .sorting,
+        .sorting_desc,
+        .sorting_asc,
+        .sorting_desc_disabled {
+          &:before {
+            right: 20px !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+table {
+  &.dataTable {
+    &.table {
+      thead {
+        td,
+        th {
+          &.sorting_asc,
+          &.sorting_desc,
+          &.sorting {
+            padding-right: 38px;
+          }
+
+          &:first-child {
+            padding-right: 9px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.selected-booking {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  color: var(--primary-color);
+  padding: 4px 9px 3px;
+  border-radius: 100px;
+  gap: 3px;
+  background-color: rgba(84, 101, 255, 0.08);
+
+  > span {
+    line-height: 1.3;
+    font-weight: 500;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+.select-service-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.table-responsive {
+  table {
+    &.dataTable {
+      thead {
+
+        tr{
+            th{
+                &:first-child{
+                    &::after,
+                    &::before{
+                        display: none !important;
+                    }
+                }
+            }
+        }
+      }
+    }
+  }
+}

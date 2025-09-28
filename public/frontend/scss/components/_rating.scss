@@ -1,0 +1,207 @@
+/**=====================
+    Rating scss
+==========================**/
+
+.star-rating {
+    @include flex_common ($dis: flex, $align: center, $justify: start);
+    flex-wrap: wrap;
+    gap: 7px;
+    flex-direction: row;
+    font-size: 1.5em;
+
+    input {
+        display: none;
+    }
+
+    label {
+        @include flex_common_1 ($dis: flex, $align: center);
+        background-color: $white;
+        color: $light-color;
+        gap: 6px;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid $gray-color;
+        line-height: 0;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+
+        i {
+            --Iconsax-Size: 18px;
+            --Iconsax-Color: #808B97;
+        }
+
+        &:hover {
+            background-color: var(--primary-color);
+            color: $white;
+
+            i {
+                --Iconsax-Color: #fff;
+            }
+        }
+    }
+
+    :checked {
+        ~label {
+            background-color: var(--primary-color);
+            color: $white;
+            border-color: var(--primary-color);
+
+            i {
+                --Iconsax-Color: #fff;
+            }
+        }
+    }
+}
+
+.reviews {
+    background-color: $white;
+    padding: 16px;
+    border-radius: 8px;
+    @include flex_common ($dis: flex, $align: start, $justify: space-between);
+    gap: 12px;
+    margin-bottom: 16px;
+
+    &:last-child {
+        margin: 0;
+    }
+
+    .person-detail {
+        @include flex_common_1 ($dis: flex, $align: center);
+        gap: 6px;
+        color: $title-color;
+
+        img {
+            border-radius: 100%;
+            height: 45px;
+            width: 45px;
+        }
+
+        p {
+            line-height: 1.5;
+            color: #808B97;
+            margin: 0;
+            font-size: 16px;
+            width: 100%;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+        }
+
+        h5 {
+            line-height: 1.5;
+            font-weight: 500;
+        }
+    }
+
+    .rating {
+        .rate {
+            justify-content: end;
+            color: $title-color;
+
+            small {
+                font-size: 16px;
+            }
+        }
+
+        .overview-list {
+            list-style: none;
+
+            li {
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            margin-left: 50px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        flex-direction: column;
+        align-items: start;
+        justify-content: unset;
+        gap: 4px;
+
+        .rating {
+            margin-left: 50px;
+            @include flex_common_1 ($dis: flex, $align: center);
+            flex-direction: row-reverse;
+            gap: 10px;
+
+            .rate {
+                margin: 0;
+            }
+        }
+    }
+}
+
+.rating-bars {
+    background-color: $white;
+    border-radius: 8px;
+    padding: 16px;
+    white-space: nowrap;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+
+    .rating-bar {
+        @include flex_common_1 ($dis: flex, $align: center);
+        gap: 8px;
+        text-align: left;
+
+        [dir="rtl"] & {
+            text-align: right;
+        }
+
+        .bar {
+            width: 100%;
+            height: 8px;
+            background-color: $section-bg;
+            border-radius: 4px;
+
+            .bar-item {
+                height: 8px;
+                background-color: $warning-color;
+                border-radius: 4px;
+
+                &-5 {
+                    width: 84%;
+                }
+
+                &-4 {
+                    width: 30%;
+                }
+
+                &-3 {
+                    width: 12%;
+                }
+
+                &-2 {
+                    width: 6%;
+                }
+
+                &-1 {
+                    width: 3%;
+                }
+            }
+        }
+
+        .left {
+            min-width: 40px;
+        }
+
+        .right {
+            color: $light-color;
+            text-align: left;
+            min-width: 40px;
+
+            [dir="rtl"] & {
+                text-align: right;
+            }
+
+        }
+    }
+}

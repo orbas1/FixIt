@@ -1,0 +1,11 @@
+{
+    "name": "PayPal",
+    "alias": "paypal",
+    "description": "Connect your application with PayPal for easy, widely-recognized payment processing.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\PayPal\\Providers\\PayPalServiceProvider"
+    ],
+    "files": []
+}

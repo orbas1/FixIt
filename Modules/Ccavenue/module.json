@@ -1,0 +1,11 @@
+{
+    "name": "Ccavenue",
+    "alias": "ccavenue",
+    "description": "Enables businesses to process payments with CCAvenue, a trusted payment gateway for India.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Ccavenue\\Providers\\CcavenueServiceProvider"
+    ],
+    "files": []
+}

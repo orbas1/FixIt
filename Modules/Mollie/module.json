@@ -1,0 +1,11 @@
+{
+    "name": "Mollie",
+    "alias": "mollie",
+    "description": "Provides a simple way to accept payments through Mollie, supporting a variety of local and international payment methods.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Mollie\\Providers\\MollieServiceProvider"
+    ],
+    "files": []
+}

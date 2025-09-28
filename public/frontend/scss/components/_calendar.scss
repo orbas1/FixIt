@@ -1,0 +1,836 @@
+/**=====================
+    Calendar scss
+==========================**/
+.flatpickr-day {
+
+    &.selected,
+    &.startRange,
+    &.endRange,
+    &.selected.inRange,
+    &.startRange.inRange,
+    &.endRange.inRange,
+    &.selected:focus,
+    &.startRange:focus,
+    &.endRange:focus,
+    &.selected:hover,
+    &.startRange:hover,
+    &.endRange:hover,
+    &.selected.prevMonthDay,
+    &.startRange.prevMonthDay,
+    &.endRange.prevMonthDay,
+    &.selected.nextMonthDay,
+    &.startRange.nextMonthDay,
+    &.endRange.nextMonthDay {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+}
+
+.flatpickr-calendar {
+    z-index: 12;
+    width: 324.875px;
+    padding: 16px;
+
+    &.open {
+        z-index: 13;
+    }
+
+    &:before,
+    &:after {
+        display: none;
+    }
+
+    .flatpickr-innerContainer {
+        font-size: 14px;
+        background-color: $section-bg;
+        border-radius: 8px;
+        @include flex_common;
+        overflow: visible;
+    }
+
+    .flatpickr-weekdays {
+        padding: 0;
+
+        .flatpickr-weekdaycontainer {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+            .flatpickr-weekday {
+                color: var(--primary-color);
+                font-size: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                @media (max-width: 480px) {
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+
+    .flatpickr-day {
+        max-width: 37px;
+        height: 35px;
+        line-height: 35px;
+        color: $title-color;
+        font-size: 16px;
+
+        @media (max-width: 480px) {
+            font-size: 13px;
+            max-width: 33px;
+            height: 32px;
+            line-height: 32px;
+        }
+
+        &:hover {
+            color: var(--primary-color);
+            font-weight: 600;
+            z-index: 0;
+            position: relative;
+            overflow: hidden;
+
+            &::before {
+                @extend %bg-primary-color;
+                opacity: 0.1;
+            }
+        }
+
+        &.today {
+            background-color: var(--primary-color);
+            color: $white;
+            border: none;
+        }
+
+        &.selected {
+            color: $white;
+            background-color: var(--primary-color);
+        }
+
+        &.prevMonthDay,
+        &.flatpickr-disabled,
+        &.flatpickr-disabled:hover,
+        &.nextMonthDay,
+        &.notAllowed,
+        &.notAllowed.prevMonthDay,
+        &.notAllowed.nextMonthDay {
+            color: $light-color;
+        }
+
+        &.inRange {
+            box-shadow: none;
+            z-index: 0;
+            position: relative;
+            overflow: hidden;
+
+            &::before {
+                @extend %bg-primary-color;
+                opacity: 0.1;
+            }
+
+            &.today {
+                background-color: var(--primary-color);
+            }
+        }
+    }
+
+    .dayContainer {
+        padding: 16px;
+
+        @media (max-width: 480px) {
+            padding: 0;
+        }
+    }
+
+    .flatpickr-months {
+        margin-bottom: 16px;
+
+        .flatpickr-month {
+            color: $title-color;
+        }
+
+        .flatpickr-current-month {
+            padding: 0;
+            gap: 10px;
+            @include flex_common;
+
+            input {
+                &.cur-year {
+                    font-size: 16px;
+
+                    @media (max-width: 480px) {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+
+        .flatpickr-prev-month,
+        .flatpickr-next-month {
+            background-color: $section-bg;
+            border-radius: 100%;
+            padding: 8px;
+            height: 30px;
+            width: 30px;
+            top: 18px;
+            @include flex_common;
+
+            &:hover {
+                svg {
+                    fill: $title-color;
+                }
+            }
+
+            svg {
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        .flatpickr-prev-month {
+            left: 16px !important;
+
+            [dir="rtl"] & {
+                left: unset;
+                right: 16px !important;
+            }
+        }
+
+        .flatpickr-next-month {
+            right: 16px !important;
+
+            [dir="rtl"] & {
+                right: unset;
+                left: 16px !important;
+            }
+
+        }
+
+        .flatpickr-monthDropdown-months {
+            background-color: $section-bg;
+            border-radius: 6px;
+            font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+            padding: 9px 12px;
+            appearance: unset;
+        }
+
+        .numInputWrapper {
+            background-color: $section-bg;
+            border-radius: 6px;
+            font-size: 14px;
+            padding: 6px 12px;
+            width: 80px;
+        }
+    }
+
+    .numInputWrapper {
+        &:hover {
+            span {
+                border: none;
+            }
+        }
+
+        span {
+            &:hover {
+                background-color: unset;
+                border: none;
+            }
+
+            &.arrowUp {
+                &:after {
+                    top: 55%;
+                }
+            }
+
+            &.arrowDown {
+                &:after {
+                    top: 20%;
+                }
+            }
+        }
+    }
+
+    &.hasTime {
+        .flatpickr-time {
+            border: none;
+            line-height: unset;
+            height: 70px !important;
+            max-height: 70px !important;
+            gap: 10px;
+
+            &:after {
+                display: none;
+            }
+
+            .numInputWrapper {
+                height: 100%;
+                position: relative;
+                border-radius: 12px;
+                z-index: 0;
+                width: 30%;
+                overflow: hidden;
+                background-color: transparent;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: var(--primary-color);
+                    opacity: 0.1;
+                    z-index: -1;
+                }
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    border-radius: 12px;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border: 1px solid var(--primary-color);
+                    opacity: 0.8;
+                    z-index: -1;
+                }
+
+                input {
+
+                    &:hover,
+                    &:focus {
+                        background: transparent;
+
+                    }
+                }
+
+                span {
+                    right: 16px;
+
+                    [dir="rtl"] & {
+                        right: unset;
+                        left: 16px;
+                    }
+
+                    &.arrowUp {
+                        &:after {
+                            border-bottom-color: var(--primary-color);
+                            border-width: 5px;
+                            top: unset;
+                            bottom: 13%;
+                        }
+                    }
+
+                    &.arrowDown {
+                        &:after {
+                            border-top-color: var(--primary-color);
+                            border-width: 5px;
+                            top: 13%;
+                        }
+                    }
+                }
+            }
+
+            input {
+                text-align: left;
+                padding-left: 20px;
+                font-size: 18px;
+                color: var(--primary-color);
+                font-weight: 500;
+
+                [dir="rtl"] & {
+                    text-align: right;
+                    padding-right: 20px;
+                    padding-left: unset;
+                }
+            }
+
+            .flatpickr-time-separator {
+                width: 2%;
+                color: var(--primary-color);
+                font-size: 24px;
+                @include flex_common;
+            }
+
+            .flatpickr-am-pm {
+                height: 100%;
+                position: relative;
+                z-index: 0;
+                width: 29%;
+                font-size: 18px;
+                background-color: transparent;
+                overflow: hidden;
+                color: var(--primary-color);
+                @include flex_common;
+                border-radius: 12px;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: var(--primary-color);
+                    opacity: 0.1;
+                    z-index: -1;
+                }
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    border-radius: 12px;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border: 1px solid var(--primary-color);
+                    opacity: 0.8;
+                    z-index: -1;
+                }
+            }
+        }
+
+    }
+}
+
+.main-inline-calender {
+    &.input-group {
+        flex-direction: column;
+
+        .form-control {
+            width: 100%;
+            border-radius: 6px !important;
+            color: var(--primary-color);
+            padding: 0;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 23px;
+
+            &:focus {
+                border: none;
+            }
+
+            &:focus,
+            &:disabled {
+                box-shadow: unset;
+                border: none;
+                background-color: unset;
+            }
+        }
+
+        .form-control[readonly] {
+            box-shadow: unset;
+            border: none;
+            background-color: unset;
+        }
+
+        .flatpickr-calendar {
+            &.inline {
+                width: 100%;
+                border-radius: 6px !important;
+
+                @media (max-width: 575.98px) {
+                    max-width: 410px;
+                    min-width: 400px;
+                    @include center(horizontal);
+                }
+
+                @media (max-width: 480px) {
+                    min-width: 310px;
+                    max-width: min-content;
+                }
+
+                @media (max-width: 360px) {
+                    min-width: 270px;
+                    max-width: min-content;
+                }
+            }
+        }
+
+        .flatpickr-innerContainer {
+            display: block;
+        }
+
+        .flatpickr-rContainer {
+            display: block;
+
+            .flatpickr-weekdays {
+                width: 100%;
+            }
+
+            .flatpickr-days {
+                width: 100%;
+
+                .dayContainer {
+                    width: 100%;
+                    max-width: none;
+                    min-width: unset;
+                    gap: 20px;
+
+                    @media (max-width: 575.98px) {
+                        gap: 14px;
+                    }
+
+                    @media (max-width: 480px) {
+                        gap: 3px;
+                        padding: 4px;
+                    }
+
+                    @media (max-width: 360px) {
+                        gap: 0;
+                    }
+
+
+                    .flatpickr-day {
+                        border-radius: 100%;
+                        width: 100%;
+                        color: $title-color;
+
+                        &:hover {
+                            color: var(--primary-color);
+                        }
+
+                        &.selected,
+                        &.today {
+                            color: $white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.inline-time-picker {
+    @media (max-width: 575.98px) {
+        max-width: 410px;
+        min-width: 400px;
+        margin-inline: auto;
+    }
+
+    @media (max-width: 480px) {
+        min-width: 310px;
+        max-width: min-content;
+    }
+
+    @media (max-width: 360px) {
+        min-width: 270px;
+        max-width: min-content;
+    }
+}
+
+.inline-picker-btn {
+    @media (max-width: 575.98px) {
+        max-width: 410px;
+        min-width: 400px;
+        margin-inline: auto;
+    }
+
+    @media (max-width: 480px) {
+        min-width: 310px;
+        max-width: min-content;
+    }
+
+    @media (max-width: 360px) {
+        min-width: 270px;
+        max-width: min-content;
+    }
+}
+
+.mbsc-ios-dark.mbsc-selected .mbsc-calendar-cell-text {
+    background-color: var(--primary-color);
+    color: $white;
+}
+
+.mbsc-ios-dark.mbsc-calendar-today,
+.mbsc-ios-dark.mbsc-calendar-week-nr {
+    color: var(--primary-color);
+}
+
+.mbsc-ios-dark.mbsc-hover .mbsc-calendar-cell-text {
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+    background-color: transparent;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--primary-color);
+        opacity: 0.3;
+        z-index: -1;
+    }
+}
+
+.mbsc-datepicker {
+    &.mbsc-datepicker-inline {
+        width: 100%;
+        border: none;
+        background: #fff;
+        color: #000;
+    }
+
+    .mbsc-datepicker-tab-wrapper {
+        display: block;
+    }
+
+    .mbsc-calendar {
+        width: 100% !important;
+        background-color: red;
+    }
+
+    &.mbsc-selected {
+        .mbsc-calendar-cell-text {
+            background: var(--primary-color);
+        }
+    }
+
+    &.mbsc-datepicker {
+
+        .mbsc-calendar-slide,
+        .mbsc-calendar,
+        .mbsc-calendar-cell {
+            background-color: transparent;
+            padding: 0;
+            color: $title-color;
+        }
+
+        .mbsc-calendar-slide {
+            background-color: $section-bg;
+        }
+    }
+
+    &.mbsc-datepicker {
+        .mbsc-calendar-cell {
+            width: 30px;
+            height: 30px;
+            margin: auto;
+            flex: none;
+            border: none;
+
+            >div {
+                &:first-child {
+                    display: none;
+                }
+            }
+
+            .mbsc-calendar-cell-inner {
+                .mbsc-calendar-cell-text {
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 1;
+                    @include pseudowh;
+                    margin: 0;
+                    border-radius: 100%;
+                    border: none;
+                    @include flex_common;
+                }
+            }
+        }
+    }
+
+    &.mbsc-selected {
+        .mbsc-calendar-cell-text {
+            background-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        &.mbsc-hover {
+            .mbsc-calendar-cell-text {
+                background-color: var(--primary-color);
+            }
+        }
+    }
+
+    .mbsc-calendar-day-inner {
+        width: 30px;
+        height: 30px;
+        @include flex_common;
+    }
+
+    &.mbsc-calendar-day-text {
+        margin: 0;
+    }
+
+    .mbsc-calendar-button {
+        &.mbsc-button {
+            font-size: 16px;
+            font-weight: 500;
+            color: $title-color;
+            padding: 0;
+            line-height: 1.5;
+            @include flex_common;
+            background-color: transparent;
+            gap: 8px;
+            margin: 0 auto;
+            background-color: $section-bg;
+
+            .mbsc-calendar-title {
+                padding: 8px 15px;
+                border-radius: 4px;
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 1.3;
+            }
+        }
+
+        &.mbsc-calendar-button-prev,
+        &.mbsc-calendar-button-next {
+            position: absolute;
+            @include center(vertical);
+            width: 34px;
+            height: 34px;
+            background-color: $section-bg;
+            border-radius: 100%;
+            padding: 7px;
+
+            .mbsc-button-icon {
+                @include pseudowh;
+                line-height: 1;
+            }
+        }
+
+        &.mbsc-calendar-button-next {
+            right: 0;
+
+            [dir="rtl"] & {
+                left: 0;
+                right: unset;
+            }
+        }
+    }
+
+    .mbsc-calendar-controls {
+        position: relative;
+        padding: 0;
+        min-height: unset;
+    }
+
+    .mbsc-calendar-week-day {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--primary-color);
+        width: 30px;
+        height: 30px;
+        @include flex_common;
+        margin: auto;
+    }
+
+    .mbsc-calendar-table {
+        gap: 10px;
+
+        .mbsc-flex {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        }
+    }
+
+    &.mbsc-hover {
+        .mbsc-calendar-cell-text {
+            background-color: rgba(84, 101, 255, 0.12);
+        }
+    }
+
+    .mbsc-calendar-body {
+        padding: calc(12px + (20 - 12) * ((100vw - 320px) / (1920 - 320)));
+        border-radius: 12px;
+        margin-top: 15px;
+        background-color: $section-bg;
+    }
+
+    &.mbsc-datepicker {
+        .mbsc-calendar-cell-inner {
+            padding: 0;
+
+            .mbsc-calendar-cell-text {
+                min-width: unset;
+                padding: 0;
+                width: 30px !important;
+                height: 30px !important;
+            }
+        }
+    }
+
+    .mbsc-calendar-row {
+        flex: none;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+        &:has(.mbsc-calendar-month-inner, .mbsc-calendar-year-text) {
+            grid-template-columns: 1fr 1fr 1fr;
+
+            .mbsc-calendar-cell {
+                @include pseudowh;
+            }
+
+            .mbsc-calendar-cell-inner {
+                @include pseudowh;
+
+                .mbsc-calendar-cell-text {
+                    width: 100% !important;
+                    height: 100% !important;
+                    border-radius: 5px;
+                    padding: 12px;
+                }
+            }
+        }
+    }
+
+    .mbsc-datepicker-tab-timegrid {
+        &.mbsc-datepicker-tab {
+            width: 100%;
+            min-height: unset;
+            margin-top: 22px;
+            background-color: $section-bg;
+            border-radius: 12px;
+            padding: calc(12px + (20 - 12) * ((100vw - 320px) / (1920 - 320)));
+            max-height: 250px;
+
+            .mbsc-timegrid-container {
+                position: relative;
+                inset: unset;
+                display: flex;
+                flex-direction: column;
+                gap: calc(9px + (15 - 9) * ((100vw - 320px) / (1920 - 320)));
+
+                .mbsc-timegrid-row {
+                    width: 100%;
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    gap: calc(9px + (15 - 9) * ((100vw - 320px) / (1920 - 320)));
+
+                    .mbsc-timegrid-cell {
+                        >div {
+                            &:first-child {
+                                display: none;
+                            }
+                        }
+
+                        .mbsc-timegrid-item {
+                            margin: 0;
+                            line-height: 1.3;
+                            padding: 10px;
+                            border-radius: 6px;
+                            background-color: $white;
+                            font-size: 14px;
+                            font-weight: 500;
+                            color: #808B97;
+
+                            &.mbsc-selected {
+                                background-color: var(--primary-color);
+                                color: $white;
+                                font-weight: 500;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

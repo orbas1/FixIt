@@ -1,0 +1,293 @@
+/**=====================
+Pagination CSS Start
+==========================**/
+
+.pagination-main {
+    display: flex;
+    flex-direction: row-reverse;
+    border-top: 1px dashed rgba($dark-color, 0.10);
+    padding-top: 24px;
+
+    .text-muted {
+        color: $dark-color !important;
+
+        strong {
+            font-weight: 400 !important;
+        }
+    }
+
+    .pagination {
+        gap: 12px;
+        justify-content: end;
+        overflow: hidden;
+
+        nav {
+            width: 100%;
+        }
+
+        .page-item {
+            &.active {
+                span {
+                    background-color: var(--primary-color) !important;
+                    color: $white;
+                }
+            }
+
+            &:first-child,
+            &:last-child {
+
+                span,
+                button {
+                    font-size: 26px !important;
+                    font-weight: 300 !important;
+                }
+            }
+
+            .page-link {
+                font-size: 14px;
+                font-weight: 400;
+                width: 24px;
+                height: 24px;
+                border-radius: 100% !important;
+                border: none;
+
+
+
+            }
+
+            &.disabled {
+                color: $tab-border;
+            }
+        }
+    }
+
+    @media (max-width: 991px) {
+        justify-content: unset;
+    }
+
+    .page-item {
+        &:first-child {
+            .page-link {
+                border-radius: 4px;
+            }
+        }
+
+        &:first-child,
+        &:last-child {
+
+            >span,
+            a {
+                font-size: 18px;
+                line-height: 0.1;
+            }
+        }
+
+        &:not(:first-child) {
+            .page-link {
+                margin: 0;
+                border-radius: 4px;
+            }
+        }
+
+        &.active {
+            span {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+        }
+    }
+
+    .page-link {
+        color: #00162e;
+        border-radius: 4px;
+        border-color: #ddd;
+        width: 32px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+
+        &:focus {
+            box-shadow: none;
+        }
+
+        &:hover {
+            background-color: $white;
+        }
+    }
+}
+
+.page-item {
+    &.active {
+        .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+    }
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+
+    @media (max-width: 575.98px) {
+        justify-content: unset;
+        overflow: auto;
+    }
+
+    nav {
+        width: 100%;
+
+        .flex-sm-fill {
+            p.small {
+                padding-top: 8px;
+                white-space: nowrap;
+                font-size: 14px;
+                font-weight: 400;
+                margin: 0;
+                color: rgb(117, 117, 117) !important;
+
+                span {
+                    color: #333;
+
+                    &.fw-semibold {
+                        font-weight: 500 !important;
+                    }
+                }
+            }
+
+            .pagination {
+                margin-top: 0;
+
+                .page-item {
+                    &:first-child {
+                        .page-link {
+                            font-size: 0;
+
+                            &::before {
+                                content: "\ea64";
+                                font-family: remixicon !important;
+                                font-style: normal;
+                                -webkit-font-smoothing: antialiased;
+                                font-size: 21px;
+                            }
+                        }
+                    }
+
+                    &:last-child {
+                        .page-link {
+                            font-size: 0;
+
+                            &::before {
+                                content: "\ea6e";
+                                font-family: remixicon !important;
+                                font-style: normal;
+                                -webkit-font-smoothing: antialiased;
+                                font-size: calc(19px + (21 - 19) * ((100vw - 320px) / (1920 - 320)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .page-item {
+        box-shadow: none;
+        outline: none;
+
+        .page-link {
+            border-radius: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            line-height: 1;
+            color: rgba($dark-color, 0.8);
+            font-size: 14px;
+            border: none;
+            box-shadow: none;
+            outline: none;
+            background-color: transparent;
+
+            &[aria-label="« Previous"],
+            &[aria-label="Next »"] {
+                color: rgba($dark-color, 0.8) !important;
+                background: unset !important;
+
+                .page-link {
+                    color: rgba($dark-color, 0.8) !important;
+                }
+            }
+        } &:first-child {
+            .page-link {
+                font-size: 0;
+
+                &::before {
+                    content: "\ea64";
+                    font-family: remixicon !important;
+                    font-style: normal;
+                    -webkit-font-smoothing: antialiased;
+                    font-size: 21px;
+                }
+            }
+        }
+
+        &:last-child {
+            .page-link {
+                font-size: 0;
+
+                &::before {
+                    content: "\ea6e";
+                    font-family: remixicon !important;
+                    font-style: normal;
+                    -webkit-font-smoothing: antialiased;
+                    font-size: calc(19px + (21 - 19) * ((100vw - 320px) / (1920 - 320)));
+                }
+            }
+        }
+
+        &.active,
+        &.active:hover {
+            .page-link {
+                border-color: var(--primary-color);
+                background-color: var(--primary-color);
+                color: $white !important;
+            }
+        }
+
+        &:hover,
+        &:focus {
+            .page-link {
+                color: var(--primary-color) !important;
+                border-color: rgba($primary-color, 0.01);
+                background-color: rgba($primary-color, 0.1);
+                box-shadow: unset;
+            }
+        }
+
+        &[aria-label="« Previous"],
+        &[aria-label="Next »"] {
+            .page-link {
+                color: rgba($dark-color, 0.8) !important;
+                background: unset !important;
+            }
+        }
+    }
+
+    span {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+}
+
+/**=====================
+Pagination CSS End
+==========================**/

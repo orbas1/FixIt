@@ -1,0 +1,154 @@
+/**=====================
+     Typography scss
+==========================**/
+body {
+     font-family: "DM Sans", serif !important;
+     position: relative;
+     font-size: 14px;
+     margin: 0;
+     background-color: $white;
+     color: $title-color;
+     scroll-behavior: smooth;
+}
+
+ul {
+     padding-left: 0;
+     margin-bottom: 0;
+}
+
+li {
+     display: inline-block;
+     font-size: 14px;
+}
+
+p {
+     font-size: 14px;
+     line-height: 1.5;
+     margin: 0;
+}
+
+a {
+     color: var(--primary-color);
+     transition: all 0.2s ease-in-out;
+     text-decoration: none;
+
+     &:hover {
+          color: var(--primary-color);
+          text-decoration: none;
+     }
+
+     &:focus {
+          outline: none;
+     }
+}
+
+button {
+     &:focus {
+          outline: none;
+     }
+}
+
+:focus {
+     outline: none;
+}
+
+label {
+     font-size: 16px;
+     color: $light-color;
+}
+
+h1 {
+     font-size: calc(22px + (60 - 22) * ((100vw - 320px) / (1920 - 320)));
+     font-weight: 500;
+     line-height: 1.1;
+     text-transform: capitalize;
+     margin: 0;
+}
+
+h2 {
+     font-size: calc(20px + (26 - 20) * ((100vw - 320px) / (1920 - 320)));
+     font-weight: 600;
+     text-transform: capitalize;
+     margin: 0;
+}
+
+h3 {
+     font-size: calc(16px + (20 - 16) * ((100vw - 320px) / (1920 - 320)));
+     font-weight: 500;
+     line-height: 1.2;
+     margin: 0;
+}
+
+h4 {
+     font-size: calc(17px + (18 - 17) * ((100vw - 320px) / (1920 - 320)));
+     line-height: 1.2;
+     margin: 0;
+     font-weight: 400;
+}
+
+h5 {
+     font-size: calc(15px + (16 - 15) * ((100vw - 320px) / (1920 - 320)));
+     line-height: 1.2;
+     margin: 0;
+     font-weight: 400;
+}
+
+h6 {
+     font-size: calc(13px + (14 - 13) * ((100vw - 320px) / (1920 - 320)));
+     line-height: 1.2;
+     margin: 0;
+     font-weight: 400;
+}
+
+span {
+     display: inline-block;
+}
+
+.theme-color {
+     color: var(--primary-color) !important;
+}
+
+.theme-bg-color {
+     background: var(--primary-color) !important;
+}
+
+.col-custom-3 {
+     width: 29%;
+
+     @media (max-width: 1366px) {
+          width: 36%;
+     }
+
+     @media (max-width: 1199.98px) {
+          width: 300px;
+          position: relative;
+     }
+}
+
+.col-custom-9 {
+     width: 71%;
+
+     @media (max-width: 1366px) {
+          width: 64%;
+     }
+
+     @media (max-width: 1199.98px) {
+          width: 100%;
+     }
+}
+
+.no-data-col-custom-9 {
+
+     .no-data-found {
+          height: 100%;
+     }
+
+     &:has(.no-data-found) {
+          width: 71%;
+     }
+
+}
+
+.w-max {
+     width: max-content !important;
+}

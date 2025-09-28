@@ -1,0 +1,11 @@
+{
+    "name": "BKash",
+    "alias": "bkash",
+    "description": "Facilitates easy integration with BKash, a leading mobile financial service in Bangladesh.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\BKash\\Providers\\BKashServiceProvider"
+    ],
+    "files": []
+}

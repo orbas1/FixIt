@@ -1,0 +1,32 @@
+CATEGORY IMPORT FORMAT - INSTRUCTIONS
+
+Required Columns:
+-----------------
+1. title         => Title of the category (Required, Max: 255 characters)
+2. description   => Optional description of the category
+3. zones         => JSON array of zone IDs (e.g., "[1,2,3]") - Each ID must exist in the zones table and not be soft-deleted
+4. parent_id     => Optional ID of the parent category (Must exist in categories table and not be soft-deleted)
+5. image         => Optional image URL (must be png, jpg, or jpeg)
+6. commission    => Required commission value (e.g., 10.00; must be a number with up to 2 decimal places)
+7. category_type => Required; must be "service"
+8. status        => Required; category status (e.g., 0 or 1)
+9. is_featured   => Optional; indicate if the category is featured (e.g., 0 or 1)
+10. created_by   => Optional; ID of the user who created the category
+11. media        => Optional URL for media to be added to the category image collection (must be png, jpg, or jpeg)
+
+Validation Rules:
+-----------------
+- title is required, must be a string, and max 255 characters.
+- zones must be a JSON array of valid zone IDs (exists in zones table, not soft-deleted).
+- parent_id must be a valid ID from the categories table (not soft-deleted).
+- commission must match the pattern XX.XX (e.g., 12, 15.50).
+- category_type must be "service" only.
+- Image and media URLs must be valid image formats (png, jpg, jpeg).
+
+Notes:
+------
+- The zones field should be a valid JSON string, e.g., "[1, 2, 3]".
+- parent_id is optional but, if provided, must exist and not be soft-deleted.
+- media is uploaded via the provided image URL and added to the image media collection with locale-specific custom properties.
+- Any error during import will throw a formatted exception.
+- Supported languages for image metadata are determined by the system locale or the provided locale.

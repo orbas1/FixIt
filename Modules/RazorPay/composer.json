@@ -1,0 +1,35 @@
+{
+    "name": "nwidart/razorpay",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "require": {
+        "php": ">=8.1",
+        "razorpay/razorpay": "^2.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\RazorPay\\": "",
+            "Modules\\RazorPay\\App\\": "app/",
+            "Modules\\RazorPay\\Database\\Factories\\": "database/factories/",
+            "Modules\\RazorPay\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\RazorPay\\Tests\\": "tests/"
+        }
+    }
+}

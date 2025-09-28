@@ -1,0 +1,58 @@
+/**=====================
+    Card scss
+==========================**/
+
+.card {
+    background-color: $white;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid $gray-color;
+    margin: 0;
+
+    &:hover {
+        .card-img {
+            transform: scale(1.1) rotate(2deg);
+        }
+    }
+
+    .card-img {
+        img {
+            @include pseudowh;
+            aspect-ratio: 3 / 2;
+            object-fit: cover;
+        }
+    }
+
+    &.dark-card {
+        background-color: rgba($white, 0.10);
+        color: $light-color;
+        border: none;
+
+        .card-body {
+            .card-title {
+                h4 {
+                    color: $white;
+                }
+            }
+        }
+    }
+
+    &.gray-card {
+        background-color: $section-bg;
+        border: none;
+        height: calc(100% - 60px);
+    }
+
+    .card-footer {
+        padding: 16px;
+        background-color: transparent;
+        border: none;
+        gap: 8px;
+        @include flex_common ($dis: flex, $align: center, $justify: space-between);
+
+        .book-btn {
+            display: inline-block;
+            width: auto;
+        }
+    }
+}

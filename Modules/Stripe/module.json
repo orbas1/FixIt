@@ -1,0 +1,11 @@
+{
+    "name": "Stripe",
+    "alias": "stripe",
+    "description": "Enables seamless integration with Stripe for secure and flexible payment processing in your Laravel application.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Stripe\\Providers\\StripeServiceProvider"
+    ],
+    "files": []
+}

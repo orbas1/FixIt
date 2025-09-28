@@ -1,0 +1,373 @@
+/**=====================
+    Calendar scss
+==========================**/
+
+.flatpickr-calendar {
+    z-index: 3;
+    width: 324.875px;
+    padding: 16px;
+    margin-top: -69px;
+
+    &.open {
+        z-index: 13;
+    }
+
+    &:before,
+    &:after {
+        display: none;
+    }
+
+    .flatpickr-innerContainer {
+        font-size: 14px;
+        background-color: rgba($input-bg, 0.40);
+        border-radius: 8px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .flatpickr-weekdays {
+        padding: 16px;
+        padding-bottom: 0;
+
+        .flatpickr-weekdaycontainer {
+            .flatpickr-weekday {
+                color: var(--primary-color);
+                font-size: 16px;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .flatpickr-day {
+        max-width: 37px;
+        height: 35px;
+        line-height: 35px;
+        color: $dark-color;
+        font-size: 16px;
+        box-shadow: none !important;
+
+        &:hover {
+            background-color: rgba($primary-color, 0.10);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        &.today {
+            background-color: transparent;
+            color: $dark-color;
+            border: none;
+        }
+
+        &.selected,
+        &.startRange,
+        &.endRange {
+            color: $white;
+            background-color: var(--primary-color);
+            box-shadow: none !important;
+        }
+
+        &.prevMonthDay,
+        &.flatpickr-disabled,
+        &.flatpickr-disabled:hover,
+        &.nextMonthDay,
+        &.notAllowed,
+        &.notAllowed.prevMonthDay,
+        &.notAllowed.nextMonthDay {
+            color: $dark-gray;
+        }
+
+        &.inRange {
+            background-color: rgba($primary-color, 0.10);
+            box-shadow: none;
+
+            &.today {
+                background-color: var(--primary-color);
+            }
+        }
+
+        &.nextMonthDay {
+
+            &.selected,
+            &.startRange,
+            &.endRange {
+                color: $white;
+                background-color: var(--primary-color);
+                box-shadow: none !important;
+            }
+        }
+    }
+
+    .dayContainer {
+        padding: 16px;
+    }
+
+    .flatpickr-months {
+        margin-bottom: 16px;
+
+        .flatpickr-month {
+            color: $dark-color;
+        }
+
+        .flatpickr-current-month {
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+
+            input {
+                &.cur-year {
+                    font-size: 16px;
+                    font-family: var(--font-family);
+                }
+            }
+        }
+
+        .flatpickr-prev-month,
+        .flatpickr-next-month {
+            background-color: rgba($input-bg, 0.40);
+            border-radius: 100%;
+            padding: 8px;
+            height: 30px;
+            width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 18px;
+
+            &:hover {
+                svg {
+                    fill: $dark-color;
+                }
+            }
+
+            svg {
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        .flatpickr-prev-month {
+            left: 16px !important;
+        }
+
+        .flatpickr-next-month {
+            right: 16px !important;
+        }
+
+        .flatpickr-monthDropdown-months {
+            background-color: rgba($input-bg, 0.40);
+            border-radius: 6px;
+            font-size: 16px;
+            padding: 6px 12px;
+            background-image: none !important;
+        }
+
+        .numInputWrapper {
+            background-color: rgba($input-bg, 0.40);
+            border-radius: 6px;
+            font-size: 14px;
+            padding: 6px 12px;
+            width: 80px;
+        }
+    }
+
+    .numInputWrapper {
+        &:hover {
+            background-color: rgba($primary-color, 0.04);
+
+            span {
+                border: none;
+            }
+        }
+
+        span {
+            &:hover {
+                background-color: unset;
+                border: none;
+            }
+
+            &.arrowUp {
+                &:after {
+                    top: 55%;
+                }
+            }
+
+            &.arrowDown {
+                &:after {
+                    top: 20%;
+                }
+            }
+        }
+    }
+
+    &.hasTime {
+        .flatpickr-time {
+            border: none;
+            line-height: unset;
+            gap: 10px;
+
+            &:after {
+                display: none;
+            }
+
+            .numInputWrapper {
+                input {
+                    border: 1px solid rgba($primary-color, 0.6);
+                    border-radius: 8px;
+
+                    &:hover,
+                    &:focus {
+                        background: $transparent-color;
+
+                    }
+                }
+
+                span {
+                    right: 16px;
+
+                    &.arrowUp {
+                        &:after {
+                            border-bottom-color: var(--primary-color);
+                            border-width: 5px;
+                            top: unset;
+                            bottom: 13%;
+                        }
+                    }
+
+                    &.arrowDown {
+                        &:after {
+                            border-top-color: var(--primary-color);
+                            border-width: 5px;
+                            top: 13%;
+                        }
+                    }
+                }
+            }
+
+            input {
+                text-align: left;
+                padding-left: 20px;
+                font-size: 18px;
+                color: var(--primary-color);
+                font-weight: 500;
+
+            }
+
+            .flatpickr-time-separator {
+                width: 2%;
+                color: var(--primary-color);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+            }
+
+            .flatpickr-am-pm {
+                height: 40px;
+                position: relative;
+                z-index: 0;
+                width: 29%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                color: var(--primary-color);
+                border: 1px solid rgba($primary-color, 0.6);
+                border-radius: 8px;
+
+                &:hover {
+                    background-color: rgba($primary-color, 0.04);
+                }
+            }
+        }
+    }
+}
+
+.main-inline-calender {
+    &.input-group {
+        flex-direction: column;
+
+        .form-control {
+            width: 100%;
+            border-radius: 6px !important;
+            color: var(--primary-color);
+            padding: 0;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 23px;
+
+            &:focus {
+                border: none;
+            }
+
+            &:focus,
+            &:disabled {
+                box-shadow: unset;
+                border: none;
+                background-color: unset;
+            }
+        }
+
+        .form-control[readonly] {
+            box-shadow: unset;
+            border: none;
+            background-color: unset;
+        }
+
+        .flatpickr-calendar {
+            &.inline {
+                width: 100%;
+                border-radius: 6px !important;
+            }
+        }
+
+        .flatpickr-innerContainer {
+            display: block;
+        }
+
+        .flatpickr-rContainer {
+            display: block;
+
+            .flatpickr-weekdays {
+                width: 100%;
+            }
+
+            .flatpickr-days {
+                width: 100%;
+
+                .dayContainer {
+                    width: 100%;
+                    max-width: none;
+                    min-width: unset;
+                    gap: 20px;
+
+
+                    .flatpickr-day {
+                        border-radius: 100%;
+                        width: 100%;
+                        color: $dark-color;
+
+                        &:hover {
+                            color: var(--primary-color);
+                        }
+
+                        &.selected,
+                        &.today {
+                            color: $white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.input-icon {
+    position: absolute;
+    top: 14px;
+    right: 28px;
+    --Iconsax-Size: 20px;
+    --Iconsax-Color: #808B97;
+    z-index: 3;
+}

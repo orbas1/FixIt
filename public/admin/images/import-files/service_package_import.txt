@@ -1,0 +1,43 @@
+Service Package Import Instructions
+===================================
+
+Required Columns:
+-----------------
+- title : (string) Required. Title of the package. Max 255 characters.
+- hexa_code : (string) Required. Hexadecimal color code (e.g., "#FF5733").
+- bg_color : (string) Required. Background color name or code.
+- price : (numeric) Required. Base price of the service package.
+- discount : (numeric) Required. Discount amount or percentage.
+- description : (string) Required. Short or long description of the package.
+- is_featured : (boolean) Required. 1 or 0 to mark package as featured.
+- provider_id : (integer) Required. Must be a valid user ID of a provider.
+- started_at : (datetime string) Required. Start date of the package validity (format: Y-m-d H:i:s).
+- ended_at : (datetime string) Required. End date of the package validity (format: Y-m-d H:i:s).
+- status : (string) Required. Current status of the package (e.g., "active", "inactive").
+
+Optional Columns:
+-----------------
+- service_ids : (JSON array of service IDs) Optional. Each ID must exist in the `services` table.
+- image : (string) Optional. URL of the image to attach. Will be added to the `image` media collection.
+
+Media Fields (optional):
+------------------------
+- image : (string) Valid image URL. The image will be downloaded and attached using `addMediaFromUrl`. Language for the media is set from app locale or request locale.
+
+Translation:
+------------
+- The `title` and `description` fields will be translated based on the app’s default language or request locale.
+
+Validation Rules:
+-----------------
+- No strict validation is currently applied via `rules()` method.
+- If required, validations can be added in the `rules()` array in the import class.
+
+Error Handling:
+---------------
+- If any error occurs (validation or otherwise), the import will halt and throw a `422` validation exception using `ExceptionHandler`.
+
+Output:
+-------
+- Successfully imported packages can be retrieved using `getImportedUsers()` method (reused naming).
+- Each package may include related services and an optional featured image.

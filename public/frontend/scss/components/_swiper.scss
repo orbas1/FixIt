@@ -1,0 +1,111 @@
+/**=====================
+    Swiper scss
+==========================**/
+
+.swiper {
+    [dir="rtl"] & {
+        direction: ltr;
+
+        .swiper-slide {
+            direction: rtl;
+        }
+    }
+
+.swiper-wrapper {
+    height: auto;
+
+    .swiper-slide {
+        .card {
+            margin-bottom: 0;
+        }
+    }
+}
+}
+
+.offer-section,
+.service-list-section,
+.service-package-section,
+.about-us-slider {
+
+    .swiper-button-next4,
+    .swiper-button-prev4,
+    .swiper-button-next1,
+    .swiper-button-prev1,
+    .swiper-button-next2,
+    .swiper-button-prev2,
+    .swiper-button-next3,
+    .swiper-button-prev3 {
+        background-repeat: no-repeat;
+        background-size: 80% auto;
+        background-position: center;
+        width: 28px;
+        height: 20px;
+        top: -10px;
+        position: absolute;
+        opacity: 1;
+
+        &:after {
+            display: none;
+        }
+    }
+
+    .swiper-button-prev4,
+    .swiper-button-prev1,
+    .swiper-button-prev2,
+    .swiper-button-prev3 {
+        background-image: url("@/svg/preview.svg");
+        right: 30px;
+        left: auto;
+
+
+        &.swiper-button-disabled {
+            background-image: url("@/svg/preview-disable.svg") !important;
+        }
+    }
+
+    .swiper-button-next4,
+    .swiper-button-next1,
+    .swiper-button-next2,
+    .swiper-button-next3 {
+        background-image: url("@/svg/next.svg") !important;
+        right: 0;
+        left: auto;
+
+        &.swiper-button-disabled {
+            background-image: url("@/svg/next-disable.svg") !important;
+        }
+    }
+}
+
+.swiper-button-next5,
+.swiper-button-prev5 {
+    background-repeat: no-repeat;
+    background-size: 50% auto;
+    background-position: center;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    z-index: 1;
+    @include center(vertical);
+    background-color: rgba($white, 0.40);
+    border-radius: 100%;
+    opacity: 1;
+
+    &:after {
+        display: none;
+    }
+
+    &.swiper-button-disabled {
+        opacity: 0.7;
+    }
+}
+
+.swiper-button-prev5 {
+    background-image: url("@/svg/left.svg");
+    left: 20px;
+}
+
+.swiper-button-next5 {
+    background-image: url("@/svg/right.svg") !important;
+    right: 20px;
+}

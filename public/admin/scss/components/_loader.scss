@@ -1,0 +1,44 @@
+/**=====================
+      Loader CSS Start
+==========================**/
+
+#loader {
+  position: absolute;
+  background: white;
+  width: 100%;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.notLoaded {
+  height: 100vh;
+  overflow: hidden;
+  position: fixed;
+  margin: 0px;
+  width: 100%;
+}
+
+.page-loader {
+  .page-loader-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 12px;
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+  }
+}
+
+/**=====================
+      Loader CSS End
+==========================**/

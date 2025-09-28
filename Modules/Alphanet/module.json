@@ -1,0 +1,11 @@
+{
+    "name": "Alphanet",
+    "alias": "alphanet",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Alphanet\\Providers\\AlphanetServiceProvider"
+    ],
+    "files": []
+}

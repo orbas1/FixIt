@@ -1,0 +1,6 @@
+"title","price","parent_id","user_id","image"
+"Gas Filling With Repairing","50","3","3","http://127.0.0.1:8000/storage/1082/Gas-Filling-With-Repairing.jpg"
+"Leak Detection Service","30","58","22","http://127.0.0.1:8000/storage/1081/Leak-Detection-Service.jpg"
+"Pipe Insulation Installation","75","58","22","http://127.0.0.1:8000/storage/1080/Pipe-Insulation-Installation.jpg"
+"Primer Application","40","53","21","http://127.0.0.1:8000/storage/1079/Primer-Application.jpg"
+"Protective Coating","70","53","21","http://127.0.0.1:8000/storage/1078/Protective-Coating.jpg"

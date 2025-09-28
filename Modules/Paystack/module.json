@@ -1,0 +1,11 @@
+{
+    "name": "Paystack",
+    "alias": "paystack",
+    "description": "Provides integration with Paystack to handle payments across Africa with ease and security.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Paystack\\Providers\\PaystackServiceProvider"
+    ],
+    "files": []
+}

@@ -1,0 +1,293 @@
+/**=====================
+      Tree CSS Start
+==========================**/
+
+.jstree-default {
+    .jstree-anchor {
+        width: auto;
+        line-height: calc(26px + (29 - 26) * ((100vw - 320px) / (1920 - 320)));
+    }
+
+    .jstree-hovered {
+        box-shadow: unset;
+    }
+
+    .jstree-children {
+        ul[role="group"] {
+            .jstree-node {
+                margin-left: 30px;
+
+                @media (max-width:575px) {
+                    margin-left: 15px;
+                }
+            }
+        }
+    }
+
+    .jstree-search {
+        color: rgba($dark-color, 0.9);
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .jstree-icon,
+    .jstree-node {
+        color: rgba($dark-color, 0.9);
+    }
+}
+
+.jstree {
+    .edit-icon {
+        background-color: unset;
+        border-radius: 0;
+        padding: 0;
+    }
+
+    .jstree-container-ul {
+        &.jstree-children {
+            .jstree-node {
+                .jstree-anchor {
+                    position: relative;
+                    border: none;
+                    margin: 0;
+                    font-size: 14px;
+
+                    .jstree-icon {
+                        background-image: url('/public/admin/images/svg/folder.svg') !important;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        background-size: 30px 30px;
+                        margin: 0 !important;
+                    }
+
+                    .actions {
+                        opacity: 1;
+                        transform: scale(1);
+                        visibility: visible;
+                        transition: all 0.2s ease;
+                        position: absolute;
+                        right: -60px;
+                        top: 0;
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+
+                        @media (max-width:575px) {
+                            right: -40px;
+                        }
+
+                        .edit-icon,
+                        .remove-icon,
+                        .edit-child,
+                        .delete-child {
+                            width: calc(16px + (18 - 16) * ((100vw - 320px) / (1920 - 320)));
+                            height: calc(16px + (18 - 16) * ((100vw - 320px) / (1920 - 320)));
+
+                        }
+                    }
+
+                    @media (min-width:992px) {
+                        .actions {
+                            opacity: 0;
+                            transform: scale(0.8);
+                            visibility: hidden;
+                        }
+
+                        &:hover {
+                            .actions {
+                                opacity: 1;
+                                transform: scale(1);
+                                visibility: visible;
+                                transition: all 0.2s ease;
+                            }
+                        }
+                    }
+
+                    &.jstree-hovered {
+                        background: unset;
+                    }
+
+                    &.jstree-clicked {
+                        color: var(--primary-color);
+                        background: unset;
+                        border: unset;
+                        box-shadow: none;
+                    }
+                }
+
+                &.jstree-open {
+                    .jstree-anchor {
+                        .jstree-icon {
+                            background-image: url('/public/admin/images/svg/folder.svg') !important;
+                            background-position: center;
+                            background-repeat: no-repeat;
+                            background-size: 30px 30px;
+                        }
+                    }
+                }
+
+                ul {
+                    li {
+                        .jstree-anchor {
+                            .jstree-icon.ti-file {
+                                background-image: url('/public/admin/images/svg/file.svg') !important;
+                                background-position: center;
+                                background-repeat: no-repeat;
+                                background-size: 30px 30px;
+
+                                &:before {
+                                    display: none;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            i {
+                --Iconsax-Size: 20px;
+                --Iconsax-Color: #0b64c3;
+            }
+        }
+    }
+
+}
+
+.no-data {
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .jstree {
+        min-height: 220px;
+        padding-top: 24px;
+    }
+}
+
+.no-data-detail {
+    margin-left: 0 !important;
+
+    .jstree-anchor {
+        height: 220px;
+    }
+
+    img {
+        height: calc(170px + (190 - 170) * ((100vw - 320px) / (1920 - 320)));
+        width: calc(220px + (250 - 220) * ((100vw - 320px) / (1920 - 320)));
+    }
+
+    .jstree-icon {
+        display: none;
+    }
+}
+
+.address-body {
+    .no-data-detail {
+        align-items: center;
+        justify-content: center;
+
+        .data-not-found {
+            margin-top: 20px;
+        }
+    }
+}
+
+.left-jstree-box {
+    position: sticky;
+    top: calc(103px - var(--bs-gutter-y));
+
+    .no-data {
+        .jstree {
+            height: calc(100vh - 356px);
+            min-height: unset;
+            overflow: auto;
+
+            &::-webkit-scrollbar-track {
+                background-color: #f8f9f9;
+            }
+
+            &::-webkit-scrollbar {
+                width: 6px;
+                height: 5px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: rgba($primary-color, 0.1);
+            }
+        }
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes gradients-2 {
+    0% {
+        background-position: 0 0;
+    }
+
+    25% {
+        background-position: 50% 0;
+    }
+
+    50% {
+        background-position: 100% 0;
+    }
+
+    75% {
+        background-position: 50% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+
+.jstree-main-box {
+    position: relative;
+    margin-top: 24px;
+
+    &:has(.jstree-loader[style="display: block;"], .jstree-loader[style*=opacity], .jstree-loader[style*=""]) {
+        height: 220px;
+    }
+
+    .jstree-loader {
+
+        &[style="display: block;"],
+        &[style*="opacity"],
+        &[style*=""] {
+            background-color: #f8f9f9;
+            height: 220px;
+            display: flex !important;
+            z-index: 1;
+            border-radius: 8px;
+            position: relative;
+            inset: unset;
+
+            ~.jstree.jstree-1.jstree-default {
+                display: none !important;
+            }
+        }
+    }
+
+    .jstree {
+        padding-top: 0;
+    }
+}
+
+/**=====================
+      Tree CSS Start
+==========================**/

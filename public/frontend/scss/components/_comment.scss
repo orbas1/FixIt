@@ -1,0 +1,231 @@
+/**=====================
+    Comment scss
+==========================**/
+.review-section {
+    .review-content {
+        .review-card {
+            border: 1px solid $gray-color;
+            padding: calc(15px + (20 - 15) * ((100vw - 320px) / (1920 - 320)));
+            border-radius: 8px;
+            background-color: $section-bg;
+            display: block;
+
+            +.review-card {
+                margin-top: 20px;
+            }
+
+            .review-detail {
+                display: block;
+                position: relative;
+
+                .review-image-box {
+                    border-radius: 100%;
+                    width: calc(30px + (40 - 30) * ((100vw - 320px) / (1920 - 320)));
+                    height: calc(30px + (40 - 30) * ((100vw - 320px) / (1920 - 320)));
+                    overflow: hidden;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    .initial-letter {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: $white;
+                        color: $title-color;
+                        font-size: 24px;
+                        line-height: 1;
+                        font-weight: 500;
+                    }
+                }
+
+                .review-top-box {
+                    display: flex;
+                    align-items: center;
+                    gap: 13px;
+                }
+
+                .review-auth-name {
+                    display: flex;
+                    align-items: center;
+                    gap: calc(4px + (11 - 4) * ((100vw - 320px) / (1920 - 320)));
+                    flex-wrap: wrap;
+                    width: calc(100% - calc(30px + (40 - 30) * ((100vw - 320px) / (1920 - 320))) - 13px);
+
+                    h4 {
+                        font-weight: 600;
+                        font-size: 20px;
+                        line-height: 1.3;
+                    }
+
+                    span {
+                        line-height: 1.5;
+                        position: relative;
+                        color: #808B97;
+                        font-size: calc(13px + (14 - 13) * ((100vw - 320px) / (1920 - 320)));
+                    }
+                }
+
+                .review-right-box {
+                    margin-top: 15px;
+
+                    h4 {
+                        font-weight: 600;
+                        font-size: calc(16px + (18 - 16) * ((100vw - 320px) / (1920 - 320)));
+                    }
+
+                    span {
+                        color: $light-color;
+                        font-weight: 500;
+                    }
+
+                    h4,
+                    span {
+                        width: 100%;
+                        overflow: hidden;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1;
+                        -webkit-box-orient: vertical;
+                        text-overflow: ellipsis;
+                        word-break: break-all;
+                    }
+                }
+            }
+
+            .review {
+                p {
+                    font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+                    line-height: 1.4;
+                }
+
+
+                .comment-box {
+                    margin-top: 19px;
+
+                    .btn {
+                        border-radius: 7px;
+                        margin-top: 13px;
+                        font-weight: 500;
+                    }
+
+                    &.reply-box {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+
+
+
+                        .reply-btn {
+                            display: inline-block;
+                            width: auto;
+                            margin-top: 0;
+                        }
+                    }
+                }
+            }
+
+            .favourite {
+                top: 0;
+                right: calc((-3px) + (15 - (-3)) * ((100vw - 320px) / (1920 - 320)));
+                left: unset;
+                padding: 0;
+                background-color: unset;
+
+                [dir="rtl"] & {
+                    right: unset;
+                    left: calc((-3px) + (15 - (-3)) * ((100vw - 320px) / (1920 - 320)));
+                }
+
+                .nolike {
+                    --Iconsax-Size: calc(16px + (20 - 16) * ((100vw - 320px) / (1920 - 320)));
+                    --Iconsax-Color: #808B97;
+
+                    &.hide {
+                        display: none;
+                    }
+                }
+
+                .like {
+                    height: calc(16px + (20 - 16) * ((100vw - 320px) / (1920 - 320))) !important;
+                    width: calc(16px + (20 - 16) * ((100vw - 320px) / (1920 - 320))) !important;
+                    display: none;
+
+                    &.show {
+                        display: block;
+                    }
+                }
+            }
+
+
+
+            >ul {
+                border: unset;
+                padding: 0;
+                border-radius: unset;
+                background-color: unset;
+                margin-top: 20px;
+                margin-left: 0;
+                border-left: 1px solid $gray-color;
+                display: grid;
+                gap: calc(11px + (20 - 11) * ((100vw - 320px) / (1920 - 320)));
+
+                [dir="rtl"] & {
+                    margin-left: unset;
+                    margin-right: 0;
+                    border-left: none;
+                    border-right: 1px solid $gray-color;
+                }
+
+                >.review-card {
+                    border: none;
+                    padding: 0;
+                    padding-left: calc(16px + (20 - 16) * ((100vw - 320px) / (1920 - 320)));
+                    position: relative;
+
+                    [dir="rtl"] & {
+                        padding-left: unset;
+                        padding-right: calc(16px + (20 - 16) * ((100vw - 320px) / (1920 - 320)));
+                    }
+
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        top: 20px;
+                        left: 0;
+                        width: calc(30px + (50 - 30) * ((100vw - 320px) / (1920 - 320)));
+                        height: 1px;
+                        border-top: 1px solid $gray-color;
+
+                        [dir="rtl"] & {
+                            left: unset;
+                            right: 0;
+                        }
+                    }
+
+                    +.review-card {
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.comment-section {
+    form {
+        border: 1px solid $gray-color;
+        padding: calc(15px + (20 - 15) * ((100vw - 320px) / (1920 - 320)));
+        border-radius: 8px;
+        background-color: $section-bg;
+
+        .btn {
+            width: max-content;
+
+        }
+    }
+}

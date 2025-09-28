@@ -1,0 +1,61 @@
+Service Import Instructions
+===========================
+
+Required Columns:
+-----------------
+- title : (string) Required. Max 255 characters.
+- category_id : (JSON array of category IDs) Required. Each ID must exist in `categories` table.
+- type : (string) Required. Accepted values: fixed, provider_site, remotely.
+- user_id : (integer) Optional. Must exist in `users` table if provided.
+- required_servicemen : (integer) Required.
+- price : (numeric) Required.
+- duration : (integer) Required.
+- duration_unit : (string) Required. Accepted values: hours, minutes.
+- per_serviceman_commission : (numeric) Required. Value must be between 0 and 100.
+
+Optional Columns:
+-----------------
+- video : (string) URL to the video file.
+- status : (string) status of the service.
+- discount : (numeric) Discount amount or percentage.
+- service_id : (JSON array of service IDs) Optional. Each ID must exist in `services` table.
+- description : (string) Service description.
+- content : (string) Rich content or long description.
+- is_featured : (boolean) 1 or 0.
+- service_rate : (numeric) Rating of the service.
+- isMultipleServiceman : (boolean) 1 or 0.
+- is_random_related_services : (boolean) 1 or 0.
+
+Media Fields (optional):
+------------------------
+- image : (JSON array) URLs of images for mobile app.
+- web_images : (JSON array) URLs of images for web.
+- web_thumbnail : (JSON array) URLs of web thumbnails. Will be added to both `web_thumbnail` and `thumbnail` collections.
+
+Relationship Fields:
+--------------------
+- categories : (JSON array of category IDs) Will be attached to the service if provided.
+- taxes : (JSON array of tax IDs) Will be attached to the service if provided.
+- related_services : (JSON array of service IDs) Will be attached as related services.
+
+Notes:
+------
+- All JSON arrays must be passed as valid JSON strings in the Excel sheet, e.g.:
+  "[1, 2, 3]"
+- Media will be fetched from the provided URLs using `addMediaFromUrl`.
+- Locale for media language is determined from the request or defaults to app locale.
+- Each service is saved individually and attached to relevant relationships.
+
+Validation:
+-----------
+- If any rule fails, import will throw an error with proper message.
+- Custom error messages are defined for fields like name, price, category_id, and tax_id.
+
+Error Handling:
+---------------
+- On any throwable error, the import will halt and return a validation exception.
+
+Output:
+-------
+- Imported services can be retrieved using the `getImportedServices()` method for logging or reporting.
+

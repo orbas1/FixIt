@@ -1,0 +1,52 @@
+.theme-accordion {
+    margin-top: 18px;
+
+    .accordion-item {
+        border: 1px solid $input-bg;
+        background-color: transparent;
+        border-radius: 6px;
+        overflow: hidden;
+
+        +.accordion-item {
+            margin-top: 19px;
+        }
+
+        .accordion-header {
+            .accordion-button {
+                font-size: 16px;
+                font-weight: 400;
+                color: $dark-color;
+                background-color: rgba(237, 239, 241, 0.4);
+                box-shadow: none;
+                font-family: inherit;
+                padding: calc(15px + (18 - 15) * ((100vw - 320px) / (1920 - 320))) calc(17px + (22 - 17) * ((100vw - 320px) / (1920 - 320)));
+
+                &::after {
+                    content: "\ea4e";
+                    @include icon;
+                    border: none;
+                    background: unset;
+                    width: auto;
+                    height: auto;
+                    font-size: 21px;
+                    line-height: 1;
+                    color: #777;
+                }
+
+                &:not(.collapsed) {
+                    background-color: $input-bg;
+                    font-weight: 500;
+
+                    &::after {
+                        font-weight: normal;
+                        color: #00162e;
+                    }
+                }
+            }
+        }
+
+        .accordion-body {
+            padding: calc(10px + (16 - 10) * ((100vw - 320px) / (1920 - 320))) calc(14px + (20 - 14) * ((100vw - 320px) / (1920 - 320)));
+        }
+    }
+}

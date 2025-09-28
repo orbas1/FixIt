@@ -1,0 +1,27 @@
+PROVIDER DOCUMENTS IMPORT FORMAT - INSTRUCTIONS
+
+Required Columns:
+-----------------
+1. user_id         => ID of the provider (Must exist in the users table)
+2. document_id     => ID of the document type (Must exist in the documents table)
+3. identity_no     => Identity number of the provider (Required string)
+4. status          => Status of the document (e.g., 0 or 1) [REQUIRED]
+5. image           => Required image URL (will be stored as provider document)
+6. notes           => Optional notes field
+7. document_image  => Optional URL to the document image (jpg, jpeg, or png)
+
+Validation Rules:
+-----------------
+- All required fields must be filled.
+- user_id must exist in the users table.
+- document_id must exist in the documents table.
+- identity_no is required and must be a string.
+- image/document_image URLs must point to valid image files (jpg, jpeg, png).
+
+Notes:
+------
+- The uploaded image will be stored in the 'provider_documents' media collection.
+- If provided, the `document_image` field will be used to attach the file via URL.
+- The notes field is optional and can include extra details.
+- Status should be a valid integer or value accepted by the system (e.g., 0 for inactive, 1 for active).
+- Any import errors will throw a formatted exception.
