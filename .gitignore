@@ -17,3 +17,5 @@ yarn-debug.log*
 /bootstrap/cache/*.php
 /public/*.sql
 /public/*.dump
+/public/*.sql
+/public/*.dump
