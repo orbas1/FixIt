@@ -2258,3 +2258,101 @@ Next: I can generate FormRequest/Policy stubs for the routes above, Retrofit mod
 ## Deliverable
 
 With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **configuration checklist**, and **localization/currency** rules needed to implement, test, and launch Fixit + Taskup across web/admin/mobile with confidence.
+
+---
+## Comprehensive Execution & Visualization Checklist
+
+### How to Complete This Plan
+1. **Orient** yourself with each section referenced below; expand the document context links (`>` separators) to revisit the detailed guidance above before starting work.
+2. **Check the box** once the deliverable is complete and evidence has been captured; leave unchecked items visible to highlight remaining scope.
+3. **Grade rigorously**: record a percentage (0–100) in each rubric box to benchmark Functionality, Integration, UI/UX, and Security outcomes for the task.
+4. **Iterate visually**: use color-coding or kanban swimlanes in your project tracker mirroring the numbers below to provide at-a-glance status reporting across the entire Fixit + Taskup program.
+5. **Review holistically** at milestones—aggregate scores per phase/section to spot weak spots and trigger remediation sprints before launch.
+
+### Program-Wide Task Ledger
+1. [ ] Align on Fixit + Taskup program charter and cross-platform scope mapping — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+2. [ ] Implement 0.1 Environments & Secrets hardening across Laravel, mobile CI, and parameter store integrations — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+3. [ ] Stand up 0.2 Logging, Metrics, and Tracing stack with JSON logging, Sentry, and request correlation — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+4. [ ] Deliver 0.3 Authentication upgrades (Sanctum/JWT, MFA, OAuth, magic links, device management) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+5. [ ] Enforce 0.4 Rate Limiting & Abuse Controls with per-route policies and bot mitigation — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+6. [ ] Operationalize 0.5 Queue & Background Job architecture with Redis, Horizon, and DLQ policies — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+7. [ ] Establish 0.6 Test Harness coverage across PHPUnit/Pest, Cypress, and Flutter integration pipelines — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+8. [ ] Execute Phase 2 Core Data Model & Migrations delivery with spatial indexes and seeders — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+9. [ ] Execute Phase 3 API Contracts & Services rollout with versioned REST and WebSockets — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+10. [ ] Execute Phase 4 Web UI/UX Overhaul including landing, search grid, and dashboards — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+11. [ ] Execute Phase 5 Mobile Apps Parity initiatives for feed, search, jobs, bids, escrow, and disputes — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+12. [ ] Execute Phase 6 Performance & Security program for caching, Core Web Vitals, and WAF/CSP — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+13. [ ] Execute Phase 7 UAT & Launch readiness with runbooks, rollback, and dry-run sign-offs — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+14. [ ] Complete 1.1 Live Feed & Marketplace domain tables, implementation notes, and acceptance criteria — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+15. [ ] Complete 1.2 Escrow & Payments schema, workflows, and acceptance coverage — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+16. [ ] Complete 1.3 Disputes (Multi-Stage) entities, automation, and closure acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+17. [ ] Complete 1.4 Taxes & Zones modelling, geospatial indexes, and acceptance gates — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+18. [ ] Complete 1.5 Unified Search & Matching entities, rankings, and success criteria — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+19. [ ] Complete 1.6 Ads/Banners & Placements structures, targeting flows, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+20. [ ] Complete 1.7 Affiliates data model, linking logic, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+21. [ ] Complete 1.8 Storefront: Provider Tools eCommerce objects, fulfillment logic, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+22. [ ] Complete 1.9 Moderation & Safety pipelines, review queues, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+23. [ ] Package Migration Delivery Format with ERD, factory, and seeding standards — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+24. [ ] Finalize 2.1 Live Feed API contracts with pagination, filters, and socket events — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+25. [ ] Finalize 2.2–2.3 Escrow & Disputes API contracts for holds, releases, and resolution flows — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+26. [ ] Finalize 2.4–2.7 Search, Ads, Affiliates, and Storefront API contracts with consistent DTOs — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+27. [ ] Plan 3) Services & Domain Logic orchestration, service boundaries, and integration glue — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+28. [ ] Implement 3.1–3.2 Live Feed and Tax Engine services with caching and policy layers — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+29. [ ] Implement 3.3–3.4 Escrow & Disputes services with ledgering, SLAs, and compliance hooks — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+30. [ ] Implement 3.5–3.8 Unified Search, Ads, Affiliates, and Storefront service modules — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+31. [ ] Deliver 4.1.1–4.1.3 Flutter architecture, dependencies, and bootstrap readiness — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+32. [ ] Deliver 4.1.4–4.1.6 Flutter state management, networking interceptors, and realtime strategy — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+33. [ ] Deliver 4.1.7 Flutter routing and navigation patterns for consumer and provider personas — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+34. [ ] Ship 4.2.1–4.2.3 Mobile consumer funnel screens (landing, feed, job detail) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+35. [ ] Ship 4.2.4–4.2.9 Mobile marketplace and commerce screens (search, escrow, disputes, storefront, affiliate, settings) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+36. [ ] Integrate 4.3 Native capabilities (location, file scanning, push notifications) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+37. [ ] Build 5.1–5.2 Design tokens, theming system, and shared component library — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+38. [ ] Build 5.3–5.6 Experience upgrades (landing, dashboards, admin redesign, accessibility) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+39. [ ] Execute 6.1–6.2 Backend performance and caching enhancements — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+40. [ ] Execute 6.3–6.4 Asset optimization and API transport improvements — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+41. [ ] Execute 6.5–6.6 Mobile runtime optimizations, observability gates, and acceptance metrics — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+42. [ ] Deliver 7.1–7.2 Identity, MFA, and authorization protections — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+43. [ ] Deliver 7.3–7.5 Payments, file security, and abuse mitigation safeguards — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+44. [ ] Deliver 7.6–7.8 Secrets management, AppSec automation, and privacy compliance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+45. [ ] Deliver 7.9–7.10 Security runbooks, incident response, and acceptance testing — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+46. [ ] Implement 8.1 Admin modules for moderation, disputes, and commerce oversight — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+47. [ ] Implement 8.2–8.3 Ops observability dashboards and alerting with SLOs — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+48. [ ] Implement 8.4–8.5 Product analytics instrumentation and admin acceptance checks — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+49. [ ] Deliver 9.1–9.2 Ads slot registry, rendering, and fill waterfall — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+50. [ ] Deliver 9.3–9.7 Creative specs, measurement, privacy, performance budgets, and admin UX for ads — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+51. [ ] Execute 10.1–10.4 Affiliate program foundations (entities, tracking, tiers, payouts) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+52. [ ] Execute 10.5–10.9 Affiliate fraud controls, API/events, dashboards, admin tooling, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+53. [ ] Execute 11.1–11.2 Zones standards with SRID, H3 computation, and storage — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+54. [ ] Execute 11.3–11.7 Zone matching, backfill, geocoding, permissions, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+55. [ ] Execute 12.1–12.3 Search index, scoring, and normalization logic — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+56. [ ] Execute 12.4–12.8 Query parsing, personalization, feedback loops, performance, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+57. [ ] Map 13) Dispute system user journeys and escalation handling — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+58. [ ] Map 14) Payments & Escrow scenarios for lifecycle coverage — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+59. [ ] Map 15) Storefront eCommerce scenarios across inventory, carts, and fulfillment — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+60. [ ] Map 16) Moderation, bad-word detection, and file scanning operations — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+61. [ ] Map 17) Speed upgrades and performance backlog prioritization — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+62. [ ] Deliver 18.1–18.3 Mobile redesign navigation, layout, dark mode, and motion system — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+63. [ ] Deliver 18.4–18.7 Mobile redesign skeleton loaders, offline UX, accessibility, and quality bars — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+64. [ ] Implement 19.1–19.3 CI/CD branching, GitHub Actions, and deployment automations — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+65. [ ] Implement 19.4–19.6 Environment configuration, release management, and observability in CI/CD — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+66. [ ] Design 20.1–20.2 Admin UX layouts and list views — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+67. [ ] Design 20.3–20.4 Admin detail, audit, and safety views — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+68. [ ] Define 21.1–21.2 Unit and integration testing coverage plans — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+69. [ ] Define 21.3–21.5 E2E, performance, security tests, and fixture strategies — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+70. [ ] Define 21.6–21.7 Coverage gates and UAT scripts — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+71. [ ] Execute 22.1–22.4 Migration & Backfill plan (pre-flight, execution, rollback, validation) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+72. [ ] Operationalize 23.1–23.3 Analytics KPIs for marketplace health, growth, and monetization — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+73. [ ] Operationalize 23.4–23.7 Retention metrics, instrumentation, experimentation, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+74. [ ] Complete 24) Detailed Task Breakdown (WBS) conventions and domain work packages — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+75. [ ] Produce 25) Example controllers and routes for Laravel implementation patterns — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+76. [ ] Produce 26) Flutter Retrofit feed client example with interceptors and models — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+77. [ ] Deliver 27) Notifications & Chat data models, APIs, features, and safety protocols — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+78. [ ] Deliver 28) Banners & slow UI fixes across async loading, asset optimization, caching, and measurement — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+79. [ ] Deliver 29) Provider-set taxes compliance workflows, validation, invoicing, and privacy handling — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+80. [ ] Deliver 30) Seeders & demo data factories, seed scripts, sample flows, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+81. [ ] Deliver 31) Runbooks for deployments, incidents, payments, disputes, and post-incident reviews — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+82. [ ] Deliver 32) Acceptance checklists across domains, mobile, performance, security, and final deliverable — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+83. [ ] Compile Appendix A entity diagram coverage for identity, marketplace, payments, providers, affiliates, taxes, and safety — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+84. [ ] Compile Appendix B environment & secrets checklist (namespaces, ownership, matrices, validation) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+85. [ ] Compile Appendix C i18n & currency implementation guidance and QA — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+
