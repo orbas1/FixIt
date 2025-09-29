@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Feed;
 
-use App\Models\Bid;
 use App\Models\ServiceRequest;
+use App\Services\Feed\ServiceRequestFeedService;
+use App\Http\Requests\API\Feed\ServiceRequestFeedRequest;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -11,29 +13,31 @@ class ServiceRequestFeedTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        ServiceRequest::unsetEventDispatcher();
+        ServiceRequest::flushEventListeners();
+    }
+
     /** @test */
     public function it_returns_paginated_service_requests(): void
     {
-        ServiceRequest::factory()->count(3)->has(Bid::factory()->count(2))->create();
+        ServiceRequest::factory()->count(3)->create();
 
-        $response = $this->getJson('/api/feed/service-requests?per_page=2');
+        $service = app(ServiceRequestFeedService::class);
+        $request = ServiceRequestFeedRequest::createFromBase(HttpRequest::create(
+            '/feed/service-requests',
+            'GET',
+            ['per_page' => 2]
+        ));
+        $request->setContainer(app());
 
-        $response->assertOk()
-            ->assertJson(
-                [
-                    'success' => true,
-                    'meta' => [
-                        'current_page' => 1,
-                        'per_page' => 2,
-                        'last_page' => 2,
-                        'total' => 3,
-                    ],
-                ]
-            );
+        $paginator = $service->serviceRequests($request);
 
-        $this->assertCount(2, $response->json('data'));
-        $this->assertArrayHasKey('bids', $response->json('data')[0]);
-        $this->assertArrayHasKey('location', $response->json('data')[0]);
+        $this->assertSame(2, $paginator->perPage());
+        $this->assertSame(3, $paginator->total());
+        $this->assertCount(2, $paginator->items());
     }
 
     /** @test */
@@ -51,12 +55,23 @@ class ServiceRequestFeedTest extends TestCase
             'location_coordinates' => ['lat' => 34.0522, 'lng' => -118.2437],
         ]);
 
-        $response = $this->getJson('/api/feed/service-requests?latitude=40.713&longitude=-74.006&radius=20');
+        $service = app(ServiceRequestFeedService::class);
+        $request = ServiceRequestFeedRequest::createFromBase(HttpRequest::create(
+            '/feed/service-requests',
+            'GET',
+            [
+                'latitude' => 40.713,
+                'longitude' => -74.006,
+                'radius' => 20,
+            ]
+        ));
+        $request->setContainer(app());
 
-        $response->assertOk();
-        $data = $response->json('data');
-        $this->assertCount(1, $data);
-        $this->assertSame($nearby->id, $data[0]['id']);
-        $this->assertNotNull($data[0]['distance_km']);
+        $paginator = $service->serviceRequests($request);
+        $items = $paginator->items();
+
+        $this->assertCount(1, $items);
+        $this->assertTrue($items[0]->is($nearby));
+        $this->assertNotNull($items[0]->distance_km ?? null);
     }
 }

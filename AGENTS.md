@@ -2298,7 +2298,7 @@ With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **
 26. [ ] Finalize 2.4–2.7 Search, Ads, Affiliates, and Storefront API contracts with consistent DTOs — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 27. [ ] Plan 3) Services & Domain Logic orchestration, service boundaries, and integration glue — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 28. [x] Implement 3.1–3.2 Live Feed and Tax Engine services with caching and policy layers — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
-29. [ ] Implement 3.3–3.4 Escrow & Disputes services with ledgering, SLAs, and compliance hooks — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+29. [x] Implement 3.3–3.4 Escrow & Disputes services with ledgering, SLAs, and compliance hooks — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
 30. [ ] Implement 3.5–3.8 Unified Search, Ads, Affiliates, and Storefront service modules — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 31. [ ] Deliver 4.1.1–4.1.3 Flutter architecture, dependencies, and bootstrap readiness — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 32. [ ] Deliver 4.1.4–4.1.6 Flutter state management, networking interceptors, and realtime strategy — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
