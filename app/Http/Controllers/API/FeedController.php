@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Feed\ServiceRequestFeedRequest;
 use App\Http\Resources\Feed\ServiceRequestFeedResource;
+use App\Models\ServiceRequest;
 use App\Services\Feed\ServiceRequestFeedService;
 use Illuminate\Http\JsonResponse;
 
@@ -16,6 +17,8 @@ class FeedController extends Controller
 
     public function serviceRequests(ServiceRequestFeedRequest $request): JsonResponse
     {
+        $this->authorize('viewAny', ServiceRequest::class);
+
         $paginator = $this->service->serviceRequests($request);
 
         $data = $paginator->getCollection()

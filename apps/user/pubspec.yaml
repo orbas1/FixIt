@@ -57,6 +57,8 @@ dependencies:
   saver_gallery: ^4.0.0
   http: ^1.2.2
   dio: ^5.7.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
   collection:
   #firebase
   firebase_core: ^3.15.1

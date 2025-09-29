@@ -40,4 +40,8 @@ return [
         'cache_ttl' => env('FEED_H3_CACHE_TTL', 60),
     ],
 
+    'tax' => [
+        'cache_ttl' => env('TAX_CACHE_TTL', 600),
+    ],
+
 ];

@@ -1,11 +1,15 @@
 import 'dart:convert';
 
 import 'package:fixit_user/config.dart';
+import 'package:fixit_user/services/feed/feed_api_client.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedProvider extends ChangeNotifier {
-  static const _cacheKey = 'feed_v1_cache';
+  static const _cacheBoxName = 'feed_cache_box';
+  static const _cacheKey = 'feed_v2_cache';
+  static const _staleAfter = Duration(minutes: 15);
   static const _perPage = 10;
 
   FeedProvider();
@@ -17,11 +21,20 @@ class FeedProvider extends ChangeNotifier {
 
   int _currentPage = 1;
   Map<String, dynamic> _filters = {};
+  Box<dynamic>? _cacheBox;
+  late final FeedApiClient _client = FeedApiClient(
+    baseUrl: api.feedServiceRequests,
+    tokenResolver: () async {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString(session.accessToken);
+    },
+  );
 
   Future<void> bootstrap({bool forceRefresh = false, Map<String, dynamic>? filters}) async {
     _filters = filters ?? {};
 
     if (!forceRefresh) {
+      await _ensureCacheBox();
       await _loadFromCache();
     }
 
@@ -46,38 +59,24 @@ class FeedProvider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    final query = _buildQuery();
-    final endpoint = '${api.feedServiceRequests}?$query';
-
     try {
-      final response = await apiServices.getApi(endpoint, [],
-          isToken: true, isData: true, isMessage: false);
+      final query = _buildQuery();
+      final response = await _client.fetchJobs(query);
+      final newJobs = response.jobs;
 
-      if (response.isSuccess ?? false) {
-        final payload = Map<String, dynamic>.from(response.data as Map);
-        final List<dynamic> rawItems = payload['data'] as List<dynamic>? ?? [];
-        final newJobs = rawItems
-            .map((e) => FeedJobModel.fromJson(Map<String, dynamic>.from(e)))
-            .toList();
-
-        if (reset) {
-          jobs = newJobs;
-        } else {
-          jobs = [...jobs, ...newJobs];
-        }
-
-        final meta = Map<String, dynamic>.from(payload['meta'] ?? {});
-        final currentPage = meta['current_page'] is int
-            ? meta['current_page'] as int
-            : _currentPage;
-        final lastPage = meta['last_page'] is int ? meta['last_page'] as int : currentPage;
-        hasMore = currentPage < lastPage;
-        _currentPage = currentPage + 1;
-        lastSyncedAt = DateTime.now();
-        await _persistCache(meta);
+      if (reset) {
+        jobs = newJobs;
       } else {
-        await _loadFromCache();
+        jobs = [...jobs, ...newJobs];
       }
+
+      final meta = response.meta;
+      final currentPage = meta['current_page'] is int ? meta['current_page'] as int : _currentPage;
+      final lastPage = meta['last_page'] is int ? meta['last_page'] as int : currentPage;
+      hasMore = currentPage < lastPage;
+      _currentPage = currentPage + 1;
+      lastSyncedAt = DateTime.now();
+      await _persistCache(meta);
     } catch (error, stackTrace) {
       debugPrint('FeedProvider fetch error: $error');
       debugPrintStack(stackTrace: stackTrace);
@@ -92,25 +91,17 @@ class FeedProvider extends ChangeNotifier {
     await fetchNext(reset: true);
   }
 
-  String _buildQuery() {
-    final filters = <String, String>{
-      'page': _currentPage.toString(),
-      'per_page': _perPage.toString(),
-    };
-
-    _filters.forEach((key, value) {
-      if (value == null) return;
-      filters[key] = value.toString();
-    });
-
-    return filters.entries
-        .map((entry) => '${entry.key}=${Uri.encodeComponent(entry.value)}')
-        .join('&');
+  FeedQuery _buildQuery() {
+    return FeedQuery(
+      page: _currentPage,
+      perPage: _perPage,
+      filters: Map<String, dynamic>.from(_filters),
+    );
   }
 
   Future<void> _persistCache(Map<String, dynamic> meta) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
+      final box = await _ensureCacheBox();
       final snapshot = {
         'items': jobs.take(25).map((e) => e.toJson()).toList(),
         'meta': meta,
@@ -118,7 +109,7 @@ class FeedProvider extends ChangeNotifier {
         'hasMore': hasMore,
         'savedAt': DateTime.now().toIso8601String(),
       };
-      await prefs.setString(_cacheKey, jsonEncode(snapshot));
+      await box.put(_cacheStorageKey(), jsonEncode(snapshot));
     } catch (error) {
       debugPrint('FeedProvider cache write failed: $error');
     }
@@ -126,31 +117,60 @@ class FeedProvider extends ChangeNotifier {
 
   Future<void> _loadFromCache() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final raw = prefs.getString(_cacheKey);
+      final box = await _ensureCacheBox();
+      final raw = box.get(_cacheStorageKey());
       if (raw == null) return;
 
-      final Map<String, dynamic> cached = jsonDecode(raw) as Map<String, dynamic>;
+      final Map<String, dynamic> cached = jsonDecode(raw as String) as Map<String, dynamic>;
       final List<dynamic> items = cached['items'] as List<dynamic>? ?? [];
       jobs = items
           .map((e) => FeedJobModel.fromJson(Map<String, dynamic>.from(e)))
           .toList();
       hasMore = cached['hasMore'] as bool? ?? true;
       final savedAt = cached['savedAt'] as String?;
+      bool isStale = false;
       if (savedAt != null) {
         lastSyncedAt = DateTime.tryParse(savedAt);
+        isStale = lastSyncedAt != null && DateTime.now().difference(lastSyncedAt!) > _staleAfter;
       }
       final meta = cached['meta'] as Map<String, dynamic>?;
       if (meta != null && meta['current_page'] != null) {
         _currentPage = (meta['current_page'] as int) + 1;
       }
       final filters = cached['filters'] as Map<String, dynamic>?;
-      if (filters != null) {
+      if (filters != null && filters.isNotEmpty) {
         _filters = filters;
       }
+
+      if (isStale) {
+        hasMore = true;
+      }
+
       notifyListeners();
     } catch (error) {
       debugPrint('FeedProvider cache read failed: $error');
     }
+  }
+
+  Future<Box<dynamic>> _ensureCacheBox() async {
+    if (_cacheBox != null && _cacheBox!.isOpen) {
+      return _cacheBox!;
+    }
+
+    _cacheBox = await Hive.openBox<dynamic>(_cacheBoxName);
+    return _cacheBox!;
+  }
+
+  @override
+  void dispose() {
+    if (_cacheBox?.isOpen ?? false) {
+      _cacheBox?.close();
+    }
+    super.dispose();
+  }
+
+  String _cacheStorageKey() {
+    final signature = FeedQuery(page: 1, perPage: _perPage, filters: Map<String, dynamic>.from(_filters)).signature();
+    return '$_cacheKey:$signature';
   }
 }
