@@ -6,6 +6,7 @@ import 'package:fixit_user/helper/notification.dart';
 import 'package:fixit_user/providers/app_pages_providers/job_request_providers/add_job_request_provider.dart';
 import 'package:fixit_user/providers/app_pages_providers/job_request_providers/job_request_details_provider.dart';
 import 'package:fixit_user/providers/app_pages_providers/offer_chat_provider.dart';
+import 'package:fixit_user/providers/app_pages_providers/feed/feed_provider.dart';
 import 'package:fixit_user/services/environment.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -172,6 +173,7 @@ class _MyAppState extends State<MyApp> {
                       create: (_) => JobRequestListProvider()),
                   ChangeNotifierProvider(
                       create: (_) => AddJobRequestProvider()),
+                  ChangeNotifierProvider(create: (_) => FeedProvider()),
                   // ChangeNotifierProvider(create: (_) => AudioCallProvider()),
                   // ChangeNotifierProvider(create: (_) => VideoCallProvider()),
                   ChangeNotifierProvider(
