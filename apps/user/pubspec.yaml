@@ -59,6 +59,7 @@ dependencies:
   dio: ^5.7.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  equatable: ^2.0.5
   collection:
   #firebase
   firebase_core: ^3.15.1
@@ -116,6 +117,7 @@ dependencies:
   firebase_app_check: ^0.3.2+6
   android_intent_plus: ^5.3.0
   open_file: ^3.5.10
+  pusher_channels_flutter: ^2.1.0
 
 
 

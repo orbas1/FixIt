@@ -7,6 +7,8 @@ import 'package:fixit_user/providers/app_pages_providers/job_request_providers/a
 import 'package:fixit_user/providers/app_pages_providers/job_request_providers/job_request_details_provider.dart';
 import 'package:fixit_user/providers/app_pages_providers/offer_chat_provider.dart';
 import 'package:fixit_user/providers/app_pages_providers/feed/feed_provider.dart';
+import 'package:fixit_user/providers/chat/thread_conversation_provider.dart';
+import 'package:fixit_user/providers/chat/thread_inbox_provider.dart';
 import 'package:fixit_user/services/environment.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -170,6 +172,8 @@ class _MyAppState extends State<MyApp> {
                   ChangeNotifierProvider(
                       create: (_) => ExpertServiceProvider()),
                   ChangeNotifierProvider(create: (_) => ChatHistoryProvider()),
+                  ChangeNotifierProvider(create: (_) => ThreadInboxProvider()),
+                  ChangeNotifierProvider(create: (_) => ThreadConversationProvider()),
                   ChangeNotifierProvider(create: (_) => DeleteDialogProvider()),
                   ChangeNotifierProvider(
                       create: (_) => JobRequestListProvider()),

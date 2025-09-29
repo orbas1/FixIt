@@ -156,6 +156,13 @@ Route::group(['middleware' => ['localization']], function () {
         Route::post('dummy/notification', 'App\Http\Controllers\API\NotificationController@dummyNotification');
         Route::post('update-company-details', 'App\Http\Controllers\API\ProviderController@updateCompanyDetails');
 
+        // Threads & messaging
+        Route::get('threads', 'App\Http\Controllers\API\ThreadController@index');
+        Route::post('threads', 'App\Http\Controllers\API\ThreadController@store');
+        Route::get('threads/{thread:public_id}', 'App\Http\Controllers\API\ThreadController@show');
+        Route::post('threads/{thread:public_id}/messages', 'App\Http\Controllers\API\ThreadMessageController@store');
+        Route::post('threads/{thread:public_id}/read', 'App\Http\Controllers\API\ThreadReadController@store');
+
         // Delete Account
         Route::get('deleteAccount', 'App\Http\Controllers\API\AccountController@deleteAccount')->name('deleteAccount');
 
