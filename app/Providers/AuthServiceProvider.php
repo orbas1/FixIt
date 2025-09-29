@@ -17,6 +17,7 @@ use App\Models\Setting;
 use App\Models\SystemLang;
 use App\Models\Tag;
 use App\Models\Tax;
+use App\Models\Thread;
 use App\Models\TimeSlot;
 use App\Models\User;
 use App\Models\WithdrawRequest;
@@ -36,6 +37,7 @@ use App\Policies\SettingPolicy;
 use App\Policies\SystemLangPolicy;
 use App\Policies\TagPolicy;
 use App\Policies\TaxPolicy;
+use App\Policies\ThreadPolicy;
 use App\Policies\TimeSlotPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\WithdrawRequestPolicy;
@@ -75,6 +77,7 @@ class AuthServiceProvider extends ServiceProvider
         Zone::class => ZonePolicy::class,
         ServiceRequest::class => ServiceRequestPolicy::class,
         Bid::class => BidPolicy::class,
+        Thread::class => ThreadPolicy::class,
     ];
 
     /**
