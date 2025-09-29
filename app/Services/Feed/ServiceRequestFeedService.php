@@ -5,12 +5,17 @@ namespace App\Services\Feed;
 use App\Enums\BidStatusEnum;
 use App\Http\Requests\API\Feed\ServiceRequestFeedRequest;
 use App\Models\ServiceRequest;
+use App\Services\Geo\H3IndexService;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ServiceRequestFeedService
 {
+    public const CACHE_VERSION_KEY = 'feed:service_requests:version';
+
     public function serviceRequests(ServiceRequestFeedRequest $request): LengthAwarePaginator
     {
         $cacheKey = $this->cacheKey($request);
@@ -73,12 +78,30 @@ class ServiceRequestFeedService
             if ($request->hasLocation()) {
                 $lat = $request->latitude();
                 $lng = $request->longitude();
+                $radius = $request->radius() ?? 25.0;
+
+                /** @var H3IndexService $h3 */
+                $h3 = app(H3IndexService::class);
+                $resolution = (int) config('services.h3.feed_resolution', 8);
+                $indexes = $h3->indexesForRadius($lat, $lng, $radius, $resolution);
+
+                if (!empty($indexes)) {
+                    $query->whereIn('h3_index', $indexes);
+                }
+
                 $haversine = '6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))';
                 $query->selectRaw($haversine . ' as distance_km', [$lat, $lng, $lat]);
 
                 if ($request->radius() !== null) {
                     $query->having('distance_km', '<=', $request->radius());
                 }
+            }
+
+            if ($user = $request->user() ?? Auth::user()) {
+                $query->where(function ($builder) use ($user) {
+                    $builder->whereNull('provider_id')
+                        ->orWhere('provider_id', '!=', $user->id);
+                });
             }
 
             $this->applyOrdering($query, $request);
@@ -88,6 +111,11 @@ class ServiceRequestFeedService
 
             return $paginator;
         });
+    }
+
+    public function flushCache(): void
+    {
+        Cache::forget(self::CACHE_VERSION_KEY);
     }
 
     public function appliedFilters(ServiceRequestFeedRequest $request): array
@@ -146,6 +174,11 @@ class ServiceRequestFeedService
             'search' => $request->input('search'),
         ];
 
-        return 'feed:service_requests:' . md5(json_encode($payload));
+        return 'feed:service_requests:' . $this->cacheVersion() . ':' . md5(json_encode($payload));
+    }
+
+    protected function cacheVersion(): string
+    {
+        return Cache::rememberForever(self::CACHE_VERSION_KEY, fn () => (string) Str::uuid());
     }
 }

@@ -6,6 +6,7 @@ use App\Enums\AmountEnum;
 use App\Exceptions\ExceptionHandler;
 use App\Helpers\Helpers;
 use App\Models\Service;
+use App\Services\Tax\TaxEngine;
 use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -132,37 +133,33 @@ trait CheckoutTrait
 
     public function getTax($service_id, $subtotal, $platform_fees)
     {
-        $totalTax = 0;
-        $taxIds = $this->getTaxIds($service_id);
+        $service = Service::with('taxes')->find($service_id);
 
-        if (!empty($taxIds)) {
-            $taxRates = $this->getTaxRates($taxIds);
-            $taxableAmount = $subtotal + $platform_fees;
-            foreach ($taxRates as $taxRate) {
-                $totalTax += ($taxableAmount * $taxRate) / 100;
-            }
+        if (!$service) {
+            return 0.0;
         }
 
-        return $totalTax;
+        $result = $this->taxEngine()->calculateForService($service, (float) $subtotal, (float) $platform_fees);
+
+        return $result['total'];
     }
 
     public function getTaxes($serviceId, $subtotal = 0, $platform_fees = 0)
     {
-        $taxesData = [];
-        $taxableAmount = $subtotal + $platform_fees;
         $service = Service::with('taxes')->find($serviceId);
-        if ($service && $service->taxes) {
-        foreach ($service->taxes as $tax) {
-                $taxesData[] = [
-                    'id' => $tax->id,
-                    'name' => $tax->name,
-                    'rate' => $tax->rate,
-                    'amount' => round(($taxableAmount * $tax->rate) / 100, 2),
-                ];
-            }
+
+        if (!$service) {
+            return [];
         }
 
-        return $taxesData;
+        $result = $this->taxEngine()->calculateForService($service, (float) $subtotal, (float) $platform_fees);
+
+        return $result['lines'];
+    }
+
+    protected function taxEngine(): TaxEngine
+    {
+        return app(TaxEngine::class);
     }
 
 

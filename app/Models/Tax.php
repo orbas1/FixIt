@@ -26,7 +26,7 @@ class Tax extends Model
     ];
 
     protected $casts = [
-        'rate' => 'integer',
+        'rate' => 'float',
         'status' => 'integer',
         'created_by_id' => 'integer',
         'zone_id' => 'integer',

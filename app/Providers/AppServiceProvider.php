@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use App\Services\Guardian;
-
 use App\Helpers\Helpers;
+use App\Models\ServiceRequest;
+use App\Observers\ServiceRequestObserver;
+use App\Services\Guardian;
 use Database\Seeders\ThemeOptionSeeder;
 use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -59,6 +60,8 @@ class AppServiceProvider extends ServiceProvider
         }
         Translatable::fallback(fallbackAny: true);
         Model::automaticallyEagerLoadRelationships();
+
+        ServiceRequest::observe(ServiceRequestObserver::class);
     }
 
     private function getThemeOptions()
