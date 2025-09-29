@@ -65,6 +65,7 @@ class ApiMethods {
   String zone = '$apiUrl/zone';
   String categoryService = '$apiUrl/category-services';
   String step2Booking = '$apiUrl/step-2/booking';
+  String feedServiceRequests = '$apiUrl/feed/service-requests';
 
   String providerReview = '$apiUrl/provider/reviews';
   String customService = '$apiUrl/custom-offer-service';

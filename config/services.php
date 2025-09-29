@@ -35,4 +35,9 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
+    'h3' => [
+        'feed_resolution' => env('FEED_H3_RESOLUTION', 8),
+        'cache_ttl' => env('FEED_H3_CACHE_TTL', 60),
+    ],
+
 ];

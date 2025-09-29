@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use App\Models\Bid;
 use App\Enums\BidStatusEnum;
-use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Bid;
+use App\Services\Geo\H3IndexService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class ServiceRequest extends Model implements HasMedia
 {
@@ -35,7 +36,11 @@ class ServiceRequest extends Model implements HasMedia
         'booking_date',
         'category_ids',
         'locations',
-        'location_coordinates'
+        'location_coordinates',
+        'attachments',
+        'latitude',
+        'longitude',
+        'h3_index'
     ];
 
     protected $hidden = [
@@ -59,7 +64,11 @@ class ServiceRequest extends Model implements HasMedia
         'booking_date' => 'datetime',
         'category_ids' => 'json',
         'locations' => 'json',
-        'location_coordinates' => 'json',
+        'location_coordinates' => 'array',
+        'attachments' => 'array',
+        'latitude' => 'float',
+        'longitude' => 'float',
+        'h3_index' => 'integer',
         // 'user' => 'json',
     ];
 
@@ -67,8 +76,50 @@ class ServiceRequest extends Model implements HasMedia
     {
         parent::boot();
         static::saving(function ($model) {
-            $model->created_by_id = auth()?->user()?->id;
+            if (!$model->created_by_id) {
+                $model->created_by_id = auth()?->user()?->id;
+            }
+
+            $model->synchroniseLocationCoordinates();
         });
+    }
+
+    protected function synchroniseLocationCoordinates(): void
+    {
+        $coordinates = $this->location_coordinates;
+
+        if (is_string($coordinates)) {
+            $decoded = json_decode($coordinates, true);
+            $coordinates = is_array($decoded) ? $decoded : null;
+            $this->location_coordinates = $coordinates;
+        }
+
+        if (is_array($coordinates)) {
+            if ($this->latitude === null && array_key_exists('lat', $coordinates)) {
+                $this->latitude = $coordinates['lat'] !== null ? (float) $coordinates['lat'] : null;
+            }
+
+            if ($this->longitude === null && array_key_exists('lng', $coordinates)) {
+                $this->longitude = $coordinates['lng'] !== null ? (float) $coordinates['lng'] : null;
+            }
+        } elseif ($this->latitude !== null && $this->longitude !== null) {
+            $this->location_coordinates = [
+                'lat' => (float) $this->latitude,
+                'lng' => (float) $this->longitude,
+            ];
+        }
+
+        if ($this->latitude !== null && $this->longitude !== null) {
+            /** @var H3IndexService $h3Service */
+            $h3Service = app(H3IndexService::class);
+            $this->h3_index = $h3Service->indexFor(
+                (float) $this->latitude,
+                (float) $this->longitude,
+                (int) config('services.h3.feed_resolution', 8)
+            );
+        } else {
+            $this->h3_index = null;
+        }
     }
 
     public function getCategoriesDataAttribute()

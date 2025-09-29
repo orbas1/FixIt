@@ -30,3 +30,4 @@ export 'package:fixit_user/models/extra_charges.dart';
 export 'package:fixit_user/models/service_faq_model.dart';
 export 'package:fixit_user/models/job_request_model.dart';
 export 'package:fixit_user/models/additional_services.dart';
+export 'package:fixit_user/models/feed_job_model.dart';

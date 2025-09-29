@@ -2297,7 +2297,7 @@ With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **
 25. [ ] Finalize 2.2–2.3 Escrow & Disputes API contracts for holds, releases, and resolution flows — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 26. [ ] Finalize 2.4–2.7 Search, Ads, Affiliates, and Storefront API contracts with consistent DTOs — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 27. [ ] Plan 3) Services & Domain Logic orchestration, service boundaries, and integration glue — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-28. [ ] Implement 3.1–3.2 Live Feed and Tax Engine services with caching and policy layers — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+28. [ ] Implement 3.1–3.2 Live Feed and Tax Engine services with caching and policy layers — Functionality grade [80/100] | Integration grade [65/100] | UI:UX grade [40/100] | Security grade [55/100]
 29. [ ] Implement 3.3–3.4 Escrow & Disputes services with ledgering, SLAs, and compliance hooks — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 30. [ ] Implement 3.5–3.8 Unified Search, Ads, Affiliates, and Storefront service modules — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 31. [ ] Deliver 4.1.1–4.1.3 Flutter architecture, dependencies, and bootstrap readiness — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
@@ -2345,7 +2345,7 @@ With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **
 73. [ ] Operationalize 23.4–23.7 Retention metrics, instrumentation, experimentation, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 74. [ ] Complete 24) Detailed Task Breakdown (WBS) conventions and domain work packages — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 75. [ ] Produce 25) Example controllers and routes for Laravel implementation patterns — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-76. [ ] Produce 26) Flutter Retrofit feed client example with interceptors and models — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+76. [ ] Produce 26) Flutter Retrofit feed client example with interceptors and models — Functionality grade [60/100] | Integration grade [55/100] | UI:UX grade [35/100] | Security grade [45/100]
 77. [ ] Deliver 27) Notifications & Chat data models, APIs, features, and safety protocols — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 78. [ ] Deliver 28) Banners & slow UI fixes across async loading, asset optimization, caching, and measurement — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 79. [ ] Deliver 29) Provider-set taxes compliance workflows, validation, invoicing, and privacy handling — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
