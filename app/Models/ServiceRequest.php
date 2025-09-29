@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -138,6 +139,16 @@ class ServiceRequest extends Model implements HasMedia
     public function bids(): HasMany
     {
         return $this->hasMany(Bid::class, 'service_request_id');
+    }
+
+    public function escrow(): HasOne
+    {
+        return $this->hasOne(Escrow::class, 'service_request_id');
+    }
+
+    public function disputes(): HasMany
+    {
+        return $this->hasMany(Dispute::class, 'service_request_id');
     }
 
     public function provider(): BelongsTo

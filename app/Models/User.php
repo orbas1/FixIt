@@ -56,7 +56,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'served',
         'fcm_token',
         'company_id',
-        'location_cordinates'
+        'location_cordinates',
+        'stripe_customer_id',
+        'default_payment_method_id',
     ];
 
     protected $casts = [

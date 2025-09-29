@@ -5,7 +5,6 @@ namespace App\Services\Feed;
 use App\Enums\BidStatusEnum;
 use App\Http\Requests\API\Feed\ServiceRequestFeedRequest;
 use App\Models\ServiceRequest;
-use App\Services\Geo\H3IndexService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -80,20 +79,23 @@ class ServiceRequestFeedService
                 $lng = $request->longitude();
                 $radius = $request->radius() ?? 25.0;
 
-                /** @var H3IndexService $h3 */
-                $h3 = app(H3IndexService::class);
-                $resolution = (int) config('services.h3.feed_resolution', 8);
-                $indexes = $h3->indexesForRadius($lat, $lng, $radius, $resolution);
-
-                if (!empty($indexes)) {
-                    $query->whereIn('h3_index', $indexes);
-                }
-
                 $haversine = '6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))';
-                $query->selectRaw($haversine . ' as distance_km', [$lat, $lng, $lat]);
+                $bindings = [$lat, $lng, $lat];
+
+                $query->selectRaw($haversine . ' as distance_km', $bindings);
 
                 if ($request->radius() !== null) {
-                    $query->having('distance_km', '<=', $request->radius());
+                    $latRange = $radius / 111.0;
+                    $lngRange = $radius / (111.0 * max(cos(deg2rad($lat)), 0.1));
+
+                    $query->whereBetween('latitude', [$lat - $latRange, $lat + $latRange])
+                        ->whereBetween('longitude', [$lng - $lngRange, $lng + $lngRange]);
+
+                    if (DB::connection()->getDriverName() === 'sqlite') {
+                        $query->whereRaw($haversine . ' <= ?', array_merge($bindings, [$request->radius()]));
+                    } else {
+                        $query->having('distance_km', '<=', $request->radius());
+                    }
                 }
             }
 

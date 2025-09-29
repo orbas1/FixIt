@@ -8,11 +8,12 @@ use InvalidArgumentException;
  * Lightweight deterministic geo indexer that emulates H3 resolution buckets.
  *
  * This implementation does not depend on native extensions; it normalises the
- * latitude/longitude pair and converts it into a stable 60-bit integer using
- * a fast hash. The output preserves ordering for nearby coordinates at the
- * configured resolution which is sufficient for caching, sharding and
- * pagination in feed queries. When a dedicated H3 extension becomes available
- * the implementation can be swapped without touching callers.
+ * latitude/longitude pair and converts it into a stable 60-bit integer by
+ * quantising the coordinates to a resolution-aware grid. Nearby coordinates
+ * therefore share identical buckets which keeps cache keys, sharding and
+ * pagination stable across database vendors. When a dedicated H3 extension
+ * becomes available the implementation can be swapped without touching
+ * callers.
  */
 class H3IndexService
 {
@@ -26,13 +27,12 @@ class H3IndexService
         $lat = $this->clamp($latitude, -90.0, 90.0);
         $lng = $this->clamp($longitude, -180.0, 180.0);
 
-        $scaledLat = (int) round(($lat + 90) * 1_000_000);
-        $scaledLng = (int) round(($lng + 180) * 1_000_000);
+        $scale = $this->bucketScale($normalisedResolution);
 
-        $hashSource = $scaledLat . ':' . $scaledLng . ':' . $normalisedResolution;
-        $hash = hash('xxh3', $hashSource);
+        $latBucket = (int) floor(($lat + 90.0) * $scale);
+        $lngBucket = (int) floor(($lng + 180.0) * $scale);
 
-        return hexdec(substr($hash, 0, 15));
+        return ($latBucket << 32) | ($lngBucket & 0xFFFFFFFF);
     }
 
     /**
@@ -45,22 +45,25 @@ class H3IndexService
     public function indexesForRadius(float $latitude, float $longitude, float $radiusKm, int $resolution = 8): array
     {
         $radiusKm = max(0.1, $radiusKm);
-        $steps = max(1, (int) ceil($radiusKm / 5));
         $degreeRadius = $radiusKm / 111.0; // approximate degrees per kilometre
-        $stepSize = max(0.01, min(1.0, $degreeRadius / max(1, $steps)));
+        $density = max(6, (int) ceil($radiusKm * 2));
+        $scale = $this->bucketScale($resolution);
+        $minimumStep = 1.0 / $scale;
+        $stepSize = max($minimumStep, min(1.0, $degreeRadius / max($density * 32, 1)));
 
         $indexes = [
             $this->indexFor($latitude, $longitude, $resolution),
         ];
 
-        for ($latStep = -$steps; $latStep <= $steps; $latStep++) {
-            for ($lngStep = -$steps; $lngStep <= $steps; $lngStep++) {
+        for ($latStep = -$density; $latStep <= $density; $latStep++) {
+            for ($lngStep = -$density; $lngStep <= $density; $lngStep++) {
                 if ($latStep === 0 && $lngStep === 0) {
                     continue;
                 }
 
                 $offsetLat = $latitude + ($latStep * $stepSize);
-                $offsetLng = $longitude + ($lngStep * $stepSize / max(cos(deg2rad($latitude)), 0.1));
+                $cosine = max(cos(deg2rad($offsetLat)), 0.1);
+                $offsetLng = $longitude + ($lngStep * $stepSize / $cosine);
 
                 $indexes[] = $this->indexFor($offsetLat, $offsetLng, $resolution);
             }
@@ -81,5 +84,10 @@ class H3IndexService
     private function clamp(float $value, float $min, float $max): float
     {
         return max($min, min($max, $value));
+    }
+
+    private function bucketScale(int $resolution): float
+    {
+        return 1_000.0 * (2 ** $resolution);
     }
 }

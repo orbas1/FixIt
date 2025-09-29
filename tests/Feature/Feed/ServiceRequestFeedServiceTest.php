@@ -16,6 +16,13 @@ class ServiceRequestFeedServiceTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        ServiceRequest::unsetEventDispatcher();
+        ServiceRequest::flushEventListeners();
+    }
+
     public function test_feed_filters_by_location_and_flushes_cache_on_update(): void
     {
         Event::fake([FeedUpdated::class]);
