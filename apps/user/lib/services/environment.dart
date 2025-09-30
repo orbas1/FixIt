@@ -1,39 +1,75 @@
-import 'dart:developer';
+import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../config.dart';
+import 'configuration/app_environment.dart';
 
+class EnvironmentStore {
+  EnvironmentStore._();
 
+  static final EnvironmentStore instance = EnvironmentStore._();
 
-String apiUrl = "Your ApiUrl";
-String paymentUrl = "Your PaymentUrl";
+  AppEnvironment? _environment;
+  SharedPreferences? _preferences;
+  Locale _locale = const Locale('en');
 
-String playstoreUrl =
-    "Your playstoreUrl";
+  Future<void> configure({
+    required AppEnvironment environment,
+    required SharedPreferences preferences,
+  }) async {
+    _environment = environment;
+    _preferences = preferences;
+    final persistedLocale = preferences.getString('selectedLocale');
+    _locale = Locale(persistedLocale ?? environment.app.defaultLocale);
+  }
 
-String userAppPlayStoreUrl =
-    "Your userAppPlayStoreUrl";
+  AppEnvironment get environment {
+    final env = _environment;
+    if (env == null) {
+      throw StateError('Environment has not been configured');
+    }
+    return env;
+  }
 
-late SharedPreferences sharedPreferences;
-String local = appSettingModel!.general!.defaultLanguage!.locale!;
+  SharedPreferences get preferences {
+    final prefs = _preferences;
+    if (prefs == null) {
+      throw StateError('SharedPreferences has not been configured');
+    }
+    return prefs;
+  }
 
-// Initialize SharedPreferences and Locale
-Future<void> initializeAppSettings() async {
-  sharedPreferences = await SharedPreferences.getInstance();
-  local = sharedPreferences.getString('selectedLocale') ?? 'en';
-  log("set language:: $local");
+  Locale get locale => _locale;
+
+  Future<void> updateLocale(Locale locale) async {
+    _locale = locale;
+    await preferences.setString('selectedLocale', locale.languageCode);
+  }
+
+  String get apiBaseUrl => environment.api.baseUrl;
+  String get paymentBaseUrl => environment.api.paymentUrl;
+  String get playStoreUrl => environment.store.playStoreUrl;
+  String get userAppPlayStoreUrl => environment.store.userAppPlayStoreUrl;
+
+  Map<String, String> headers({String? token}) {
+    final headers = <String, String>{
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Accept-Lang': _locale.languageCode,
+    };
+    if (token != null && token.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+    return headers;
+  }
 }
 
-// Headers Token Function
-Map<String, String>? headersToken(String? token) => {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      "Accept-Lang": local,
-      "Authorization": "Bearer $token",
-    };
+EnvironmentStore get environmentStore => EnvironmentStore.instance;
 
-// Default Headers
-Map<String, String>? get headers => {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      "Accept-Lang": local,
-    };
+String get apiUrl => environmentStore.apiBaseUrl;
+String get paymentUrl => environmentStore.paymentBaseUrl;
+String get playstoreUrl => environmentStore.playStoreUrl;
+String get userAppPlayStoreUrl => environmentStore.userAppPlayStoreUrl;
+Locale get currentLocale => environmentStore.locale;
+
+Map<String, String>? headersToken(String? token) => environmentStore.headers(token: token);
+Map<String, String>? get headers => environmentStore.headers();

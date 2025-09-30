@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../config.dart';
 import 'app_theme.dart';
 
 class ThemeService extends ChangeNotifier {
-  final SharedPreferences sharedPreferences;
-  final BuildContext? context;
+  ThemeService(this.sharedPreferences);
 
-  ThemeService(this.sharedPreferences, this.context);
+  final SharedPreferences sharedPreferences;
 
   /// Gets the saved theme index: 0 = light, 1 = dark, 2 = system (default)
   int get themeIndex => sharedPreferences.getInt(session.themeIndex) ?? 2;
@@ -15,7 +15,8 @@ class ThemeService extends ChangeNotifier {
   /// Determines if dark mode should be used
   bool get isDarkMode {
     if (themeIndex == 2) {
-      return MediaQuery.of(context!).platformBrightness == Brightness.dark;
+      return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+          Brightness.dark;
     } else {
       return themeIndex == 1;
     }

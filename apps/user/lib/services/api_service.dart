@@ -1,16 +1,32 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:dio/dio.dart';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:fixit_user/config.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+
 import '../screens/app_pages_screens/server_error_screen/server_error.dart';
+import 'auth/auth_token_store.dart';
 import 'environment.dart';
 import 'error/exceptions.dart';
 
 class ApiServices {
-  static var client = http.Client();
-  final dio = Dio();
+  factory ApiServices() => GetIt.I<ApiServices>();
+
+  ApiServices.withDependencies({
+    required this.dio,
+    required EnvironmentStore environmentStore,
+    required AuthTokenStore tokenStore,
+  })  : _environmentStore = environmentStore,
+        _tokenStore = tokenStore;
+
+  final Dio dio;
+  final EnvironmentStore _environmentStore;
+  final AuthTokenStore _tokenStore;
+
+  static final http.Client client = http.Client();
   static List<Map<String, String>> conversationHistory = [];
 
   //to get full path with paramiters
@@ -106,11 +122,8 @@ class ApiServices {
       log("URL Name For Call: $apiName");
 
       try {
-        //dio.options.headers["authtoken"] = authtoken;
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        String? token = pref.getString(session.accessToken);
+        final token = isToken ? await _tokenStore.read() : null;
         log("token : $token");
-        // log("sharedPreferences : ${headersToken(token)}/// $headers");
         Response? response;
         response = await dio.get(
           apiName,
@@ -180,9 +193,7 @@ class ApiServices {
     } else {
       log("URL: $apiName");
 
-      //dio.options.headers["authtoken"] = authtoken;
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? token = pref.getString(session.accessToken);
+      final token = isToken ? await _tokenStore.read() : null;
       log("AUTH : $token");
       log("AUTH : ${headersToken(token)}");
       try {
@@ -295,9 +306,7 @@ class ApiServices {
     } else {
       log("URL: $apiName");
 
-      //dio.options.headers["authtoken"] = authtoken;
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? token = pref.getString(session.accessToken);
+      final token = isToken ? await _tokenStore.read() : null;
       log("AUTH : $token");
       log("AUTH : ${headersToken(token)}");
       try {
@@ -382,9 +391,7 @@ class ApiServices {
     } else {
       log("URL: $apiName");
 
-      //dio.options.headers["authtoken"] = authtoken;
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? token = pref.getString(session.accessToken);
+      final token = isToken ? await _tokenStore.read() : null;
       log("AUTH : $token");
       log("AUTH : ${headersToken(token)}");
       try {

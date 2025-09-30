@@ -1,225 +1,59 @@
 import 'dart:async';
-import 'dart:developer';
-import 'dart:io';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:fixit_user/helper/notification.dart';
-import 'package:fixit_user/providers/app_pages_providers/job_request_providers/add_job_request_provider.dart';
-import 'package:fixit_user/providers/app_pages_providers/job_request_providers/job_request_details_provider.dart';
-import 'package:fixit_user/providers/app_pages_providers/offer_chat_provider.dart';
-import 'package:fixit_user/providers/app_pages_providers/feed/feed_provider.dart';
-import 'package:fixit_user/providers/chat/thread_conversation_provider.dart';
-import 'package:fixit_user/providers/chat/thread_inbox_provider.dart';
-import 'package:fixit_user/services/environment.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:upgrader/upgrader.dart';
 
+import 'bootstrap/app_bootstrapper.dart';
+import 'bootstrap/provider_registry.dart';
+import 'common/languages/language_change.dart';
+import 'common/theme/theme_service.dart';
 import 'common/theme/app_theme.dart';
 import 'config.dart';
+import 'helper/notification.dart';
+import 'providers/common_providers/currency_provider.dart';
+import 'services/environment.dart';
+import 'services/logging/app_logger.dart';
 
-void main() async {
-  // var widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  if (Platform.isAndroid) {
-    log("app android");
-    await Firebase.initializeApp(
-        name: "Your appName",
-        options: const FirebaseOptions(
-            apiKey: "Your Apikey",
-            appId: "Your appId",
-            messagingSenderId: "Your messagingSenderId",
-            projectId: "Your projectId"));
-  } else {
-    log("app IOS");
-    await Firebase.initializeApp(
-        name: "Your appName",
-        options: const FirebaseOptions(
-            apiKey: "Your Apikey",
-            appId: "Your appId",
-            messagingSenderId: "Your messagingSenderId",
-            projectId: "Your projectId"));
-  }
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await initializeAppSettings();
+final AppLogger _logger = AppLogger.instance;
 
-  sharedPreferences.getString("selectedLocale");
-  log("=-=-=-=-=-=-=-=-=- ${sharedPreferences.getString("selectedLocale")}");
+Future<void> main() async {
+  final bootstrapper = AppBootstrapper();
+  final bootstrapResult = await bootstrapper.bootstrap(_firebaseMessagingBackgroundHandler);
 
-  runApp(const MyApp());
+  runZonedGuarded(
+    () => runApp(MyApp(bootstrapResult: bootstrapResult)),
+    (error, stackTrace) => _logger.error('Uncaught error', error: error, stackTrace: stackTrace),
+  );
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key, required this.bootstrapResult});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+  final BootstrapResult bootstrapResult;
 
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    // FlutterNativeSplash.remove();
-    // Timer(Duration(milliseconds: 500), () {
-    //   FlutterNativeSplash.remove();
-    // });
-    lockScreenPortrait();
-    return FutureBuilder(
-        future: SharedPreferences.getInstance(),
-        builder: (context1, AsyncSnapshot<SharedPreferences> snapData) {
-          // SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack, overlays: [
-          // SystemUiOverlay.top,
-          //   SystemUiOverlay.bottom,
-          // ]);
-          if (snapData.hasData) {
-            return MultiProvider(
-                providers: [
-                  ChangeNotifierProvider(
-                      create: (_) => ThemeService(snapData.data!, context)),
-                  ChangeNotifierProvider(create: (_) => SplashProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => LanguageProvider(snapData.data!, context)),
-                  ChangeNotifierProvider(create: (_) => CommonApiProvider()),
-                  ChangeNotifierProvider(create: (_) => OnBoardingProvider()),
-                  ChangeNotifierProvider(create: (_) => LoginProvider()),
-                  ChangeNotifierProvider(create: (_) => OfferChatProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => LoginWithPhoneProvider()),
-                  ChangeNotifierProvider(create: (_) => VerifyOtpProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ForgetPasswordProvider()),
-                  ChangeNotifierProvider(create: (_) => RegisterProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ResetPasswordProvider()),
-                  ChangeNotifierProvider(create: (_) => LoadingProvider()),
-                  ChangeNotifierProvider(create: (_) => DashboardProvider()),
-                  ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
-                  ChangeNotifierProvider(create: (_) => ProfileProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => AppSettingProvider(snapData.data!)),
-                  ChangeNotifierProvider(create: (_) => CurrencyProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ProfileDetailProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => FavouriteListProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => CommonPermissionProvider()),
-                  ChangeNotifierProvider(create: (_) => LocationProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ChangePasswordProvider()),
-                  ChangeNotifierProvider(create: (_) => MyReviewProvider()),
-                  ChangeNotifierProvider(create: (_) => EditReviewProvider()),
-                  ChangeNotifierProvider(create: (_) => AppDetailsProvider()),
-                  ChangeNotifierProvider(create: (_) => RateAppProvider()),
-                  ChangeNotifierProvider(create: (_) => ContactUsProvider()),
-                  ChangeNotifierProvider(create: (_) => NotificationProvider()),
-                  ChangeNotifierProvider(create: (_) => NewLocationProvider()),
-                  ChangeNotifierProvider(create: (_) => SearchProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => LatestBLogDetailsProvider()),
-                  ChangeNotifierProvider(create: (_) => NoInternetProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => CategoriesListProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => CategoriesDetailsProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ServicesDetailsProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ServiceReviewProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ProviderDetailsProvider()),
-                  ChangeNotifierProvider(create: (_) => SlotBookingProvider()),
-                  ChangeNotifierProvider(create: (_) => CartProvider()),
-                  ChangeNotifierProvider(create: (_) => PaymentProvider()),
-                  ChangeNotifierProvider(create: (_) => WalletProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ServicemanListProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ServiceSelectProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => SelectServicemanProvider()),
-                  ChangeNotifierProvider(create: (_) => BookingProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => PendingBookingProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => AcceptedBookingProvider()),
-                  ChangeNotifierProvider(create: (_) => ChatProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => OngoingBookingProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => CompletedServiceProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ServicesPackageDetailsProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => CheckoutWebViewProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => CancelledBookingProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => PackageBookingProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ServicemanDetailProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => FeaturedServiceProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ExpertServiceProvider()),
-                  ChangeNotifierProvider(create: (_) => ChatHistoryProvider()),
-                  ChangeNotifierProvider(create: (_) => ThreadInboxProvider()),
-                  ChangeNotifierProvider(create: (_) => ThreadConversationProvider()),
-                  ChangeNotifierProvider(create: (_) => DeleteDialogProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => JobRequestListProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => AddJobRequestProvider()),
-                  ChangeNotifierProvider(create: (_) => FeedProvider()),
-                  // ChangeNotifierProvider(create: (_) => AudioCallProvider()),
-                  // ChangeNotifierProvider(create: (_) => VideoCallProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => JobRequestDetailsProvider()),
-                  ChangeNotifierProvider(
-                      create: (_) => ServicePackageAllListProvider()),
-                ],
-                child: UpgradeAlert(
-                    dialogStyle: UpgradeDialogStyle.cupertino,
-                    showIgnore: false,
-                    showLater: false,
-                    barrierDismissible: false,
-                    upgrader: Upgrader(
-                        storeController: UpgraderStoreController(
-                            onAndroid: () => UpgraderPlayStore())),
-                    child: const RouteToPage()));
-          } else {
-            return MaterialApp(
-                theme: AppTheme.fromType(ThemeType.light).themeData,
-                darkTheme: AppTheme.fromType(ThemeType.dark).themeData,
-                themeMode: ThemeMode.light,
-                debugShowCheckedModeBanner: false,
-                home: UpgradeAlert(
-                    showIgnore: false,
-                    showLater: false,
-                    barrierDismissible: false,
-                    dialogStyle: UpgradeDialogStyle.cupertino,
-                    upgrader: Upgrader(
-                        storeController: UpgraderStoreController(
-                            onAndroid: () => UpgraderPlayStore())),
-                    child: const SplashLayout()));
-          }
-        });
-  }
-
-  lockScreenPortrait() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    return MultiProvider(
+      providers: AppProviderRegistry.buildProviders(
+        context,
+        bootstrapResult.sharedPreferences,
+      ),
+      child: UpgradeAlert(
+        dialogStyle: UpgradeDialogStyle.cupertino,
+        showIgnore: false,
+        showLater: false,
+        barrierDismissible: false,
+        upgrader: Upgrader(
+          storeController: UpgraderStoreController(onAndroid: () => UpgraderPlayStore()),
+        ),
+        child: const RouteToPage(),
+      ),
+    );
   }
 }
 
@@ -233,11 +67,8 @@ class RouteToPage extends StatefulWidget {
 class _RouteToPageState extends State<RouteToPage> {
   @override
   void initState() {
-    // TODO: implement initState
-    // CustomNotificationController().initNotification(context);
-    CustomNotificationController().initFirebaseMessaging();
-    setState(() {});
     super.initState();
+    CustomNotificationController().initFirebaseMessaging();
   }
 
   @override
@@ -245,11 +76,10 @@ class _RouteToPageState extends State<RouteToPage> {
     return Consumer<ThemeService>(builder: (context, theme, child) {
       return Consumer<LanguageProvider>(builder: (context, lang, child) {
         return Consumer<CurrencyProvider>(builder: (context, currency, child) {
-          // Check if currency is null, and handle it gracefully.
           if (currency.currency == null) {
-            // Provide a fallback value or handle the null state
-            currency.setVal(); // Initialize or set default value if needed.
+            currency.setVal();
           }
+
           final provider = Provider.of<LanguageProvider>(context, listen: true);
 
           return MaterialApp(
@@ -264,12 +94,11 @@ class _RouteToPageState extends State<RouteToPage> {
               AppLocalizationDelagate(),
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate
+              GlobalCupertinoLocalizations.delegate,
             ],
-            themeMode: Provider.of<ThemeService>(context).theme,
+            themeMode: theme.theme,
             initialRoute: "/",
             routes: appRoute.route,
-            // Wrap MaterialApp with Directionality
             builder: (context, child) {
               return Directionality(
                 textDirection: lang.locale?.languageCode == 'ar'
@@ -287,14 +116,8 @@ class _RouteToPageState extends State<RouteToPage> {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: "Your ApiKey",
-      appId: "Your appId",
-      messagingSenderId: "Your messagingSenderId",
-      projectId: "Your projectId",
-    ),
-  );
+  final environment = environmentStore.environment;
+  await Firebase.initializeApp(options: environment.firebase.toFirebaseOptions());
 
   final title = message.data['title'] ?? '';
   final AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -303,21 +126,19 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     description: 'This channel is used for important notifications.',
     importance: Importance.high,
     playSound: true,
-    sound:
-        (title == 'Incoming Audio Call...' || title == 'Incoming Video Call...')
-            ? const RawResourceAndroidNotificationSound('callsound')
-            : null,
+    sound: (title == 'Incoming Audio Call...' || title == 'Incoming Video Call...')
+        ? const RawResourceAndroidNotificationSound('callsound')
+        : null,
   );
 
   showNotification(message, channel);
 }
 
-Future<void> showNotification(
-    RemoteMessage remote, AndroidNotificationChannel channel) async {
+Future<void> showNotification(RemoteMessage remote, AndroidNotificationChannel channel) async {
   final String title = remote.notification?.title ?? '';
   final String body = remote.notification?.body ?? '';
 
-  AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+  final androidDetails = AndroidNotificationDetails(
     channel.id,
     channel.name,
     channelDescription: channel.description,
@@ -333,12 +154,12 @@ Future<void> showNotification(
     visibility: NotificationVisibility.public,
   );
 
-  DarwinNotificationDetails iOSDetails = const DarwinNotificationDetails(
+  const iOSDetails = DarwinNotificationDetails(
     sound: 'callsound.wav',
     presentSound: true,
   );
 
-  NotificationDetails notificationDetails = NotificationDetails(
+  final notificationDetails = NotificationDetails(
     android: androidDetails,
     iOS: iOSDetails,
   );
