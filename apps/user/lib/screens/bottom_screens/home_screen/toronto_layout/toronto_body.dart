@@ -3,23 +3,12 @@
 import 'package:fixit_user/screens/bottom_screens/home_screen/berlin_layout.dart/berline_today_offiers.dart';
 import 'package:fixit_user/screens/bottom_screens/home_screen/layouts/horizontal_blog_list.dart';
 import 'package:fixit_user/screens/bottom_screens/home_screen/layouts/special_offers_layout.dart';
-import 'package:fixit_user/screens/bottom_screens/home_screen/toronto_layout/toronto_banner_layout.dart';
 import 'package:fixit_user/screens/bottom_screens/home_screen/toronto_layout/toronto_coupon_layout.dart';
 import 'package:fixit_user/screens/bottom_screens/home_screen/toronto_layout/toronto_package_layout.dart';
 import 'package:fixit_user/screens/bottom_screens/home_screen/toronto_layout/toronto_top_categories.dart';
 
 import '../../../../config.dart';
-// ignore_for_file: use_build_context_synchronously, deprecated_member_use, avoid_print, prefer_is_empty
-
-import 'package:fixit_user/screens/bottom_screens/home_screen/berlin_layout.dart/berline_today_offiers.dart';
-import 'package:fixit_user/screens/bottom_screens/home_screen/layouts/horizontal_blog_list.dart';
-import 'package:fixit_user/screens/bottom_screens/home_screen/layouts/special_offers_layout.dart';
-import 'package:fixit_user/screens/bottom_screens/home_screen/toronto_layout/toronto_banner_layout.dart';
-import 'package:fixit_user/screens/bottom_screens/home_screen/toronto_layout/toronto_coupon_layout.dart';
-import 'package:fixit_user/screens/bottom_screens/home_screen/toronto_layout/toronto_package_layout.dart';
-import 'package:fixit_user/screens/bottom_screens/home_screen/toronto_layout/toronto_top_categories.dart';
-
-import '../../../../config.dart';
+import '../../../../widgets/ad_slot_widget.dart';
 
 class TorontoBody extends StatelessWidget {
   const TorontoBody({super.key});
@@ -78,16 +67,12 @@ class TorontoBody extends StatelessWidget {
                       border: Border.all(color: appColor(context).stroke)),
                 ],
               ).padding(horizontal: Insets.i20, bottom: Insets.i20),
-              if (commonApi.dashboardModel != null &&
-                  commonApi.dashboardModel!.banners!.isNotEmpty)
-                TorontoBannerLayout(
-                    bannerList: commonApi.dashboardModel!.banners,
-                    onTap: commonApi.isLoading == true
-                        ? (type, id) {
-                      print("object=-===-=-=-=-=-=-=-=-=");
-                    }
-                        : (type, id) => value.onBannerTap(context, type, id))
-                    .paddingOnly(left: Insets.i20),
+              AdSlotWidget(
+                slot: 'home_special_offers',
+                margin: const EdgeInsets.symmetric(horizontal: Insets.i20),
+                borderRadius: BorderRadius.circular(AppRadius.r12),
+                onPlacementTap: (item) => value.onPlacementTap(context, item),
+              ),
               const VSpace(Sizes.s25),
               Column(
                 children: [

@@ -2598,9 +2598,9 @@ With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **
 77. [x] Deliver 27) Notifications & Chat data models, APIs, features, and safety protocols — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
     - **77A — Data model & API documentation refresh**: Keep entity diagrams and API references aligned with delivered scope.
     - **77B — Safety protocol retrospectives**: Maintain safety checklists, incident learnings, and regression suites confirming protections stay active.
-78. [ ] Deliver 28) Banners & slow UI fixes across async loading, asset optimization, caching, and measurement — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-    - **78A — Diagnosis & remediation plan**: Audit banners/async pain points, define optimization strategies, and prioritize fixes with metrics.
-    - **78B — Implementation & measurement**: Execute optimizations, update caching strategies, and verify improvements via performance dashboards.
+78. [x] Deliver 28) Banners & slow UI fixes across async loading, asset optimization, caching, and measurement — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
+    - **78A — Diagnosis & remediation plan**: Audit banners/async pain points, define optimization strategies, and prioritize fixes with metrics. ✅ Completed with cross-platform async architecture and documented remediation outcomes.
+    - **78B — Implementation & measurement**: Execute optimizations, update caching strategies, and verify improvements via performance dashboards. ✅ Async repositories, widgets, and telemetry instrumentation shipped with automated coverage.
 79. [ ] Deliver 29) Provider-set taxes compliance workflows, validation, invoicing, and privacy handling — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
     - **79A — Workflow design & compliance mapping**: Outline provider tax workflows, compliance checkpoints, and data handling requirements.
     - **79B — Implementation & audit trails**: Build validation logic, invoicing updates, and privacy safeguards with audit evidence collection.

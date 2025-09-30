@@ -435,10 +435,6 @@ class CategoriesDetailsProvider with ChangeNotifier {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     bool isGuest = preferences.getBool(session.isContinueAsGuest) ?? false;
     log("isGuest::$isGuest");
-    if (isGuest == false) {
-      fetchBannerAdsData(context);
-    }
-
     showLoading(context);
     dynamic data = ModalRoute.of(context)!.settings.arguments;
     categoryModel = data;

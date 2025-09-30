@@ -9,6 +9,7 @@ import 'package:fixit_user/screens/bottom_screens/home_screen/layouts/horizontal
 import 'package:fixit_user/screens/bottom_screens/home_screen/layouts/special_offers_layout.dart';
 import 'package:fixit_user/screens/bottom_screens/home_screen/tokyo_layout/tokyo_coupon_layout.dart';
 import 'package:fixit_user/screens/bottom_screens/home_screen/tokyo_layout/tokyo_packages_layout.dart';
+import 'package:fixit_user/widgets/ad_slot_widget.dart';
 
 class TokyoBody extends StatelessWidget {
   const TokyoBody({super.key});
@@ -155,41 +156,13 @@ class TokyoBody extends StatelessWidget {
                           ])),
                   Column(
                     children: [
-                      if (commonApi.dashboardModel != null &&
-                          commonApi.dashboardModel!.banners!.isNotEmpty &&
-                          commonApi.dashboardModel!.banners!
-                              .any((banner) => banner.media!.isNotEmpty))
-                        BannerLayout(
-                            isDubai: true,
-                            bannerList: commonApi.dashboardModel!.banners,
-                            onPageChanged: (index, reason) =>
-                                value.onSlideBanner(index),
-                            onTap: commonApi.isLoading == true
-                                ? (type, id) {
-                                    print("object=-===-=-=-=-=-=-=-=-=");
-                                  }
-                                : (type, id) {
-                                    log("object=-===-=-=-=-=-=-=-=-=");
-                                    value.onBannerTap(context, type, id);
-                                  }),
-                      if (commonApi.dashboardModel != null &&
-                          commonApi.dashboardModel!.banners!.length > 1 &&
-                          dash.bannerList
-                              .any((banner) => banner.media!.isNotEmpty))
-                        const VSpace(Sizes.s12),
-                      if (commonApi.dashboardModel != null &&
-                          commonApi.dashboardModel!.banners!.length > 1 &&
-                          commonApi.dashboardModel!.banners!
-                              .any((banner) => banner.media!.isNotEmpty))
-                        DotIndicator(
-                                list: commonApi.dashboardModel!.banners!,
-                                selectedIndex: value.selectIndex)
-                            .padding(top: Sizes.s12),
-                      if (commonApi.dashboardModel != null &&
-                          commonApi.dashboardModel!.banners!.isNotEmpty &&
-                          commonApi.dashboardModel!.banners!
-                              .any((banner) => banner.media!.isNotEmpty))
-                        const VSpace(Sizes.s20),
+                      AdSlotWidget(
+                        slot: 'home_special_offers',
+                        margin: const EdgeInsets.symmetric(horizontal: Insets.i20),
+                        borderRadius: BorderRadius.circular(AppRadius.r12),
+                        onPlacementTap: (item) => value.onPlacementTap(context, item),
+                      ),
+                      const VSpace(Sizes.s20),
                     ],
                   ).padding(top: Sizes.s75),
                 ],

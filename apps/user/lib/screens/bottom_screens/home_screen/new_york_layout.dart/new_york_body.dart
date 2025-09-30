@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import '../../../../config.dart';
+import '../../../../widgets/ad_slot_widget.dart';
 import '../layouts/horizontal_blog_list.dart';
 import '../layouts/new_job_request_layout.dart';
 
@@ -20,35 +21,13 @@ class NewYorkBody extends StatelessWidget {
           child: ListView(children: [
             Column(
               children: [
-                if (commonApi.dashboardModel != null &&
-                    commonApi.dashboardModel!.banners!.isNotEmpty)
-                  BannerLayout(
-                      isDubai: true,
-                      bannerList: commonApi.dashboardModel!.banners,
-                      onPageChanged: (index, reason) =>
-                          value.onSlideBanner(index),
-                      onTap: commonApi.isLoading == true
-                          ? (type, id) {
-                              log("object=-===-=-=-=-=-=-=-=-=");
-                            }
-                          : (type, id) => value.onBannerTap(context, type, id)),
-                if (commonApi.dashboardModel != null &&
-                    commonApi.dashboardModel!.banners!.length > 1 &&
-                    dash.bannerList.any((banner) => banner.media!.isNotEmpty))
-                  const VSpace(Sizes.s12),
-                if (commonApi.dashboardModel != null &&
-                    commonApi.dashboardModel!.banners!.length > 1 &&
-                    commonApi.dashboardModel!.banners!
-                        .any((banner) => banner.media!.isNotEmpty))
-                  DotIndicator(
-                          list: commonApi.dashboardModel!.banners!,
-                          selectedIndex: value.selectIndex)
-                      .padding(top: Sizes.s12),
-                if (commonApi.dashboardModel != null &&
-                    commonApi.dashboardModel!.banners!.isNotEmpty &&
-                    commonApi.dashboardModel!.banners!
-                        .any((banner) => banner.media!.isNotEmpty))
-                  const VSpace(Sizes.s20),
+                AdSlotWidget(
+                  slot: 'home_special_offers',
+                  margin: const EdgeInsets.symmetric(horizontal: Insets.i20),
+                  borderRadius: BorderRadius.circular(AppRadius.r12),
+                  onPlacementTap: (item) => value.onPlacementTap(context, item),
+                ),
+                const VSpace(Sizes.s20),
               ],
             ),
             Column(

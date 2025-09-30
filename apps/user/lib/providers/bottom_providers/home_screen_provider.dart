@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:fixit_user/config.dart';
+import 'package:fixit_user/models/ads/placement_models.dart';
 import 'package:fixit_user/services/environment.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -117,6 +118,35 @@ class HomeScreenProvider with ChangeNotifier {
 
       route.pushNamed(context, routeName.providerDetailsScreen,
           arg: {'providerId': id});
+    }
+  }
+
+  void onPlacementTap(BuildContext context, PlacementItem item) {
+    try {
+      if (item.hasServices) {
+        final service = item.services.first;
+        Provider.of<ServicesDetailsProvider>(context, listen: false)
+            .getServiceById(context, service.id);
+        route.pushNamed(
+          context,
+          routeName.servicesDetailsScreen,
+          arg: {'serviceId': service.id},
+        );
+        return;
+      }
+
+      final providerId = item.provider.id;
+      if (providerId != null) {
+        Provider.of<ProviderDetailsProvider>(context, listen: false)
+            .getProviderById(context, providerId);
+        route.pushNamed(
+          context,
+          routeName.providerDetailsScreen,
+          arg: {'providerId': providerId},
+        );
+      }
+    } catch (error, stackTrace) {
+      log('Failed to handle placement tap: $error', error: error, stackTrace: stackTrace);
     }
   }
 

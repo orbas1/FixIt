@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import '../../../config.dart';
+import '../../../widgets/ad_slot_widget.dart';
 import '../../../models/category_service_model.dart' show Service;
 
 class CategoryDetailScreen extends StatelessWidget {
@@ -64,71 +65,13 @@ class CategoryDetailScreen extends StatelessWidget {
                           ),
                         ).paddingSymmetric(horizontal: Insets.i20),
                         const VSpace(Sizes.s20),
-                        (login.pref?.getBool(session.isContinueAsGuest) != true)
-                            ? value.isServiceLoading && value.mediaUrls.isEmpty
-                                ? const CommonSkeleton(
-                                    height: Sizes.s128,
-                                    radius: 0,
-                                  ).paddingDirectional(horizontal: Sizes.s20)
-                                : value.mediaUrls.isNotEmpty
-                                    ? SizedBox(
-                                        height: Sizes.s128,
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: value.mediaUrls.length,
-                                          itemBuilder: (context, index) {
-                                            return ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Sizes.s9),
-                                              child: CachedNetworkImage(
-                                                width: 320,
-                                                imageUrl:
-                                                    value.mediaUrls[index],
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Container(
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.fill,
-                                                    ),
-                                                  ),
-                                                ),
-                                                placeholder: (context, url) =>
-                                                    const CommonSkeleton(
-                                                  height: Sizes.s128,
-                                                  radius: 0,
-                                                ),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Image.asset(
-                                                  eImageAssets.noImageFound2,
-                                                  fit: BoxFit.fitWidth,
-                                                ),
-                                              ).inkWell(
-                                                onTap: () {
-                                                  route.pushNamed(
-                                                    context,
-                                                    routeName
-                                                        .providerDetailsScreen,
-                                                    arg: {
-                                                      "providerId":
-                                                          fetchBannerAds
-                                                              ?.data?[index]
-                                                              .providerId
-                                                    },
-                                                  );
-                                                  log("Tapped ID: ${fetchBannerAds?.data?[index].providerId}");
-                                                },
-                                              ),
-                                            ).padding(right: Sizes.s10);
-                                          },
-                                        ).paddingSymmetric(
-                                            horizontal: Sizes.s20),
-                                      )
-                                    : const SizedBox.shrink()
-                            : SizedBox.shrink(),
+                        AdSlotWidget(
+                          slot: 'category_special_offers',
+                          margin: const EdgeInsets.symmetric(horizontal: Insets.i20),
+                          borderRadius: BorderRadius.circular(AppRadius.r12),
+                          onPlacementTap: (item) => value.onPlacementTap(context, item),
+                        ),
+                        const VSpace(Sizes.s20),
                         // if (value.isServiceLoading == false ||
                         //     value.isLoader && value.demoList.isNotEmpty)
                         value.isServiceLoading && value.mediaUrls.isEmpty

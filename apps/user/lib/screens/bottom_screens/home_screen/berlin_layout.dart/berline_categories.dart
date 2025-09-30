@@ -21,7 +21,6 @@ class BerlineCategories extends StatelessWidget {
                 selectedIndex: dash.topSelected,
                 data: homeCategoryList[index],
                 onTap: () {
-                  categoryDetails.fetchBannerAdsData(context);
                   // categoryDetails.mediaUrls = [];
                   categoryDetails.hasCategoryList.clear();
                   categoryDetails.hasCategoryList.addAll(
