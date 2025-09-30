@@ -13,6 +13,10 @@ use App\Services\Escrow\Gateways\EscrowGateway;
 use App\Services\Escrow\Gateways\InMemoryEscrowGateway;
 use App\Services\Escrow\Gateways\StripeEscrowGateway;
 use App\Services\Guardian;
+use App\Services\Geo\IpLocationResolver;
+use App\Services\Security\FileScanService;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Database\Seeders\ThemeOptionSeeder;
 use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -64,6 +68,21 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(EscrowService::class),
                 $app->make(ComplianceReporter::class),
             );
+        });
+
+        $this->app->singleton(FileScanService::class);
+
+        if (! $this->app->bound(ClientInterface::class)) {
+            $this->app->bind(ClientInterface::class, function () {
+                return new Client([
+                    'timeout' => 5,
+                    'connect_timeout' => 5,
+                ]);
+            });
+        }
+
+        $this->app->singleton(IpLocationResolver::class, function ($app) {
+            return new IpLocationResolver($app->make(ClientInterface::class));
         });
     }
 

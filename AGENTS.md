@@ -2492,9 +2492,9 @@ With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **
 33. [x] Deliver 4.1.7 Flutter routing and navigation patterns for consumer and provider personas — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
 34. [x] Ship 4.2.1–4.2.3 Mobile consumer funnel screens (landing, feed, job detail) — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
 35. [x] Ship 4.2.4–4.2.9 Mobile marketplace and commerce screens (search, escrow, disputes, storefront, affiliate, settings) — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
-36. [ ] Integrate 4.3 Native capabilities (location, file scanning, push notifications) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-37. [ ] Build 5.1–5.2 Design tokens, theming system, and shared component library — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-38. [ ] Build 5.3–5.6 Experience upgrades (landing, dashboards, admin redesign, accessibility) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+36. [x] Integrate 4.3 Native capabilities (location, file scanning, push notifications) — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
+37. [x] Build 5.1–5.2 Design tokens, theming system, and shared component library — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
+38. [x] Build 5.3–5.6 Experience upgrades (landing, dashboards, admin redesign, accessibility) — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
 39. [ ] Execute 6.1–6.2 Backend performance and caching enhancements — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 40. [ ] Execute 6.3–6.4 Asset optimization and API transport improvements — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 41. [ ] Execute 6.5–6.6 Mobile runtime optimizations, observability gates, and acceptance metrics — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100

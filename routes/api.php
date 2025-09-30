@@ -40,6 +40,8 @@ Route::group(['middleware' => ['localization']], function () {
     Route::get('appearance', 'App\Http\Controllers\API\SettingController@getAppearance');
     Route::get('settings/advertisement', 'App\Http\Controllers\API\SettingController@getAdvertisement');
 
+    Route::get('location/estimate', 'App\Http\Controllers\API\LocationController@estimate');
+
     // Payment Methods
     Route::get('payment-methods', 'App\Http\Controllers\API\PaymentMethodController@index');
 

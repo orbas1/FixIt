@@ -12,6 +12,7 @@ import '../services/auth/auth_token_store.dart';
 import '../services/realtime/app_realtime_bridge.dart';
 import '../services/state/app_state_store.dart';
 import '../services/state/user_session_store.dart';
+import '../services/notifications/notification_preferences.dart';
 
 class AppProviderRegistry {
   static List<SingleChildWidget> buildProviders(
@@ -59,7 +60,11 @@ class AppProviderRegistry {
       ChangeNotifierProvider(create: (_) => AppDetailsProvider()),
       ChangeNotifierProvider(create: (_) => RateAppProvider()),
       ChangeNotifierProvider(create: (_) => ContactUsProvider()),
-      ChangeNotifierProvider(create: (_) => NotificationProvider()),
+      ChangeNotifierProvider(
+        create: (_) => NotificationProvider(
+          preferenceStore: getIt<NotificationPreferenceStore>(),
+        ),
+      ),
       ChangeNotifierProvider(create: (_) => NewLocationProvider()),
       ChangeNotifierProvider(create: (_) => SearchProvider()),
       ChangeNotifierProvider(create: (_) => LatestBLogDetailsProvider()),

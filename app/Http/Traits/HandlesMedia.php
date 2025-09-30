@@ -29,12 +29,21 @@ trait HandlesMedia
         if($files && $files->isNotEmpty()){
             foreach ($files as $file) {
                 if ($file->isValid()) {
-                    // Add media with custom properties (e.g., language and original filename).
-                    $model->addMedia($file)
+                    $media = $model->addMedia($file)
                         ->withCustomProperties([
                             'language' => $language,
+                            'scan_status' => 'pending',
                         ])
                         ->toMediaCollection($collection);
+
+                    try {
+                        app(\App\Services\Security\FileScanService::class)->scan($media);
+                    } catch (\Throwable $exception) {
+                        $media->setCustomProperty('scan_status', 'failed');
+                        $media->setCustomProperty('scan_error', $exception->getMessage());
+                        $media->save();
+                        report($exception);
+                    }
                 }
             }
         }

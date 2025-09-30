@@ -4,14 +4,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../config.dart';
 import '../../../helper/notification.dart';
 import '../../../screens/app_pages_screens/custom_job_request/add_job_request/layouts/category_bottom_sheet.dart';
 import '../../../screens/app_pages_screens/profile_detail_screen/layouts/selection_option_layout.dart';
 import '../../../widgets/alert_message_common.dart';
+import '../../../services/security/file_security_service.dart';
 
 class AddJobRequestProvider with ChangeNotifier {
+  AddJobRequestProvider({FileSecurityService? fileSecurityService})
+      : _fileSecurityService = fileSecurityService ?? GetIt.I<FileSecurityService>();
+
+  final FileSecurityService _fileSecurityService;
   String? durationValue;
   int? taxIndex;
   bool isEdit = false;
@@ -184,10 +190,25 @@ class AddJobRequestProvider with ChangeNotifier {
   Future getImage(context, source, isThumbnail) async {
     final ImagePicker picker = ImagePicker();
     route.pop(context);
-    imageFile = (await picker.pickImage(source: source, imageQuality: 70))!;
-    if (imageFile != null) {
-      appArray.serviceImageList.add(imageFile!);
+    final pickedFile = await picker.pickImage(source: source, imageQuality: 70);
+    if (pickedFile == null) {
+      return;
     }
+
+    try {
+      Fluttertoast.showToast(msg: 'Scanning attachment…');
+      await _fileSecurityService.evaluateXFile(pickedFile, useCase: FileUseCase.image);
+    } on FileSecurityException catch (error) {
+      Fluttertoast.showToast(
+        msg: error.message,
+        backgroundColor: appColor(context).red,
+      );
+      return;
+    }
+
+    imageFile = pickedFile;
+    appArray.serviceImageList.add(pickedFile);
+    Fluttertoast.showToast(msg: 'Attachment ready');
     notifyListeners();
   }
 

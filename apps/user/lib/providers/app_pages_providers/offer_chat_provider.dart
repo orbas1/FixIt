@@ -7,6 +7,7 @@ import 'package:fixit_user/services/environment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common_tap.dart';
 import '../../config.dart';
@@ -16,8 +17,13 @@ import '../../models/message_model.dart';
 import '../../screens/app_pages_screens/profile_detail_screen/layouts/selection_option_layout.dart';
 import '../../users_services.dart';
 import '../../widgets/alert_message_common.dart';
+import '../../services/security/file_security_service.dart';
 
 class OfferChatProvider with ChangeNotifier {
+  OfferChatProvider({FileSecurityService? fileSecurityService})
+      : _fileSecurityService = fileSecurityService ?? GetIt.I<FileSecurityService>();
+
+  final FileSecurityService _fileSecurityService;
   final TextEditingController controller = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final FocusNode chatFocus = FocusNode();
@@ -324,6 +330,19 @@ class OfferChatProvider with ChangeNotifier {
 
       if (pickedFile != null) {
         log("Picked file path: ${pickedFile.path}");
+        try {
+          Fluttertoast.showToast(msg: 'Scanning attachment…');
+          await _fileSecurityService.evaluateXFile(
+            pickedFile,
+            useCase: isVideo ? FileUseCase.document : FileUseCase.image,
+          );
+        } on FileSecurityException catch (error) {
+          Fluttertoast.showToast(
+            msg: error.message,
+            backgroundColor: appColor(context).red,
+          );
+          return;
+        }
         notifyListeners();
         await uploadFile(context, pickedFile,
             isVideo: pickedFile.name.contains(".mp4"));

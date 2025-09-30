@@ -4,6 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../config.dart';
+import '../../design_system/components/fixit_button.dart';
+import '../../design_system/components/fixit_card.dart';
+import '../../design_system/components/fixit_section_header.dart';
+import '../../design_system/fixit_theme.dart';
 import '../../models/feed_job_model.dart';
 import '../../providers/app_pages_providers/feed/feed_provider.dart';
 import '../../services/state/app_state_store.dart';
@@ -44,12 +48,14 @@ class _LandingScreenState extends State<LandingScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final theme = Theme.of(context);
+    final designSystem = context.fixitTheme;
+    final colors = designSystem.colors;
+    final spacing = designSystem.spacing;
     final isAuthenticated =
         context.watch<AppStateStore>().isAuthenticated;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.surface,
+      backgroundColor: colors.backgroundPrimary,
       body: SafeArea(
         child: FutureBuilder<void>(
           future: _bootstrapFuture,
@@ -61,8 +67,8 @@ class _LandingScreenState extends State<LandingScreen>
                 slivers: [
                   SliverToBoxAdapter(child: _buildHero(context, isAuthenticated)),
                   SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                    sliver: _buildDiscoverPreview(theme),
+                    padding: EdgeInsets.symmetric(horizontal: spacing.lg, vertical: spacing.md),
+                    sliver: _buildDiscoverPreview(context),
                   ),
                 ],
               ),
@@ -74,60 +80,67 @@ class _LandingScreenState extends State<LandingScreen>
   }
 
   Widget _buildHero(BuildContext context, bool isAuthenticated) {
-    final theme = Theme.of(context);
+    final designSystem = context.fixitTheme;
+    final colors = designSystem.colors;
+    final spacing = designSystem.spacing;
+    final radius = designSystem.radius;
+    final typography = designSystem.typography;
+
     return Container(
-      margin: const EdgeInsets.all(20),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+      margin: EdgeInsets.all(spacing.lg),
+      padding: EdgeInsets.symmetric(horizontal: spacing.xxl, vertical: spacing.xxl),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(radius.lg),
         gradient: LinearGradient(
-          colors: [
-            theme.colorScheme.primary,
-            theme.colorScheme.primary.withOpacity(0.8),
-          ],
+          colors: [colors.brandPrimary, colors.brandSecondary],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: colors.shadow,
+            offset: const Offset(0, 20),
+            blurRadius: 40,
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             translations?.landingHeadline ?? 'Expert help for every home project',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              color: theme.colorScheme.onPrimary,
-              fontWeight: FontWeight.w700,
+            style: typography.headlineMedium.copyWith(
+              color: colors.brandOnPrimary,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: spacing.md),
           Text(
             translations?.landingSubheading ??
                 'Book trusted professionals for repairs, cleaning, deliveries, and more with transparent pricing and protected payments.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onPrimary.withOpacity(0.85),
+            style: typography.bodyLarge.copyWith(
+              color: colors.brandOnPrimary.withOpacity(0.85),
             ),
           ),
-          const SizedBox(height: 24),
-          Row(
+          SizedBox(height: spacing.xl),
+          Wrap(
+            spacing: spacing.md,
+            runSpacing: spacing.sm,
             children: [
-              ElevatedButton(
+              FixitButton(
+                label: isAuthenticated
+                    ? (translations?.landingActionExplore ?? 'Browse jobs')
+                    : (translations?.loginNow ?? 'Sign in'),
                 onPressed: () =>
                     route.pushNamed(context, isAuthenticated ? routeName.feed : routeName.login),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                ),
-                child: Text(
-                  isAuthenticated
-                      ? (translations?.landingActionExplore ?? 'Browse jobs')
-                      : (translations?.loginNow ?? 'Sign in'),
-                ),
+                fullWidth: false,
+                backgroundColorOverride: colors.brandOnPrimary,
+                foregroundColorOverride: colors.brandPrimary,
               ),
-              const SizedBox(width: 16),
-              TextButton(
+              FixitButton(
+                label: translations?.landingActionCreate ?? 'Create account',
                 onPressed: () => route.pushNamed(context, routeName.registerUser),
-                style: TextButton.styleFrom(
-                  foregroundColor: theme.colorScheme.onPrimary,
-                ),
-                child: Text(translations?.landingActionCreate ?? 'Create account'),
+                variant: FixitButtonVariant.ghost,
+                foregroundColorOverride: colors.brandOnPrimary,
               ),
             ],
           ),
@@ -136,24 +149,21 @@ class _LandingScreenState extends State<LandingScreen>
     );
   }
 
-  SliverList _buildDiscoverPreview(ThemeData theme) {
-    final textTheme = theme.textTheme;
+  SliverList _buildDiscoverPreview(BuildContext context) {
+    final designSystem = context.fixitTheme;
+    final colors = designSystem.colors;
+    final spacing = designSystem.spacing;
+    final typography = designSystem.typography;
     return SliverList(
       delegate: SliverChildListDelegate([
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              translations?.landingDiscoverTitle ?? 'Trending nearby requests',
-              style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-            ),
-            TextButton(
-              onPressed: () => route.pushNamed(context, routeName.discover),
-              child: Text(translations?.viewAll ?? 'View all'),
-            ),
-          ],
+        FixitSectionHeader(
+          title: translations?.landingDiscoverTitle ?? 'Trending nearby requests',
+          trailing: GestureDetector(
+            onTap: () => route.pushNamed(context, routeName.discover),
+            child: Text(translations?.viewAll ?? 'View all'),
+          ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: spacing.md),
         Consumer<FeedProvider>(
           builder: (context, provider, child) {
             if (provider.isLoading && provider.jobs.isEmpty) {
@@ -166,19 +176,29 @@ class _LandingScreenState extends State<LandingScreen>
             }
 
             if (provider.jobs.isEmpty) {
-              return EmptyLayout(
+              return FixitCard(
                 title: translations?.noDataFound ?? 'No jobs yet',
                 subtitle: translations?.noDataFoundDesc ??
                     'Once customers post new work in your area it will appear here instantly.',
-                buttonText: translations?.refresh ?? 'Refresh',
-                onTap: _refreshFeed,
+                actions: [
+                  FixitButton(
+                    label: translations?.refresh ?? 'Refresh',
+                    onPressed: _refreshFeed,
+                    variant: FixitButtonVariant.secondary,
+                  ),
+                ],
+                child: const SizedBox.shrink(),
               );
             }
 
             final jobs = provider.jobs.take(5).toList();
             return Column(
               children: [
-                for (final job in jobs) _JobPreviewCard(job: job),
+                for (final job in jobs)
+                  Padding(
+                    padding: EdgeInsets.only(bottom: spacing.md),
+                    child: _JobPreviewCard(job: job),
+                  ),
               ],
             );
           },
@@ -195,7 +215,11 @@ class _JobPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final designSystem = context.fixitTheme;
+    final colors = designSystem.colors;
+    final spacing = designSystem.spacing;
+    final radius = designSystem.radius;
+    final typography = designSystem.typography;
     final currencyFormatter = NumberFormat.compactCurrency(symbol: job.currency ?? r'$');
     final estimated = job.finalBudget ?? job.initialBudget ?? 0;
     final chips = <String>[
@@ -207,72 +231,73 @@ class _JobPreviewCard extends StatelessWidget {
         '${job.bidsSummary!['total']} bids',
     ];
 
-    return Semantics(
-      label: 'Job preview card',
-      hint: 'Opens job details',
-      button: true,
-      child: Card(
-        margin: const EdgeInsets.only(bottom: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(18),
-          onTap: () => GoRouter.of(context).push('/jobs/${job.id}', extra: job),
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  job.title,
-                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  job.description ??
-                      translations?.landingNoDescription ??
-                          'Detailed scope will be shared after you send a proposal.',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodyMedium?.copyWith(color: theme.textTheme.bodySmall?.color),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      currencyFormatter.format(estimated),
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                    Text(
-                      job.status.toUpperCase(),
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        letterSpacing: 0.6,
-                        color: theme.colorScheme.tertiary,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: chips
-                      .where((chip) => chip.isNotEmpty)
-                      .map(
-                        (chip) => Chip(
-                          label: Text(chip),
-                          backgroundColor: theme.colorScheme.surfaceVariant,
-                        ),
-                      )
-                      .toList(),
-                ),
-              ],
+    return FixitCard(
+      title: job.title,
+      subtitle: job.description ??
+          translations?.landingNoDescription ??
+              'Detailed scope will be shared after you send a proposal.',
+      actions: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: spacing.sm, vertical: spacing.xs),
+          decoration: BoxDecoration(
+            color: colors.brandPrimary.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(radius.sm),
+          ),
+          child: Text(
+            job.status.toUpperCase(),
+            style: typography.labelMedium.copyWith(
+              color: colors.brandPrimary,
+              letterSpacing: 0.6,
             ),
           ),
         ),
+      ],
+      onTap: () => GoRouter.of(context).push('/jobs/${job.id}', extra: job),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                currencyFormatter.format(estimated),
+                style: typography.titleMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: colors.brandPrimary,
+                ),
+              ),
+              if (job.createdAt != null)
+                Text(
+                  DateFormat.MMMd().format(job.createdAt!),
+                  style: typography.bodySmall.copyWith(color: colors.textTertiary),
+                ),
+            ],
+          ),
+          SizedBox(height: spacing.sm),
+          Wrap(
+            spacing: spacing.sm,
+            runSpacing: spacing.xs,
+            children: chips
+                .where((chip) => chip.isNotEmpty)
+                .map(
+                  (chip) => Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: spacing.sm,
+                      vertical: spacing.xs,
+                    ),
+                    decoration: BoxDecoration(
+                      color: colors.surfaceHigh,
+                      borderRadius: BorderRadius.circular(radius.lg),
+                    ),
+                    child: Text(
+                      chip,
+                      style: typography.labelMedium.copyWith(color: colors.textSecondary),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        ],
       ),
     );
   }
