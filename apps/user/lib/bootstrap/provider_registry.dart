@@ -38,6 +38,7 @@ class AppProviderRegistry {
       ChangeNotifierProvider(create: (_) => CommonApiProvider()),
       ChangeNotifierProvider(create: (_) => OnBoardingProvider()),
       ChangeNotifierProvider(create: (_) => LoginProvider()),
+      ChangeNotifierProvider(create: (_) => MfaChallengeProvider()),
       ChangeNotifierProvider(create: (_) => OfferChatProvider()),
       ChangeNotifierProvider(create: (_) => LoginWithPhoneProvider()),
       ChangeNotifierProvider(create: (_) => VerifyOtpProvider()),

@@ -36,6 +36,7 @@ class AppRoute {
     routeName.verifyOtp: (p0) => const VerifyOtpScreen(),
     routeName.forgetPassword: (p0) => const ForgotPasswordScreen(),
     routeName.resetPass: (p0) => const ResetPasswordScreen(),
+    routeName.mfaVerification: (p0) => const MfaVerificationScreen(),
     routeName.registerUser: (p0) => const RegisterScreen(),
     routeName.dashboard: (p0) => const Dashboard(),
     routeName.changePass: (p0) => const ChangePasswordScreen(),

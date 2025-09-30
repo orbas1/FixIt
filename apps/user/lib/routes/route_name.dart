@@ -20,6 +20,7 @@ class RouteName {
   final String forgetPassword ='/forgetPassword';
   final String registerUser ='/registerUser';
   final String resetPass ='/resetPass';
+  final String mfaVerification = '/mfaVerification';
   final String dashboard ='/dashboard';
   final String changePass ='/changePass';
   final String appSetting ='/appSetting';

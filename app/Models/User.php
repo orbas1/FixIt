@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasMultiFactorAuthentication;
 use Spatie\Permission\Traits\HasRoles;
 use App\Enums\BookingEnumSlug;
 use App\Enums\RoleEnum;
@@ -22,7 +23,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, HasRoles, InteractsWithMedia, Notifiable, SoftDeletes, Sluggable;
+    use HasApiTokens, HasFactory, HasRoles, InteractsWithMedia, Notifiable, SoftDeletes, Sluggable, HasMultiFactorAuthentication;
 
     /**
      * The attributes that are mass assignable.
@@ -75,6 +76,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'company_id' => 'integer',
         'is_verified' => 'integer',
         'location_cordinates' => 'array',
+        'mfa_recovery_codes' => 'array',
+        'mfa_enabled_at' => 'datetime',
+        'mfa_last_used_at' => 'datetime',
+        'mfa_recovery_codes_generated_at' => 'datetime',
+        'mfa_pending_secret_created_at' => 'datetime',
     ];
 
     // protected $appends = [
@@ -124,6 +130,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'mfa_secret',
+        'mfa_pending_secret',
+        'mfa_recovery_codes',
     ];
 
     public static function boot()

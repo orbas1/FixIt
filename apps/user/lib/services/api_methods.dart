@@ -68,6 +68,13 @@ class ApiMethods {
   String feedServiceRequests = '$apiUrl/feed/service-requests';
   String affiliateDashboard = '$apiUrl/affiliate/dashboard';
 
+  String mfaStatus = '$apiUrl/v1/security/mfa';
+  String mfaSetup = '$apiUrl/v1/security/mfa/setup';
+  String mfaConfirm = '$apiUrl/v1/security/mfa/confirm';
+  String mfaRecoveryCodes = '$apiUrl/v1/security/mfa/recovery-codes';
+  String mfaDisable = '$apiUrl/v1/security/mfa';
+  String verifyMfaChallenge = '$apiUrl/v1/security/mfa/challenge';
+
   String providerReview = '$apiUrl/provider/reviews';
   String customService = '$apiUrl/custom-offer-service';
 }

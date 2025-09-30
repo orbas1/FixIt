@@ -26,3 +26,4 @@ export '../../screens/auth_screens/register_screen/layouts/register_field_layout
 export '../../screens/auth_screens/register_screen/layouts/register_widget_class.dart';
 export '../../screens/auth_screens/change_password_screen/change_password_screen.dart';
 export '../../screens/auth_screens/change_password_screen/layouts/change_password_layout.dart';
+export '../../screens/auth_screens/mfa_verification_screen/mfa_verification_screen.dart';

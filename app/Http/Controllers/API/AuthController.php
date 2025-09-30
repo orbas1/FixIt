@@ -269,9 +269,26 @@ class AuthController extends Controller
                 throw new Exception(__('passwords.incorrect_password'), 400);
             }
 
+            if ($user->hasMfaEnabled()) {
+                $challenge = $user->startMfaChallenge([
+                    'ip' => $request->ip(),
+                    'user_agent' => (string) $request->userAgent(),
+                    'fcm_token' => $request->fcm_token,
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'requires_mfa' => true,
+                    'challenge_id' => $challenge->getKey(),
+                    'expires_at' => optional($challenge->expires_at)->toIso8601String(),
+                    'methods' => ['totp', 'recovery_code'],
+                    'recovery_codes_remaining' => $user->availableRecoveryCodesCount(),
+                    'message' => __('Two-factor authentication required.'),
+                ], 202);
+            }
+
             if ($request->fcm_token) {
-                $user->fcm_token = $request->fcm_token;
-                $user->save();
+                $user->forceFill(['fcm_token' => $request->fcm_token])->save();
             }
 
             $token = $user->createToken('auth_token')->plainTextToken;
@@ -371,7 +388,7 @@ class AuthController extends Controller
             throw new Exception($validator->messages()->first(), 422);
         }
 
-        $user = User::where([['email', $request->email], ['status', true]])->select('id', 'name', 'email', 'password', 'fcm_token')->first();
+        $user = User::where([['email', $request->email], ['status', true]])->first();
         
         if (!$user) {
             throw new Exception(__('validation.user_not_exists'), 400);
