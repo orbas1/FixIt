@@ -12,6 +12,11 @@ import '../services/http/logging_interceptor.dart';
 import '../services/http/retry_interceptor.dart';
 import '../services/http/timeout_interceptor.dart';
 import '../services/api_service.dart';
+import '../services/auth/auth_session_manager.dart';
+import '../services/http/auth_refresh_interceptor.dart';
+import '../services/http/telemetry_interceptor.dart';
+import '../services/logging/http_metrics_recorder.dart';
+import '../services/realtime/app_realtime_bridge.dart';
 
 class DependencyContainer {
   DependencyContainer(this._getIt);
@@ -44,6 +49,41 @@ class DependencyContainer {
     }
     _getIt.registerSingleton<Connectivity>(connectivity);
 
+    final metricsRecorder = HttpMetricsRecorder();
+    if (_getIt.isRegistered<HttpMetricsRecorder>()) {
+      _getIt.unregister<HttpMetricsRecorder>();
+    }
+    _getIt.registerSingleton<HttpMetricsRecorder>(metricsRecorder);
+
+    final realtimeBridge = AppRealtimeBridge(
+      configuration: environment.realtime,
+      tokenStore: authTokenStore,
+      environmentStore: EnvironmentStore.instance,
+    );
+    if (_getIt.isRegistered<AppRealtimeBridge>()) {
+      _getIt.unregister<AppRealtimeBridge>();
+    }
+    _getIt.registerSingleton<AppRealtimeBridge>(realtimeBridge);
+
+    final refreshClient = Dio(
+      BaseOptions(
+        baseUrl: environment.api.baseUrl,
+        connectTimeout: Duration(milliseconds: environment.api.connectTimeoutMs),
+        receiveTimeout: Duration(milliseconds: environment.api.receiveTimeoutMs),
+        headers: EnvironmentStore.instance.headers(),
+      ),
+    );
+
+    final sessionManager = AuthSessionManager(
+      httpClient: refreshClient,
+      tokenStore: authTokenStore,
+      environmentStore: EnvironmentStore.instance,
+    );
+    if (_getIt.isRegistered<AuthSessionManager>()) {
+      _getIt.unregister<AuthSessionManager>();
+    }
+    _getIt.registerSingleton<AuthSessionManager>(sessionManager);
+
     final dio = Dio(
       BaseOptions(
         baseUrl: environment.api.baseUrl,
@@ -57,12 +97,17 @@ class DependencyContainer {
     );
 
     dio.interceptors.addAll([
+      TelemetryInterceptor(metricsRecorder: metricsRecorder),
       TimeoutInterceptor(environment.api),
       ConnectivityInterceptor(connectivity: connectivity),
       RetryInterceptor(
         connectivity: connectivity,
         logger: AppLogger.instance,
         dio: dio,
+      ),
+      AuthRefreshInterceptor(
+        client: dio,
+        sessionManager: sessionManager,
       ),
       LoggingInterceptor(logger: AppLogger.instance),
       InterceptorsWrapper(

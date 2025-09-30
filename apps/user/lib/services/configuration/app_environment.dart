@@ -10,6 +10,7 @@ class AppEnvironment {
     required this.store,
     required this.firebase,
     required this.telemetry,
+    required this.realtime,
   });
 
   final AppInfo app;
@@ -17,6 +18,7 @@ class AppEnvironment {
   final StoreConfiguration store;
   final FirebaseConfiguration firebase;
   final TelemetryConfiguration telemetry;
+  final RealtimeConfiguration realtime;
 
   static Future<AppEnvironment> load({String? flavor}) async {
     final bundle = rootBundle;
@@ -47,6 +49,7 @@ class AppEnvironment {
       store: StoreConfiguration.fromJson(json['store'] as Map<String, dynamic>),
       firebase: FirebaseConfiguration.fromJson(json['firebase'] as Map<String, dynamic>),
       telemetry: TelemetryConfiguration.fromJson(json['telemetry'] as Map<String, dynamic>),
+      realtime: RealtimeConfiguration.fromJson(json['realtime'] as Map<String, dynamic>),
     );
   }
 }
@@ -83,12 +86,14 @@ class ApiConfiguration {
     required this.paymentUrl,
     required this.connectTimeoutMs,
     required this.receiveTimeoutMs,
+    required this.refreshEndpoint,
   });
 
   final String baseUrl;
   final String paymentUrl;
   final int connectTimeoutMs;
   final int receiveTimeoutMs;
+  final String refreshEndpoint;
 
   factory ApiConfiguration.fromJson(Map<String, dynamic> json) {
     return ApiConfiguration(
@@ -96,7 +101,16 @@ class ApiConfiguration {
       paymentUrl: json['paymentUrl'] as String,
       connectTimeoutMs: json['connectTimeoutMs'] as int,
       receiveTimeoutMs: json['receiveTimeoutMs'] as int,
+      refreshEndpoint: json['refreshEndpoint'] as String? ?? '/auth/refresh',
     );
+  }
+
+  Uri refreshUri(String baseUrl) {
+    final endpoint = refreshEndpoint;
+    if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+      return Uri.parse(endpoint);
+    }
+    return Uri.parse(baseUrl + endpoint);
   }
 }
 
@@ -177,5 +191,41 @@ class TelemetryConfiguration {
       crashlyticsEnabled: json['crashlyticsEnabled'] as bool,
       sentryDsn: json['sentryDsn'] as String,
     );
+  }
+}
+
+class RealtimeConfiguration {
+  const RealtimeConfiguration({
+    required this.driver,
+    required this.key,
+    required this.cluster,
+    required this.authEndpoint,
+    required this.activityTimeoutMs,
+    required this.maxReconnectionGapMs,
+  });
+
+  final String driver;
+  final String key;
+  final String cluster;
+  final String authEndpoint;
+  final int activityTimeoutMs;
+  final int maxReconnectionGapMs;
+
+  factory RealtimeConfiguration.fromJson(Map<String, dynamic> json) {
+    return RealtimeConfiguration(
+      driver: json['driver'] as String,
+      key: json['key'] as String,
+      cluster: json['cluster'] as String,
+      authEndpoint: json['authEndpoint'] as String,
+      activityTimeoutMs: json['activityTimeoutMs'] as int? ?? 120000,
+      maxReconnectionGapMs: json['maxReconnectionGapMs'] as int? ?? 30000,
+    );
+  }
+
+  Uri authUri(String baseUrl) {
+    if (authEndpoint.startsWith('http://') || authEndpoint.startsWith('https://')) {
+      return Uri.parse(authEndpoint);
+    }
+    return Uri.parse(baseUrl + authEndpoint);
   }
 }
