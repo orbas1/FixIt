@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:fixit_user/common/app_array.dart';
 import 'package:fixit_user/common/session.dart';
 import 'package:fixit_user/common/theme/app_theme.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:fixit_user/helper/navigation_class.dart';
 import 'package:fixit_user/models/app_setting_model.dart';
@@ -103,7 +104,7 @@ NavigationClass route = NavigationClass();
 AppArray appArray = AppArray();
 Validation validation = Validation();
 AppCss appCss = AppCss();
-ApiServices apiServices = ApiServices();
+ApiServices get apiServices => GetIt.instance<ApiServices>();
 ApiMethods api = ApiMethods();
 TextCommon textCommon = TextCommon();
 CollectionName collectionName = CollectionName();

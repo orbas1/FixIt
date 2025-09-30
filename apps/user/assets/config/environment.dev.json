@@ -1,0 +1,33 @@
+{
+  "app": {
+    "name": "FixIt User",
+    "flavor": "development",
+    "defaultLocale": "en",
+    "supportedLocales": ["en", "es", "ar"],
+    "minimumSupportedVersion": "1.0.0"
+  },
+  "api": {
+    "baseUrl": "https://api.dev.fixitmarketplace.com",
+    "paymentUrl": "https://payments.dev.fixitmarketplace.com",
+    "connectTimeoutMs": 15000,
+    "receiveTimeoutMs": 25000
+  },
+  "store": {
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.fixit.user",
+    "userAppPlayStoreUrl": "https://play.google.com/store/apps/details?id=com.fixit.user"
+  },
+  "firebase": {
+    "apiKey": "AIzaSyA-DEVFIXIT-USER-KEY",
+    "appId": "1:1234567890:android:abc123fixitdev",
+    "messagingSenderId": "1234567890",
+    "projectId": "fixit-dev",
+    "storageBucket": "fixit-dev.appspot.com",
+    "iosBundleId": "com.fixit.user.dev",
+    "androidClientId": "com.fixit.user.dev"
+  },
+  "telemetry": {
+    "analyticsEnabled": true,
+    "crashlyticsEnabled": true,
+    "sentryDsn": "https://examplePublicKey@o0.ingest.sentry.io/0"
+  }
+}
