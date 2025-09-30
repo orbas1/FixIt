@@ -49,6 +49,14 @@ class AppSettingProvider with ChangeNotifier {
       route.pushNamed(context, routeName.changeLanguage);
     } else if (index == 2) {
       route.pushNamed(context, routeName.changePass);
+    } else if (index == 3) {
+      route.pushNamed(context, routeName.escrowCenter);
+    } else if (index == 4) {
+      route.pushNamed(context, routeName.disputeCenter);
+    } else if (index == 5) {
+      route.pushNamed(context, routeName.affiliate);
+    } else if (index == 6) {
+      route.pushNamed(context, routeName.storefronts);
     }
   }
 

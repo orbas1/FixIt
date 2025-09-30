@@ -416,7 +416,14 @@ class AppArray {
         },
         // {'title': translations!.changeCurrency, 'icon': eSvgAssets.currency},
         {'title': translations!.changeLanguage, 'icon': eSvgAssets.translate},
-        {'title': translations!.changePassword, 'icon': eSvgAssets.lock}
+        {'title': translations!.changePassword, 'icon': eSvgAssets.lock},
+        {'title': 'Escrow & payments', 'icon': eSvgAssets.wallet},
+        {'title': 'Dispute center', 'icon': eSvgAssets.help},
+        {'title': 'Affiliate hub', 'icon': eSvgAssets.share},
+        {
+          'title': 'Marketplace storefronts',
+          'icon': eSvgAssets.categories
+        }
       ];
 
   List appGuestSetting(isTheme) => [
