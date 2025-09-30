@@ -19,6 +19,23 @@ Route::post('/webhooks/stripe', [\App\Http\Controllers\Webhook\StripeWebhookCont
 
 Route::group(['middleware' => ['localization']], function () {
 
+    Route::prefix('v1/security')->middleware(['auth:sanctum'])->group(function () {
+        Route::get('incidents', [\App\Http\Controllers\API\SecurityIncidentController::class, 'index'])
+            ->name('security.incidents.index');
+        Route::post('incidents', [\App\Http\Controllers\API\SecurityIncidentController::class, 'store'])
+            ->name('security.incidents.store');
+        Route::get('incidents/{incident:public_id}', [\App\Http\Controllers\API\SecurityIncidentController::class, 'show'])
+            ->name('security.incidents.show');
+        Route::put('incidents/{incident:public_id}', [\App\Http\Controllers\API\SecurityIncidentController::class, 'update'])
+            ->name('security.incidents.update');
+        Route::post('incidents/{incident:public_id}/acknowledge', [\App\Http\Controllers\API\SecurityIncidentController::class, 'acknowledge'])
+            ->name('security.incidents.acknowledge');
+        Route::post('incidents/{incident:public_id}/resolve', [\App\Http\Controllers\API\SecurityIncidentController::class, 'resolve'])
+            ->name('security.incidents.resolve');
+        Route::post('incidents/{incident:public_id}/close', [\App\Http\Controllers\API\SecurityIncidentController::class, 'close'])
+            ->name('security.incidents.close');
+    });
+
     Route::post('/login', 'App\Http\Controllers\API\AuthController@login');
     Route::post('/social/login', 'App\Http\Controllers\API\AuthController@socialLogin');
     Route::get('/logout', 'App\Http\Controllers\API\AuthController@logout');

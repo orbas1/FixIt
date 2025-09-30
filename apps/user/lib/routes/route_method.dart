@@ -17,6 +17,7 @@ import 'package:fixit_user/screens/app_pages_screens/disputes/dispute_center_scr
 import 'package:fixit_user/screens/app_pages_screens/escrow/escrow_center_screen.dart';
 import 'package:fixit_user/screens/app_pages_screens/storefront/storefront_browser_screen.dart';
 import 'package:fixit_user/screens/app_pages_screens/privacy/privacy_center_screen.dart';
+import 'package:fixit_user/screens/app_pages_screens/security/security_center_screen.dart';
 import 'package:fixit_user/screens/discover/discover_screen.dart';
 import 'package:fixit_user/screens/feed/feed_screen.dart';
 import 'package:fixit_user/screens/feed/feed_job_detail_screen.dart';
@@ -42,6 +43,7 @@ class AppRoute {
     routeName.dashboard: (p0) => const Dashboard(),
     routeName.changePass: (p0) => const ChangePasswordScreen(),
     routeName.appSetting: (p0) => const AppSettingScreen(),
+    routeName.securityCenter: (p0) => const SecurityCenterScreen(),
     routeName.privacy: (p0) => const PrivacyCenterScreen(),
     routeName.changeLanguage: (p0) => const ChangeLanguageScreen(),
     routeName.profileDetail: (p0) => const ProfileDetailScreen(),
@@ -170,6 +172,10 @@ class AppRouter {
       GoRoute(
         path: routeName.storefronts,
         builder: (context, state) => const StorefrontBrowserScreen(),
+      ),
+      GoRoute(
+        path: routeName.securityCenter,
+        builder: (context, state) => const SecurityCenterScreen(),
       ),
       GoRoute(
         path: routeName.escrowCenter,

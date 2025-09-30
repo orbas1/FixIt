@@ -202,6 +202,17 @@ dynamic ar = {
   'excellent': "ممتاز",
   'saySomething': "قل شيئًا أكثر",
   'rateApp': "قيم التطبيق",
+  'securityCenter': "مركز الأمان",
+  'securityCenterHeadline':
+      "تابع الحوادث النشطة، حالة المعالجة، وتحديثات دليل التشغيل لفريق الأمان.",
+  'noSecurityIncidents': "كل شيء مستقر — لا توجد حوادث أمان نشطة حالياً.",
+  'openIncidentsLabel': "الحوادث النشطة",
+  'securityRunbookCta':
+      "راجع دليل التشغيل لمعرفة خطوات المعالجة، جهات التصعيد، والمهام اللاحقة للحادث.",
+  'viewRunbook': "فتح دليل الأمان",
+  'statusLabel': "الحالة",
+  'detectedAt': "تم الاكتشاف",
+  'mitigationHeading': "المعالجة جارية",
   'privacyPolicy': "سياسة الخصوصية",
   'privacyPolicyDescription':
       "قم بإدارة كيفية استخدام بياناتك. غيّر التفضيلات واطلب تصدير البيانات أو حذفها في أي وقت.",

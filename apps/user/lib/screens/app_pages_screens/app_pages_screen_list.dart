@@ -5,6 +5,7 @@ export '../../screens/app_pages_screens/escrow/escrow_center_screen.dart';
 export '../../screens/app_pages_screens/disputes/dispute_center_screen.dart';
 export '../../screens/app_pages_screens/storefront/storefront_browser_screen.dart';
 export '../../screens/app_pages_screens/privacy/privacy_center_screen.dart';
+export '../../screens/app_pages_screens/security/security_center_screen.dart';
 
 export '../../screens/app_pages_screens/change_language_screen/change_language_screen.dart';
 export '../../screens/app_pages_screens/change_language_screen/layouts/radio_layout.dart';

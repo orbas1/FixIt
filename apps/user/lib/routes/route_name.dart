@@ -12,6 +12,7 @@ class RouteName {
   final String disputeCenter = '/disputes';
   final String escrowCenter = '/escrows';
   final String storefronts = '/storefronts';
+  final String securityCenter = '/securityCenter';
   final String privacy = '/privacy';
   final String settings = '/settings';
   final String onBoarding ='/onBoarding';

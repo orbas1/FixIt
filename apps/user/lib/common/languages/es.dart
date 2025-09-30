@@ -202,6 +202,17 @@ dynamic es = {
   'excellent': "Excelente",
   'saySomething': "Di algo mas",
   'rateApp': "Calificar aplicacion",
+  'securityCenter': "Centro de seguridad",
+  'securityCenterHeadline':
+      "Supervisa incidentes activos, el estado de mitigación y las actualizaciones del runbook del equipo de seguridad.",
+  'noSecurityIncidents': "Todo en orden: no hay incidentes de seguridad activos en este momento.",
+  'openIncidentsLabel': "Incidentes activos",
+  'securityRunbookCta':
+      "Consulta el runbook para los pasos de mitigación, los contactos de escalación y las tareas posteriores al incidente.",
+  'viewRunbook': "Abrir runbook de seguridad",
+  'statusLabel': "Estado",
+  'detectedAt': "Detectado",
+  'mitigationHeading': "Mitigación en curso",
   'privacyPolicy': "Política de privacidad",
   'privacyPolicyDescription':
       "Administra cómo usamos tus datos. Cambia preferencias y solicita exportaciones o eliminación cuando lo necesites.",

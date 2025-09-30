@@ -2501,7 +2501,7 @@ With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **
 42. [x] Deliver 7.1–7.2 Identity, MFA, and authorization protections — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
 43. [x] Deliver 7.3–7.5 Payments, file security, and abuse mitigation safeguards — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
 44. [x] Deliver 7.6–7.8 Secrets management, AppSec automation, and privacy compliance — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
-45. [ ] Deliver 7.9–7.10 Security runbooks, incident response, and acceptance testing — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+45. [x] Deliver 7.9–7.10 Security runbooks, incident response, and acceptance testing — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
 46. [ ] Implement 8.1 Admin modules for moderation, disputes, and commerce oversight — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 47. [ ] Implement 8.2–8.3 Ops observability dashboards and alerting with SLOs — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 48. [ ] Implement 8.4–8.5 Product analytics instrumentation and admin acceptance checks — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100

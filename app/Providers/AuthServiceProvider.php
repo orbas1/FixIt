@@ -12,6 +12,7 @@ use App\Models\Customer;
 use App\Models\Document;
 use App\Models\Escrow;
 use App\Models\Secret;
+use App\Models\SecurityIncident;
 use App\Models\Service;
 use App\Models\ServicePackage;
 use App\Models\ServiceRequest;
@@ -34,6 +35,7 @@ use App\Policies\DocumentPolicy;
 use App\Policies\EscrowPolicy;
 use App\Policies\ServicemanPolicy;
 use App\Policies\SecretPolicy;
+use App\Policies\SecurityIncidentPolicy;
 use App\Policies\ServicePackagePolicy;
 use App\Policies\ServicePolicy;
 use App\Policies\ServiceRequestPolicy;
@@ -84,6 +86,7 @@ class AuthServiceProvider extends ServiceProvider
         Thread::class => ThreadPolicy::class,
         Escrow::class => EscrowPolicy::class,
         Secret::class => SecretPolicy::class,
+        SecurityIncident::class => SecurityIncidentPolicy::class,
     ];
 
     /**

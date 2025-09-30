@@ -20,6 +20,7 @@ import '../services/realtime/app_realtime_bridge.dart';
 import '../services/location/ip_location_client.dart';
 import '../services/location/location_service.dart';
 import '../services/security/file_security_service.dart';
+import '../services/security/security_incident_service.dart';
 import '../services/notifications/notification_preferences.dart';
 import '../helper/notification.dart';
 
@@ -161,6 +162,11 @@ class DependencyContainer {
       _getIt.unregister<FileSecurityService>();
     }
     _getIt.registerSingleton<FileSecurityService>(const FileSecurityService());
+
+    if (_getIt.isRegistered<SecurityIncidentService>()) {
+      _getIt.unregister<SecurityIncidentService>();
+    }
+    _getIt.registerSingleton<SecurityIncidentService>(SecurityIncidentService());
 
     if (_getIt.isRegistered<NotificationPreferenceStore>()) {
       _getIt.unregister<NotificationPreferenceStore>();
