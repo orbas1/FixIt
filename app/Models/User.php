@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\HasMultiFactorAuthentication;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\PrivacyConsent;
 use App\Enums\BookingEnumSlug;
 use App\Enums\RoleEnum;
 use App\Helpers\Helpers;
@@ -195,6 +196,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     public function activeSubscription()
     {
         return $this->hasOne(UserSubscription::class, 'user_id')->where('is_active', true);
+    }
+
+    public function privacyConsents(): HasMany
+    {
+        return $this->hasMany(PrivacyConsent::class);
     }
 
     public function addresses()

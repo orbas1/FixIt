@@ -2,14 +2,16 @@
 
 namespace App\Repositories\API;
 
-use Exception;
-use App\Helpers\Helpers;
-use App\Models\ServiceRequest;
-use Illuminate\Support\Facades\DB;
-use App\Exceptions\ExceptionHandler;
 use App\Events\CreateServiceRequestEvent;
-use Prettus\Repository\Eloquent\BaseRepository;
+use App\Exceptions\ExceptionHandler;
+use App\Helpers\Helpers;
 use App\Http\Resources\ServiceRequestDetailResource;
+use App\Models\ServiceRequest;
+use App\Services\Security\ContentGuardService;
+use DomainException;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Prettus\Repository\Eloquent\BaseRepository;
 
 class ServiceRequestRepository extends BaseRepository
 {
@@ -27,10 +29,26 @@ class ServiceRequestRepository extends BaseRepository
     {
         DB::beginTransaction();
         try {
+            /** @var ContentGuardService $guard */
+            $guard = app(ContentGuardService::class);
+
+            $locale = $request->user()?->preferred_locale ?? app()->getLocale();
+            $titleResult = $guard->inspect($request->title, ['locale' => $locale]);
+            if ($titleResult->isBlocked()) {
+                throw new DomainException('Submitted content violates marketplace policies.');
+            }
+
+            $descriptionResult = $request->description
+                ? $guard->inspect($request->description, ['locale' => $locale])
+                : null;
+
+            if ($descriptionResult && $descriptionResult->isBlocked()) {
+                throw new DomainException('Submitted content violates marketplace policies.');
+            }
 
             $serviceRequest = $this->model->create([
-                'title' => $request->title,
-                'description' => $request->description,
+                'title' => $titleResult->sanitizedText(),
+                'description' => $descriptionResult?->sanitizedText() ?? $request->description,
                 'duration' => $request->duration,
                 'duration_unit' => $request->duration_unit,
                 'required_servicemen' => $request->required_servicemen,
@@ -49,6 +67,20 @@ class ServiceRequestRepository extends BaseRepository
             }
 
             event(new CreateServiceRequestEvent($serviceRequest));
+
+            if ($titleResult->shouldEscalate()) {
+                $guard->flag($serviceRequest, $titleResult, [
+                    'category' => 'service_request_title',
+                    'actor_id' => Helpers::getCurrentUserId(),
+                ]);
+            }
+
+            if ($descriptionResult && $descriptionResult->shouldEscalate()) {
+                $guard->flag($serviceRequest, $descriptionResult, [
+                    'category' => 'service_request_description',
+                    'actor_id' => Helpers::getCurrentUserId(),
+                ]);
+            }
 
             DB::commit();
             return response()->json([

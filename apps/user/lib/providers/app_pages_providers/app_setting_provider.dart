@@ -57,6 +57,8 @@ class AppSettingProvider with ChangeNotifier {
       route.pushNamed(context, routeName.affiliate);
     } else if (index == 6) {
       route.pushNamed(context, routeName.storefronts);
+    } else if (index == 7) {
+      route.pushNamed(context, routeName.privacy);
     }
   }
 

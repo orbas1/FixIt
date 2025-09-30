@@ -205,6 +205,18 @@ dynamic en = {
   'saySomething': "Say Something More",
   'rateApp': "Rate App",
   'privacyPolicy': "Privacy Policy",
+  'privacyPolicyDescription':
+      "Manage how we use your data. Toggle preferences and request exports or deletion whenever you need.",
+  'downloadData': "Download my data",
+  'requestAccountDeletion': "Request account deletion",
+  'accountDeletionQueued':
+      "Deletion request queued. We'll email you once processing completes.",
+  'marketingPreference': "Marketing emails",
+  'analyticsPreference': "Analytics & diagnostics",
+  'essentialPreference': "Essential communications",
+  'expiresOn': "Expires on",
+  'canUpdateAnytime': "You can update this preference at any time.",
+  'download': "Download",
   'cancellationPolicy': "Cancellation Policy",
   'refundPolicy': "Refund Policy",
   'helpSupport': "Help & Support",

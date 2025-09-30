@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 
 import '../../models/escrow_model.dart';
+import '../../models/escrow_payment_intent.dart';
 import '../environment.dart';
 import 'escrow_api_client.dart';
 
@@ -54,6 +55,12 @@ class EscrowRepository {
 
   Future<EscrowModel> refund(int id, double amount) =>
       _apiClient.refund(id, amount);
+
+  Future<EscrowPaymentIntent> createPaymentIntent(
+    int id, {
+    Map<String, dynamic>? context,
+  }) =>
+      _apiClient.createPaymentIntent(id, context: context);
 
   Future<List<EscrowModel>> _readCache() async {
     const boxName = 'escrow_cache_v1';

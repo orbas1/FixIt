@@ -50,6 +50,9 @@ class AppProviderRegistry {
       ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
       ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ChangeNotifierProvider(create: (_) => AppSettingProvider(sharedPreferences)),
+      ChangeNotifierProvider(
+        create: (_) => PrivacyPreferenceProvider(preferences: sharedPreferences),
+      ),
       ChangeNotifierProvider(create: (_) => CurrencyProvider()),
       ChangeNotifierProvider(create: (_) => ProfileDetailProvider()),
       ChangeNotifierProvider(create: (_) => FavouriteListProvider()),

@@ -8,6 +8,7 @@ use App\Models\ThreadMessage;
 use App\Models\ThreadParticipant;
 use App\Models\User;
 use App\Notifications\ThreadMessageNotification;
+use App\Services\Security\ContentGuardService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
@@ -18,7 +19,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ThreadService
 {
-    public function __construct(private readonly DatabaseManager $db)
+    public function __construct(
+        private readonly DatabaseManager $db,
+        private readonly ContentGuardService $guard,
+    )
     {
     }
 
@@ -79,10 +83,25 @@ class ThreadService
                 throw new \InvalidArgumentException('A message requires text or attachments.');
             }
 
+            $body = $payload['body'] ?? null;
+            $moderationResult = null;
+
+            if ($body !== null) {
+                $moderationResult = $this->guard->inspect($body, [
+                    'locale' => $author->preferred_locale ?? app()->getLocale(),
+                ]);
+
+                if ($moderationResult->isBlocked()) {
+                    throw new \DomainException('Message rejected by safety filters.');
+                }
+
+                $body = $moderationResult->sanitizedText();
+            }
+
             $message = ThreadMessage::query()->create([
                 'thread_id' => $thread->id,
                 'author_id' => $author->id,
-                'body' => $payload['body'] ?? null,
+                'body' => $body,
                 'attachments' => $attachments ?: null,
                 'meta' => Arr::except($payload, ['body', 'attachments']),
                 'is_system' => (bool) ($payload['is_system'] ?? false),
@@ -103,6 +122,14 @@ class ThreadService
             }
 
             $this->dispatchNotifications($thread, $message);
+
+            if ($moderationResult && $moderationResult->shouldEscalate()) {
+                $this->guard->flag($message, $moderationResult, [
+                    'category' => 'thread_message',
+                    'actor_id' => $author->id,
+                    'thread_id' => $thread->id,
+                ]);
+            }
 
             ThreadMessageCreated::dispatch($message->fresh(['author', 'thread']));
 

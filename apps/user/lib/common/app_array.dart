@@ -423,6 +423,10 @@ class AppArray {
         {
           'title': 'Marketplace storefronts',
           'icon': eSvgAssets.categories
+        },
+        {
+          'title': translations!.privacyPolicy,
+          'icon': eSvgAssets.privacy,
         }
       ];
 

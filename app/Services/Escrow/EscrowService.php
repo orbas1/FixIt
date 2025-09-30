@@ -87,6 +87,58 @@ class EscrowService
         });
     }
 
+    public function markFundedFromPaymentIntent(
+        Escrow $escrow,
+        float $amount,
+        string $reference,
+        array $metadata = []
+    ): Escrow {
+        if ($amount <= 0) {
+            throw new RuntimeException('Escrow amount must be positive.');
+        }
+
+        return DB::transaction(function () use ($escrow, $amount, $reference, $metadata) {
+            /** @var Escrow $escrow */
+            $escrow = Escrow::query()
+                ->lockForUpdate()
+                ->with('transactions')
+                ->find($escrow->getKey());
+
+            if (! $escrow) {
+                throw new RuntimeException('Escrow record missing.');
+            }
+
+            if (in_array($escrow->status, EscrowStatusEnum::TERMINAL_STATES, true)) {
+                return $escrow;
+            }
+
+            if ($escrow->status === EscrowStatusEnum::FUNDED && $escrow->hold_reference === $reference) {
+                return $escrow;
+            }
+
+            $escrow->fill([
+                'status' => EscrowStatusEnum::FUNDED,
+                'hold_reference' => $reference,
+                'funded_at' => Carbon::now(),
+                'expires_at' => Carbon::now()->addHours(config('escrow.release_sla_hours', 72)),
+                'metadata' => array_merge($escrow->metadata ?? [], [
+                    'fund' => array_merge(
+                        Arr::except($metadata, ['raw']),
+                        ['reference' => $reference]
+                    ),
+                ]),
+            ])->save();
+
+            $this->compliance->report('escrow.funded', $escrow, null, [
+                'amount' => $amount,
+                'currency' => $escrow->currency,
+                'job' => $escrow->service_request_id,
+            ]);
+
+            return $escrow->fresh(['transactions']);
+        });
+    }
+
     public function release(Escrow $escrow, float $amount, ?User $actor = null, array $metadata = []): Escrow
     {
         if ($amount <= 0) {

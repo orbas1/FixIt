@@ -16,6 +16,7 @@ import 'package:fixit_user/screens/app_pages_screens/disputes/dispute_detail_scr
 import 'package:fixit_user/screens/app_pages_screens/disputes/dispute_center_screen.dart';
 import 'package:fixit_user/screens/app_pages_screens/escrow/escrow_center_screen.dart';
 import 'package:fixit_user/screens/app_pages_screens/storefront/storefront_browser_screen.dart';
+import 'package:fixit_user/screens/app_pages_screens/privacy/privacy_center_screen.dart';
 import 'package:fixit_user/screens/discover/discover_screen.dart';
 import 'package:fixit_user/screens/feed/feed_screen.dart';
 import 'package:fixit_user/screens/feed/feed_job_detail_screen.dart';
@@ -41,6 +42,7 @@ class AppRoute {
     routeName.dashboard: (p0) => const Dashboard(),
     routeName.changePass: (p0) => const ChangePasswordScreen(),
     routeName.appSetting: (p0) => const AppSettingScreen(),
+    routeName.privacy: (p0) => const PrivacyCenterScreen(),
     routeName.changeLanguage: (p0) => const ChangeLanguageScreen(),
     routeName.profileDetail: (p0) => const ProfileDetailScreen(),
     routeName.walletBalance: (p0) => const WalletBalanceScreen(),

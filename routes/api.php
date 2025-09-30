@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/webhooks/stripe', [\App\Http\Controllers\Webhook\StripeWebhookController::class, '__invoke'])
+    ->withoutMiddleware(['throttle:api'])
+    ->name('webhooks.stripe');
+
 Route::group(['middleware' => ['localization']], function () {
 
     Route::post('/login', 'App\Http\Controllers\API\AuthController@login');
@@ -159,11 +163,38 @@ Route::group(['middleware' => ['localization']], function () {
         Route::post('dummy/notification', 'App\Http\Controllers\API\NotificationController@dummyNotification');
         Route::post('update-company-details', 'App\Http\Controllers\API\ProviderController@updateCompanyDetails');
 
+        // Escrows
+        Route::apiResource('escrows', 'App\\Http\\Controllers\\API\\EscrowController', [
+            'only' => ['index', 'store', 'show'],
+        ]);
+        Route::post('escrows/{escrow}/release', 'App\\Http\\Controllers\\API\\EscrowController@release')
+            ->name('escrows.release');
+        Route::post('escrows/{escrow}/refund', 'App\\Http\\Controllers\\API\\EscrowController@refund')
+            ->name('escrows.refund');
+        Route::post('escrows/{escrow}/payment-intent', 'App\\Http\\Controllers\\API\\EscrowController@paymentIntent')
+            ->middleware('throttle:escrow-funding')
+            ->name('escrows.payment-intent');
+
+        // Secrets management (admin only)
+        Route::apiResource('secrets', \App\Http\Controllers\API\SecretController::class)
+            ->except(['create', 'edit']);
+
+        // Privacy compliance
+        Route::get('privacy/preferences', [\App\Http\Controllers\API\PrivacyPreferenceController::class, 'show'])
+            ->name('privacy.preferences.show');
+        Route::put('privacy/preferences', [\App\Http\Controllers\API\PrivacyPreferenceController::class, 'update'])
+            ->name('privacy.preferences.update');
+        Route::post('privacy/export', [\App\Http\Controllers\API\PrivacyPreferenceController::class, 'export'])
+            ->name('privacy.export');
+        Route::delete('privacy/account', [\App\Http\Controllers\API\PrivacyPreferenceController::class, 'destroy'])
+            ->name('privacy.account.destroy');
+
         // Threads & messaging
         Route::get('threads', 'App\Http\Controllers\API\ThreadController@index');
         Route::post('threads', 'App\Http\Controllers\API\ThreadController@store');
         Route::get('threads/{thread:public_id}', 'App\Http\Controllers\API\ThreadController@show');
-        Route::post('threads/{thread:public_id}/messages', 'App\Http\Controllers\API\ThreadMessageController@store');
+        Route::post('threads/{thread:public_id}/messages', 'App\Http\Controllers\API\ThreadMessageController@store')
+            ->middleware('throttle:thread-messages');
         Route::post('threads/{thread:public_id}/read', 'App\Http\Controllers\API\ThreadReadController@store');
 
         // Delete Account
@@ -313,7 +344,8 @@ Route::group(['middleware' => ['localization']], function () {
         Route::apiResource('bid','App\Http\Controllers\API\BidController',['except' => ['show']]);
 
         // Service Requests
-        Route::apiResource('serviceRequest','App\Http\Controllers\API\ServiceRequestController');
+        Route::apiResource('serviceRequest','App\Http\Controllers\API\ServiceRequestController')
+            ->middleware('throttle:service-requests');
 
         Route::apiResource('customOffer', 'App\Http\Controllers\API\CustomOfferController');
 

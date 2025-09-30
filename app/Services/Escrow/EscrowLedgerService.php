@@ -26,6 +26,17 @@ class EscrowLedgerService
         $occurredAt ??= Carbon::now();
 
         return DB::transaction(function () use ($escrow, $type, $amount, $direction, $actor, $metadata, $reference, $gatewayId, $notes, $occurredAt) {
+            if ($reference) {
+                $existing = $escrow->transactions()
+                    ->where('type', $type)
+                    ->where('reference', $reference)
+                    ->first();
+
+                if ($existing) {
+                    return $existing;
+                }
+            }
+
             $transaction = $escrow->transactions()->create([
                 'type' => $type,
                 'amount' => round($amount, 2),
