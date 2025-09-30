@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Feed;
 
+use App\Services\Media\ImageVariantService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
@@ -25,6 +26,8 @@ class ServiceRequestFeedResource extends JsonResource
         $latestBid = $this->whenLoaded('bids', function () {
             return $this->bids->first();
         });
+
+        $imageVariantService = app(ImageVariantService::class);
 
         return [
             'id' => $this->id,
@@ -78,7 +81,8 @@ class ServiceRequestFeedResource extends JsonResource
                     ];
                 })->values();
             }),
-            'attachments' => $this->attachments ?? [],
+            'attachments' => $this->transformAttachments($imageVariantService),
+            'legacy_attachments' => $this->attachments ?? [],
             'location' => $this->when($coordinates !== null, function () use ($coordinates) {
                 return [
                     'lat' => $coordinates['lat'] ?? null,
@@ -92,5 +96,21 @@ class ServiceRequestFeedResource extends JsonResource
             'created_at' => optional($this->created_at)->toIso8601String(),
             'booking_date' => optional($this->booking_date)->toIso8601String(),
         ];
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    protected function transformAttachments(ImageVariantService $imageVariantService): array
+    {
+        if (! $this->relationLoaded('media')) {
+            return [];
+        }
+
+        return $this->media
+            ->where('collection_name', 'attachments')
+            ->map(fn ($media) => $imageVariantService->transform($media))
+            ->values()
+            ->all();
     }
 }

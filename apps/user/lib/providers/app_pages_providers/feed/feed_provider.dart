@@ -12,6 +12,9 @@ class FeedProvider extends ChangeNotifier {
   static const _cacheKey = 'feed_v2_cache';
   static const _staleAfter = Duration(minutes: 15);
   static const _perPage = 10;
+  static const _maxCachedItems = 200;
+  static const _lruIndexKey = 'feed_v2_cache:lru';
+  static const _prefetchThreshold = 3;
 
   FeedProvider();
 
@@ -19,6 +22,8 @@ class FeedProvider extends ChangeNotifier {
   bool isLoading = false;
   bool hasMore = true;
   DateTime? lastSyncedAt;
+  bool isStale = false;
+  bool lastSyncFailed = false;
 
   int _currentPage = 1;
   Map<String, dynamic> _filters = {};
@@ -65,11 +70,7 @@ class FeedProvider extends ChangeNotifier {
       final response = await _client.fetchJobs(query);
       final newJobs = response.jobs;
 
-      if (reset) {
-        jobs = newJobs;
-      } else {
-        jobs = [...jobs, ...newJobs];
-      }
+      _mergeJobs(newJobs, reset: reset);
 
       final meta = response.meta;
       final currentPage = meta['current_page'] is int ? meta['current_page'] as int : _currentPage;
@@ -78,10 +79,12 @@ class FeedProvider extends ChangeNotifier {
       _currentPage = currentPage + 1;
       lastSyncedAt = DateTime.now();
       await _persistCache(meta);
+      lastSyncFailed = false;
     } catch (error, stackTrace) {
       debugPrint('FeedProvider fetch error: $error');
       debugPrintStack(stackTrace: stackTrace);
       await _loadFromCache();
+      lastSyncFailed = true;
     } finally {
       isLoading = false;
       notifyListeners();
@@ -104,13 +107,14 @@ class FeedProvider extends ChangeNotifier {
     try {
       final box = await _ensureCacheBox();
       final snapshot = {
-        'items': jobs.take(25).map((e) => e.toJson()).toList(),
+        'items': jobs.take(_maxCachedItems).map((e) => e.toJson()).toList(),
         'meta': meta,
         'filters': _filters,
         'hasMore': hasMore,
         'savedAt': DateTime.now().toIso8601String(),
       };
       await box.put(_cacheStorageKey(), jsonEncode(snapshot));
+      await _updateLru(box, _cacheStorageKey());
     } catch (error) {
       debugPrint('FeedProvider cache write failed: $error');
     }
@@ -134,6 +138,7 @@ class FeedProvider extends ChangeNotifier {
         lastSyncedAt = DateTime.tryParse(savedAt);
         isStale = lastSyncedAt != null && DateTime.now().difference(lastSyncedAt!) > _staleAfter;
       }
+      this.isStale = isStale;
       final meta = cached['meta'] as Map<String, dynamic>?;
       if (meta != null && meta['current_page'] != null) {
         _currentPage = (meta['current_page'] as int) + 1;
@@ -151,6 +156,50 @@ class FeedProvider extends ChangeNotifier {
     } catch (error) {
       debugPrint('FeedProvider cache read failed: $error');
     }
+  }
+
+  void prefetchIfNeeded(int visibleIndex) {
+    if (!hasMore || isLoading) return;
+    final remaining = jobs.length - visibleIndex - 1;
+    if (remaining <= _prefetchThreshold) {
+      fetchNext();
+    }
+  }
+
+  void _mergeJobs(List<FeedJobModel> newJobs, {required bool reset}) {
+    final Map<int, FeedJobModel> unique = <int, FeedJobModel>{};
+
+    if (!reset) {
+      for (final job in jobs) {
+        if (job.id != null) {
+          unique[job.id!] = job;
+        }
+      }
+    }
+
+    for (final job in newJobs) {
+      if (job.id != null) {
+        unique[job.id!] = job;
+      }
+    }
+
+    jobs = unique.values.take(_maxCachedItems).toList();
+  }
+
+  Future<void> _updateLru(Box<dynamic> box, String key) async {
+    final entries = (box.get(_lruIndexKey) as List?)?.cast<String>() ?? <String>[];
+    entries.remove(key);
+    entries.insert(0, key);
+
+    if (entries.length > _maxCachedItems) {
+      final overflow = entries.sublist(_maxCachedItems);
+      for (final staleKey in overflow) {
+        await box.delete(staleKey);
+      }
+      entries.removeRange(_maxCachedItems, entries.length);
+    }
+
+    await box.put(_lruIndexKey, entries);
   }
 
   Future<Box<dynamic>> _ensureCacheBox() async {

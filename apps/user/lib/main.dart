@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
 import 'bootstrap/app_bootstrapper.dart';
@@ -22,6 +23,7 @@ import 'services/environment.dart';
 import 'services/logging/app_logger.dart';
 import 'services/state/app_state_store.dart';
 import 'services/state/user_session_store.dart';
+import 'services/background/background_sync.dart';
 
 final AppLogger _logger = AppLogger.instance;
 
@@ -29,9 +31,29 @@ Future<void> main() async {
   final bootstrapper = AppBootstrapper();
   final bootstrapResult = await bootstrapper.bootstrap(_firebaseMessagingBackgroundHandler);
 
-  runZonedGuarded(
-    () => runApp(MyApp(bootstrapResult: bootstrapResult)),
-    (error, stackTrace) => _logger.error('Uncaught error', error: error, stackTrace: stackTrace),
+  await BackgroundSyncScheduler.instance.initialize();
+  await BackgroundSyncScheduler.instance.scheduleFeedRefresh();
+
+  final telemetry = bootstrapResult.environment.telemetry;
+
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = telemetry.sentryDsn;
+      options.environment = bootstrapResult.environment.app.flavor;
+      options.release = bootstrapResult.environment.app.name;
+      options.tracesSampleRate = 0.2;
+      options.profilesSampleRate = 0.1;
+      options.enableAutoPerformanceTracking = true;
+    },
+    appRunner: () {
+      runZonedGuarded(
+        () => runApp(MyApp(bootstrapResult: bootstrapResult)),
+        (error, stackTrace) {
+          _logger.error('Uncaught error', error: error, stackTrace: stackTrace);
+          Sentry.captureException(error, stackTrace: stackTrace);
+        },
+      );
+    },
   );
 }
 
@@ -118,6 +140,7 @@ class _RouteToPageState extends State<RouteToPage> {
               GlobalCupertinoLocalizations.delegate,
             ],
             themeMode: theme.theme,
+            navigatorObservers: const [SentryNavigatorObserver()],
             builder: (context, child) {
               return Directionality(
                 textDirection: lang.locale?.languageCode == 'ar'

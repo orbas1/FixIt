@@ -72,6 +72,7 @@ dependencies:
   flutter_switch: ^0.3.2
   dotted_border: ^2.1.0
   geocoding: ^3.0.0
+  workmanager: ^0.5.2
   google_maps_flutter: ^2.9.0
   syncfusion_flutter_core: ^29.2.11
   geolocator: ^13.0.1
@@ -121,6 +122,7 @@ dependencies:
   android_intent_plus: ^5.3.0
   open_file: ^3.5.10
   pusher_channels_flutter: ^2.1.0
+  sentry_flutter: ^8.6.0
 
 
 

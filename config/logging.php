@@ -40,6 +40,12 @@ return [
             'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
+        'performance' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/performance.log'),
+            'level' => env('LOG_LEVEL_PERFORMANCE', 'info'),
+            'replace_placeholders' => true,
+        ],
 
         'single' => [
             'driver' => 'single',

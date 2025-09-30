@@ -8,7 +8,6 @@ use App\Models\SearchSnapshot;
 use App\Models\ServiceRequest;
 use App\Services\Feed\ServiceRequestFeedService;
 use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class ServiceRequestObserver
@@ -19,6 +18,9 @@ class ServiceRequestObserver
             'user.media',
             'service:id,title,price,user_id',
             'zones:id,name',
+            'media' => function ($builder) {
+                $builder->where('collection_name', 'attachments');
+            },
             'bids' => function ($builder) {
                 $builder->latest('created_at')
                     ->select(['id', 'service_request_id', 'provider_id', 'amount', 'status', 'created_at'])
@@ -39,7 +41,7 @@ class ServiceRequestObserver
             ['document' => $document]
         );
 
-        $this->flushFeedCache();
+        $this->flushFeedCache($serviceRequest);
 
         event(new FeedUpdated(
             $serviceRequest->wasRecentlyCreated ? 'created' : 'updated',
@@ -56,7 +58,7 @@ class ServiceRequestObserver
             'subject_id' => $serviceRequest->id,
         ])->delete();
 
-        $this->flushFeedCache();
+        $this->flushFeedCache($serviceRequest);
 
         event(new FeedUpdated(
             'deleted',
@@ -65,8 +67,14 @@ class ServiceRequestObserver
         ));
     }
 
-    protected function flushFeedCache(): void
+    protected function flushFeedCache(ServiceRequest $serviceRequest): void
     {
-        Cache::forget(ServiceRequestFeedService::CACHE_VERSION_KEY);
+        $buckets = ['global'];
+
+        if ($serviceRequest->h3_index !== null) {
+            $buckets[] = (string) $serviceRequest->h3_index;
+        }
+
+        $this->feedService->invalidateBuckets($buckets);
     }
 }
