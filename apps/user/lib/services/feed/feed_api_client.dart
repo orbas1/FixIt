@@ -73,7 +73,17 @@ class FeedApiClient {
     required this.baseUrl,
     Dio? dio,
     this.tokenResolver,
-  }) : _dio = dio ?? Dio(BaseOptions(connectTimeout: const Duration(seconds: 12), receiveTimeout: const Duration(seconds: 12))) {
+  }) : _dio = dio ??
+            Dio(
+              BaseOptions(
+                connectTimeout: const Duration(seconds: 12),
+                receiveTimeout: const Duration(seconds: 12),
+                headers: const {
+                  'Accept': 'application/json',
+                  'Accept-Encoding': 'gzip, deflate, br',
+                },
+              ),
+            ) {
     _dio.interceptors.add(QueuedInterceptorsWrapper(onRequest: (options, handler) async {
       options.headers.addAll(headers);
       if (tokenResolver != null) {
@@ -99,7 +109,13 @@ class FeedApiClient {
 
   Future<FeedResponse> fetchJobs(FeedQuery query) async {
     final response = await _dio.get<Map<String, dynamic>>(baseUrl, queryParameters: query.toJson());
-    return FeedResponse.fromJson(response.data ?? {});
+    final payload = response.data ?? <String, dynamic>{};
+
+    if (payload.length > 100) {
+      return compute(_deserializeFeedResponse, payload);
+    }
+
+    return FeedResponse.fromJson(payload);
   }
 
   Future<FeedJobModel> fetchJobDetail(int id) async {
@@ -117,4 +133,8 @@ class FeedApiClient {
     }
     throw StateError('Unexpected payload for job $id');
   }
+}
+
+FeedResponse _deserializeFeedResponse(Map<String, dynamic> json) {
+  return FeedResponse.fromJson(Map<String, dynamic>.from(json));
 }

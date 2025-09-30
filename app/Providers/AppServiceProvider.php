@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Helpers\Helpers;
+use App\Models\Bid;
 use App\Models\ServiceRequest;
 use App\Observers\ServiceRequestObserver;
+use App\Observers\BidObserver;
 use App\Services\Compliance\ComplianceReporter;
 use App\Services\Dispute\DisputeService;
 use App\Services\Escrow\EscrowLedgerService;
@@ -14,6 +16,8 @@ use App\Services\Escrow\Gateways\InMemoryEscrowGateway;
 use App\Services\Escrow\Gateways\StripeEscrowGateway;
 use App\Services\Guardian;
 use App\Services\Geo\IpLocationResolver;
+use App\Services\Media\ImageVariantService;
+use App\Services\Media\ImgproxyUrlBuilder;
 use App\Services\Security\FileScanService;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -72,6 +76,21 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(FileScanService::class);
 
+        $this->app->singleton(ImgproxyUrlBuilder::class, function ($app) {
+            $config = $app['config']->get('media.imgproxy', []);
+
+            return new ImgproxyUrlBuilder(
+                $config['endpoint'] ?? null,
+                $config['key'] ?? null,
+                $config['salt'] ?? null,
+                (bool) ($config['enabled'] ?? false),
+                $config['format'] ?? 'webp',
+                (int) ($config['quality'] ?? 82),
+            );
+        });
+
+        $this->app->singleton(ImageVariantService::class);
+
         if (! $this->app->bound(ClientInterface::class)) {
             $this->app->bind(ClientInterface::class, function () {
                 return new Client([
@@ -114,8 +133,10 @@ class AppServiceProvider extends ServiceProvider
         }
         Translatable::fallback(fallbackAny: true);
         Model::automaticallyEagerLoadRelationships();
+        Model::preventLazyLoading(! $this->app->isProduction());
 
         ServiceRequest::observe(ServiceRequestObserver::class);
+        Bid::observe(BidObserver::class);
     }
 
     private function getThemeOptions()

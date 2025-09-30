@@ -75,7 +75,8 @@ Route::group(['middleware' => ['localization']], function () {
     Route::get('servicePackages', 'App\Http\Controllers\API\ServiceController@servicePackages');
     Route::get('servicePackages/{id}', 'App\Http\Controllers\API\ServiceController@servicePackages');
     Route::get('service-package/{service_package}', 'App\Http\Controllers\API\ServicePackageController@show');
-    Route::get('feed/service-requests', 'App\Http\Controllers\API\FeedController@serviceRequests');
+    Route::get('feed/service-requests', 'App\Http\Controllers\API\FeedController@serviceRequests')
+        ->name('api.feed.service-requests');
 
     // Categories
     Route::get('category', 'App\Http\Controllers\API\CategoryController@index');

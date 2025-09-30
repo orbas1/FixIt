@@ -114,18 +114,32 @@ class _FeedScreenState extends State<FeedScreen> {
                             onTap: _onRefresh,
                           );
                         }
+                        final extraBanner = provider.isStale ? 1 : 0;
+                        final loaderOffset = provider.jobs.length + extraBanner;
+                        final itemCount = loaderOffset + (provider.hasMore ? 1 : 0);
+
                         return ListView.builder(
                           controller: _scrollController,
                           physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: provider.jobs.length + (provider.hasMore ? 1 : 0),
+                          itemCount: itemCount,
                           itemBuilder: (context, index) {
-                            if (index >= provider.jobs.length) {
+                            if (provider.isStale && index == 0) {
+                              return _FeedStaleBanner(
+                                lastSyncedAt: provider.lastSyncedAt,
+                                isOffline: provider.lastSyncFailed,
+                              );
+                            }
+
+                            final jobIndex = index - extraBanner;
+
+                            if (provider.hasMore && index >= loaderOffset) {
                               return const Padding(
                                 padding: EdgeInsets.all(24),
                                 child: Center(child: CircularProgressIndicator()),
                               );
                             }
-                            final job = provider.jobs[index];
+                            final job = provider.jobs[jobIndex];
+                            provider.prefetchIfNeeded(jobIndex);
                             return _FeedJobTile(job: job);
                           },
                         );
@@ -170,6 +184,59 @@ class _FeedScreenState extends State<FeedScreen> {
           setState(() => _activeFilters = filters);
           _provider?.fetchNext(reset: true, filters: filters);
         },
+      ),
+    );
+  }
+}
+
+class _FeedStaleBanner extends StatelessWidget {
+  const _FeedStaleBanner({required this.lastSyncedAt, required this.isOffline});
+
+  final DateTime? lastSyncedAt;
+  final bool isOffline;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final timestamp = lastSyncedAt != null
+        ? DateFormat.jm().format(lastSyncedAt!.toLocal())
+        : 'recently';
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(20, 12, 20, 4),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isOffline ? theme.colorScheme.errorContainer : theme.colorScheme.tertiaryContainer,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            isOffline ? Icons.cloud_off_outlined : Icons.history_toggle_off,
+            color: theme.colorScheme.onTertiaryContainer,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isOffline ? 'Showing offline data' : 'Serving cached results',
+                  style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  isOffline
+                      ? 'We will refresh automatically once you are back online.'
+                      : 'Last synced around $timestamp. Pull to refresh for the latest jobs.',
+                  style: textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
