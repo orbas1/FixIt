@@ -8,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import '../../config.dart';
 import '../../helper/notification.dart';
+import '../../services/state/user_session_store.dart';
 
 class SplashProvider extends ChangeNotifier {
   double size = 10;
@@ -124,6 +125,11 @@ class SplashProvider extends ChangeNotifier {
     await pref.remove(session.cart);
     await pref.remove(session.recentSearch);
 
+    final sessionStore =
+        Provider.of<UserSessionStore>(navigatorKey.currentContext!,
+            listen: false);
+    await sessionStore.clear();
+
     final auth = FirebaseAuth.instance.currentUser;
     if (auth != null) {
       await FirebaseAuth.instance.signOut();
@@ -200,6 +206,10 @@ class SplashProvider extends ChangeNotifier {
     await prefs.remove(session.isLogin);
     await prefs.remove(session.cart);
     await prefs.remove(session.recentSearch);
+
+    final sessionStore =
+        Provider.of<UserSessionStore>(context, listen: false);
+    await sessionStore.clear();
     userModel = null;
     setPrimaryAddress = null;
     userPrimaryAddress = null;

@@ -1,5 +1,15 @@
 class RouteName {
   final String splash ='/';
+  final String landing = '/landing';
+  final String discover = '/discover';
+  final String feed = '/feed';
+  final String productDetails = '/product/:id';
+  final String store = '/store/:slug';
+  final String jobDetails = '/jobs/:id';
+  final String checkout = '/checkout';
+  final String disputeDetails = '/disputes/:id';
+  final String affiliate = '/affiliate';
+  final String settings = '/settings';
   final String onBoarding ='/onBoarding';
   final String login ='/login';
   final String loginWithPhone ='/loginWithPhone';

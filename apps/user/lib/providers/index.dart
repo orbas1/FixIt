@@ -58,3 +58,4 @@ export '../providers/app_pages_providers/servicman_details_provider.dart';
 export '../providers/app_pages_providers/chat_history_provider.dart';
 export '../providers/app_pages_providers/job_request_providers/job_request_list_provider.dart';
 export '../providers/app_pages_providers/feed/feed_provider.dart';
+export '../providers/app_pages_providers/feed/feed_job_detail_provider.dart';

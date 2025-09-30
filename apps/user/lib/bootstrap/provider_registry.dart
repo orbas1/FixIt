@@ -11,6 +11,7 @@ import '../providers/index.dart';
 import '../services/auth/auth_token_store.dart';
 import '../services/realtime/app_realtime_bridge.dart';
 import '../services/state/app_state_store.dart';
+import '../services/state/user_session_store.dart';
 
 class AppProviderRegistry {
   static List<SingleChildWidget> buildProviders(
@@ -19,6 +20,9 @@ class AppProviderRegistry {
   ) {
     final getIt = GetIt.instance;
     return [
+      ChangeNotifierProvider(
+        create: (_) => UserSessionStore(preferences: sharedPreferences),
+      ),
       ChangeNotifierProvider(
         create: (_) => AppStateStore(
           connectivity: getIt<Connectivity>(),
@@ -93,6 +97,7 @@ class AppProviderRegistry {
       ChangeNotifierProvider(create: (_) => AddJobRequestProvider()),
       ChangeNotifierProvider(create: (_) => FeedProvider()),
       ChangeNotifierProvider(create: (_) => JobRequestDetailsProvider()),
+      ChangeNotifierProvider(create: (_) => FeedJobDetailProvider()),
       ChangeNotifierProvider(create: (_) => ServicePackageAllListProvider()),
     ];
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fixit_user/config.dart';
+import 'package:fixit_user/models/feed_job_model.dart';
 import 'package:fixit_user/services/feed/feed_api_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';

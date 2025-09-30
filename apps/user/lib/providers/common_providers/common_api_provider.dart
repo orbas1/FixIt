@@ -12,12 +12,14 @@ import 'package:fixit_user/models/onboarding_model.dart';
 import 'package:fixit_user/models/zone_model.dart';
 import 'package:fixit_user/widgets/alert_message_common.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../helper/notification.dart';
 import '../../models/app_setting_model.dart';
 import '../../models/dashboard_user_model_2.dart';
 import '../../screens/app_pages_screens/server_error_screen/server_error.dart';
+import '../../services/state/user_session_store.dart';
 
 class CommonApiProvider extends ChangeNotifier {
   //self api
@@ -49,6 +51,10 @@ class CommonApiProvider extends ChangeNotifier {
             }
             throw Exception("Failed to encode UserModel: $e");
           }
+
+          final sessionStore =
+              Provider.of<UserSessionStore>(context, listen: false);
+          await sessionStore.cacheUser(userModel!);
 
           notifyListeners();
         } else {

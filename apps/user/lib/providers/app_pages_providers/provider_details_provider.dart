@@ -100,9 +100,14 @@ class ProviderDetailsProvider with ChangeNotifier {
       data = id;
     } else {
       data = ModalRoute.of(context)!.settings.arguments;
-      if (data['providerId'] != null) {
+      if (data is Map && data['providerSlug'] != null) {
+        final slug = data['providerSlug'] as String;
+        await getProviderBySlug(context, slug);
+        return;
+      }
+      if (data is Map && data['providerId'] != null) {
         data = data['providerId'];
-      } else {
+      } else if (data is Map && data['provider'] != null) {
         provider = data['provider'];
         data = provider?.id;
       }
@@ -167,6 +172,37 @@ class ProviderDetailsProvider with ChangeNotifier {
       log("Error getProviderById: $e ===> $s");
       notifyListeners();
     }
+  }
+
+  Future<void> getProviderBySlug(BuildContext context, String slug) async {
+    isProviderLoading = true;
+    notifyListeners();
+    try {
+      final response = await apiServices.getApi(
+        "${api.provider}?slug=$slug",
+        [],
+        isData: true,
+        isToken: true,
+      );
+      if (response.isSuccess!) {
+        dynamic raw = response.data;
+        if (raw is Map && raw['data'] != null) {
+          raw = raw['data'];
+        }
+        if (raw is List && raw.isNotEmpty) {
+          raw = raw.first;
+        }
+        if (raw is Map<String, dynamic>) {
+          provider = ProviderModel.fromJson(raw);
+          providerId = provider?.id ?? providerId;
+          await getCategory(context, providerId);
+        }
+      }
+    } catch (e, s) {
+      log("Error getProviderBySlug: $e ===> $s");
+    }
+    isProviderLoading = false;
+    notifyListeners();
   }
 
   Future<void> getCategory(context, id) async {

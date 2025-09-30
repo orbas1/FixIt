@@ -62,7 +62,7 @@ class LoginLayout extends StatelessWidget {
                           .textColor(appColor(context).primary))
                   .inkWell(
                       onTap: () =>
-                          route.push(context, const ForgotPasswordScreen()))
+                          route.pushNamed(context, routeName.forgetPassword))
                   .alignment(Alignment.bottomRight)
                   .paddingSymmetric(horizontal: Insets.i20),
               const VSpace(Sizes.s35),
