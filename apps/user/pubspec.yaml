@@ -80,6 +80,7 @@ dependencies:
   cloud_functions: ^5.1.4
   firebase_storage: ^12.3.3
   map_launcher: ^3.5.0
+  flutter_stripe: ^11.0.0
 #  agora_rtc_engine: ^6.5.2
   wakelock_plus: ^1.2.8
   flutter_xlider: ^3.5.0

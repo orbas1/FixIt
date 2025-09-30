@@ -203,6 +203,18 @@ dynamic es = {
   'saySomething': "Di algo mas",
   'rateApp': "Calificar aplicacion",
   'privacyPolicy': "Política de privacidad",
+  'privacyPolicyDescription':
+      "Administra cómo usamos tus datos. Cambia preferencias y solicita exportaciones o eliminación cuando lo necesites.",
+  'downloadData': "Descargar mis datos",
+  'requestAccountDeletion': "Solicitar eliminación de cuenta",
+  'accountDeletionQueued':
+      "Solicitud de eliminación en cola. Te enviaremos un correo cuando finalice.",
+  'marketingPreference': "Correos de marketing",
+  'analyticsPreference': "Analítica y diagnósticos",
+  'essentialPreference': "Comunicaciones esenciales",
+  'expiresOn': "Expira el",
+  'canUpdateAnytime': "Puedes actualizar esta preferencia en cualquier momento.",
+  'download': "Descargar",
   'cancellationPolicy': "Política de cancelación",
   'refundPolicy': "Politica de reembolso",
   'helpSupport': "Servicio de asistencia",

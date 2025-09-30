@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SafeRedirectController;
 use App\Models\Language;
 use App\Models\SystemLang;
 use Illuminate\Support\Facades\File;
@@ -46,6 +47,8 @@ Route::get('/clean-unused-media', function () {
 
     return redirect()->route('frontend.home')->with(['message', "$deletedFilesCount unused files and $deletedFoldersCount empty folders deleted."]);
 });
+
+Route::get('/r', SafeRedirectController::class)->name('redirector');
 
 Route::post('states', 'CountryStateController@getStates');
 Route::get('getCountryCode', 'CountryStateController@getCountryCode');

@@ -6,6 +6,7 @@ use App\Models\FileScan;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\Mime\MimeTypes;
@@ -47,6 +48,33 @@ class FileScanService
         $size = filesize($path) ?: null;
         $mime = $media->mime_type ?: $this->guessMimeType($path);
 
+        if ($sha256) {
+            $cached = Cache::get(self::CACHE_PREFIX . $sha256);
+            if ($cached) {
+                $verdict = $cached['verdict'];
+                $report['checks'][] = [
+                    'check' => 'cache',
+                    'status' => $verdict,
+                    'detail' => 'Reused cached scan result.',
+                ];
+
+                $media->setCustomProperty('scan_status', $verdict);
+                $media->save();
+
+                return FileScan::updateOrCreate(
+                    ['media_id' => $media->id],
+                    [
+                        'engine' => 'cache',
+                        'verdict' => $verdict,
+                        'report' => $report,
+                        'sha256' => $sha256,
+                        'file_size' => $size,
+                        'mime_type' => $mime,
+                    ],
+                );
+            }
+        }
+
         $report['checks'][] = $this->validateFileSize($size);
         $report['checks'][] = $this->validateExtension($media->file_name);
         $report['checks'][] = $this->validateMimeType($mime, $media->file_name);
@@ -69,6 +97,19 @@ class FileScanService
                 if ($clamResult['status'] === 'malicious') {
                     $verdict = 'malicious';
                 } elseif ($clamResult['status'] === 'suspicious' && $verdict !== 'malicious') {
+                    $verdict = 'suspicious';
+                }
+            }
+        }
+
+        if ($verdict !== 'malicious' && $sha256) {
+            $vtResult = $this->checkVirusTotal($sha256);
+            if ($vtResult) {
+                $report['virustotal'] = $vtResult;
+                if ($vtResult['status'] === 'malicious') {
+                    $verdict = 'malicious';
+                    $engine = 'virustotal';
+                } elseif ($vtResult['status'] === 'suspicious' && $verdict !== 'malicious') {
                     $verdict = 'suspicious';
                 }
             }
@@ -222,6 +263,71 @@ class FileScanService
             return [
                 'status' => 'suspicious',
                 'detail' => 'ClamAV execution failed: ' . $exception->getMessage(),
+            ];
+        }
+    }
+
+    private function checkVirusTotal(string $sha256): ?array
+    {
+        $apiKey = config('services.virustotal.key');
+        if (! $apiKey) {
+            return null;
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'x-apikey' => $apiKey,
+            ])->get('https://www.virustotal.com/api/v3/files/' . $sha256);
+
+            if ($response->status() === 404) {
+                return [
+                    'status' => 'clean',
+                    'detail' => 'No known signatures matched.',
+                ];
+            }
+
+            if ($response->failed()) {
+                Log::warning('VirusTotal lookup failed', [
+                    'code' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+
+                return [
+                    'status' => 'suspicious',
+                    'detail' => 'VirusTotal lookup failed with HTTP ' . $response->status(),
+                ];
+            }
+
+            $data = $response->json('data.attributes.last_analysis_stats', []);
+            $malicious = (int) ($data['malicious'] ?? 0);
+            $suspicious = (int) ($data['suspicious'] ?? 0);
+
+            if ($malicious > 0) {
+                return [
+                    'status' => 'malicious',
+                    'detail' => 'VirusTotal detected malicious indicators (' . $malicious . ').',
+                ];
+            }
+
+            if ($suspicious > 0) {
+                return [
+                    'status' => 'suspicious',
+                    'detail' => 'VirusTotal reported suspicious signals (' . $suspicious . ').',
+                ];
+            }
+
+            return [
+                'status' => 'clean',
+                'detail' => 'VirusTotal reported no issues.',
+            ];
+        } catch (\Throwable $exception) {
+            Log::warning('VirusTotal request failed', [
+                'error' => $exception->getMessage(),
+            ]);
+
+            return [
+                'status' => 'suspicious',
+                'detail' => 'VirusTotal error: ' . $exception->getMessage(),
             ];
         }
     }

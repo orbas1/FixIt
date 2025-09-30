@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 import '../../models/escrow_model.dart';
+import '../../models/escrow_payment_intent.dart';
 import '../environment.dart';
 
 typedef TokenResolver = Future<String?> Function();
@@ -122,6 +123,28 @@ class EscrowApiClient {
         EscrowModel.fromJson(Map<String, dynamic>.from(payload));
     await _cacheEscrows([model]);
     return model;
+  }
+
+  Future<EscrowPaymentIntent> createPaymentIntent(
+    int id, {
+    Map<String, dynamic>? context,
+  }) async {
+    final response = await _performAuthenticatedRequest(() {
+      return _dio.post<Map<String, dynamic>>(
+        '/escrows/$id/payment-intent',
+        data: jsonEncode({'context': context}),
+        options: Options(contentType: Headers.jsonContentType),
+      );
+    });
+
+    final payload = response.data?['data'] as Map<dynamic, dynamic>?;
+    if (payload == null) {
+      throw StateError('Escrow payment intent response missing.');
+    }
+
+    return EscrowPaymentIntent.fromJson(
+      Map<String, dynamic>.from(payload),
+    );
   }
 
   Future<Response<T>> _performAuthenticatedRequest<T>(

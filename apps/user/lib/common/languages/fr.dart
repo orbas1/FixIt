@@ -203,6 +203,18 @@ dynamic fr = {
   'saySomething': "Dis quelque chose de plus",
   'rateApp': "Application de taux",
   'privacyPolicy': "Politique de confidentialité",
+  'privacyPolicyDescription':
+      "Gérez la façon dont nous utilisons vos données. Ajustez les préférences et demandez une exportation ou une suppression quand vous le souhaitez.",
+  'downloadData': "Télécharger mes données",
+  'requestAccountDeletion': "Demander la suppression du compte",
+  'accountDeletionQueued':
+      "Demande de suppression en file d'attente. Nous vous enverrons un e-mail une fois terminée.",
+  'marketingPreference': "E-mails marketing",
+  'analyticsPreference': "Analyses et diagnostics",
+  'essentialPreference': "Communications essentielles",
+  'expiresOn': "Expire le",
+  'canUpdateAnytime': "Vous pouvez modifier cette préférence à tout moment.",
+  'download': "Télécharger",
   'cancellationPolicy': "Politique d'annulation",
   'refundPolicy': "Politique de remboursement",
 

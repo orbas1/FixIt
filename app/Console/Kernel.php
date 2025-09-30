@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
         // $schedule->call('App\Http\Controllers\API\CommissionHistoryController@store');
         $schedule->call('App\Http\Controllers\BookingController@reminder')->daily();
         $schedule->command('booking:cancel-expired')->dailyAt('01:00');
+        $schedule->command('security:audits')->dailyAt('02:00');
     }
 
     /**

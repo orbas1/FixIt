@@ -18,7 +18,9 @@ use App\Services\Guardian;
 use App\Services\Geo\IpLocationResolver;
 use App\Services\Media\ImageVariantService;
 use App\Services\Media\ImgproxyUrlBuilder;
+use App\Services\Security\ContentGuardService;
 use App\Services\Security\FileScanService;
+use App\Services\Security\LinkRedirectService;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Database\Seeders\ThemeOptionSeeder;
@@ -48,12 +50,18 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ComplianceReporter::class);
         $this->app->singleton(EscrowLedgerService::class);
+        $this->app->singleton(LinkRedirectService::class);
+        $this->app->singleton(ContentGuardService::class);
+
+        $this->app->singleton(StripeClient::class, function () {
+            return new StripeClient((string) config('services.stripe.secret'));
+        });
 
         $this->app->bind(EscrowGateway::class, function ($app) {
             $gateway = config('escrow.gateway', 'stripe');
 
             return match ($gateway) {
-                'stripe' => new StripeEscrowGateway(new StripeClient((string) config('services.stripe.secret'))),
+                'stripe' => new StripeEscrowGateway($app->make(StripeClient::class)),
                 'in-memory', 'array', 'testing' => new InMemoryEscrowGateway(),
                 default => throw new RuntimeException("Unsupported escrow gateway [{$gateway}]."),
             };

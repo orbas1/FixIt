@@ -44,4 +44,15 @@ return [
         'cache_ttl' => env('TAX_CACHE_TTL', 600),
     ],
 
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'api_version' => env('STRIPE_API_VERSION', '2024-10-22'),
+    ],
+
+    'virustotal' => [
+        'key' => env('VIRUSTOTAL_KEY'),
+    ],
+
 ];

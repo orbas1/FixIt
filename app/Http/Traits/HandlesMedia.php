@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Jobs\Security\ScanMedia;
 use Illuminate\Support\Facades\Storage;
 
 trait HandlesMedia
@@ -36,14 +37,7 @@ trait HandlesMedia
                         ])
                         ->toMediaCollection($collection);
 
-                    try {
-                        app(\App\Services\Security\FileScanService::class)->scan($media);
-                    } catch (\Throwable $exception) {
-                        $media->setCustomProperty('scan_status', 'failed');
-                        $media->setCustomProperty('scan_error', $exception->getMessage());
-                        $media->save();
-                        report($exception);
-                    }
+                    dispatch(new ScanMedia($media->id));
                 }
             }
         }

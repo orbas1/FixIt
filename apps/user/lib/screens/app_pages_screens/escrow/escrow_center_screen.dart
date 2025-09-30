@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../config.dart';
 import '../../../models/escrow_model.dart';
 import '../../../services/payments/escrow_repository.dart';
+import '../../../services/payments/stripe_payment_sheet_service.dart';
 
 enum _EscrowAction { release, refund }
 
@@ -18,6 +19,7 @@ class EscrowCenterScreen extends StatefulWidget {
 
 class _EscrowCenterScreenState extends State<EscrowCenterScreen> {
   final EscrowRepository _repository = EscrowRepository();
+  final StripePaymentSheetService _stripe = StripePaymentSheetService();
   final TextEditingController _searchCtrl = TextEditingController();
   final FocusNode _searchFocus = FocusNode();
   final NumberFormat _currencyFormat = NumberFormat.simpleCurrency();
@@ -27,6 +29,7 @@ class _EscrowCenterScreenState extends State<EscrowCenterScreen> {
   String _query = '';
   String _statusFilter = 'all';
   bool _includeClosed = true;
+  bool _isFunding = false;
 
   @override
   void initState() {
@@ -55,6 +58,29 @@ class _EscrowCenterScreenState extends State<EscrowCenterScreen> {
       _future = _loadEscrows(preferCache: false);
     });
     await _future;
+  }
+
+  Future<void> _fundEscrow(EscrowModel escrow) async {
+    if (_isFunding) return;
+    setState(() => _isFunding = true);
+    try {
+      final intent = await _repository.createPaymentIntent(escrow.id);
+      await _stripe.present(intent);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Payment confirmed. Escrow funded.')),
+      );
+      await _refresh();
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to fund escrow: $error')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isFunding = false);
+      }
+    }
   }
 
   void _onQueryChanged(String value) {
@@ -486,6 +512,21 @@ class _EscrowCenterScreenState extends State<EscrowCenterScreen> {
                       ),
                     ),
                 ],
+              ),
+            if (['awaiting_funding', 'requires_action'].contains(escrow.status))
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: FilledButton.icon(
+                  icon: _isFunding
+                      ? const SizedBox(
+                          height: 16,
+                          width: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.lock_open),
+                  label: Text(_isFunding ? 'Processing…' : 'Fund escrow'),
+                  onPressed: _isFunding ? null : () => _fundEscrow(escrow),
+                ),
               ),
             if (!escrow.isClosed && escrow.availableAmount > 0)
               Row(
