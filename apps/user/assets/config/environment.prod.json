@@ -10,7 +10,8 @@
     "baseUrl": "https://api.fixitmarketplace.com",
     "paymentUrl": "https://payments.fixitmarketplace.com",
     "connectTimeoutMs": 12000,
-    "receiveTimeoutMs": 20000
+    "receiveTimeoutMs": 20000,
+    "refreshEndpoint": "/auth/refresh"
   },
   "store": {
     "playStoreUrl": "https://play.google.com/store/apps/details?id=com.fixit.user",
@@ -29,5 +30,13 @@
     "analyticsEnabled": true,
     "crashlyticsEnabled": true,
     "sentryDsn": "https://prodPublicKey@o0.ingest.sentry.io/0"
+  },
+  "realtime": {
+    "driver": "pusher",
+    "key": "PUSHER_PROD_KEY",
+    "cluster": "mt1",
+    "authEndpoint": "/broadcasting/auth",
+    "activityTimeoutMs": 120000,
+    "maxReconnectionGapMs": 30000
   }
 }

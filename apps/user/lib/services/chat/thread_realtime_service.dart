@@ -1,63 +1,60 @@
-import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+import 'package:get_it/get_it.dart';
+
+import '../realtime/app_realtime_bridge.dart';
 
 typedef ThreadMessageCallback = void Function(Map<String, dynamic> event);
 
 typedef TypingCallback = void Function(bool isTyping);
 
 class ThreadRealtimeService {
-  ThreadRealtimeService({PusherChannelsFlutter? client})
-      : _client = client ?? PusherChannelsFlutter.getInstance();
+  ThreadRealtimeService({AppRealtimeBridge? realtimeBridge})
+      : _realtimeBridge = realtimeBridge ?? GetIt.I<AppRealtimeBridge>();
 
-  final PusherChannelsFlutter _client;
-
-  Future<void> connect({
-    required String apiKey,
-    required String cluster,
-    String? authEndpoint,
-    Map<String, String>? headers,
-  }) async {
-    await _client.init(
-      apiKey: apiKey,
-      cluster: cluster,
-      authEndpoint: authEndpoint,
-      onAuthorizer: (channelName, socketId, options) async {
-        return headers ?? {};
-      },
-      onConnectionStateChange: (state) {},
-      onSubscriptionError: (message, [error]) {},
-      onError: (message, code, exception) {},
-      logToConsole: false,
-    );
-
-    await _client.connect();
-  }
+  final AppRealtimeBridge _realtimeBridge;
+  final Set<String> _activeChannels = <String>{};
 
   Future<void> subscribeToThread({
     required String threadId,
     ThreadMessageCallback? onMessage,
     TypingCallback? onTyping,
   }) async {
-    final channelName = 'private-thread.$threadId.message';
-    await _client.subscribe(
-      channelName: channelName,
-      onEvent: (event) {
-        final payload = event.data;
-        if (payload is Map<String, dynamic> && payload.containsKey('message')) {
-          onMessage?.call(Map<String, dynamic>.from(payload['message'] as Map));
+    final messageChannel = 'private-thread.$threadId.message';
+    await _realtimeBridge.subscribe(
+      channelName: messageChannel,
+      handler: (event) {
+        final payload = _realtimeBridge.decodeEvent(event);
+        if (payload != null) {
+          final message = payload['message'];
+          if (message is Map<String, dynamic>) {
+            onMessage?.call(Map<String, dynamic>.from(message));
+          }
         }
       },
     );
+    _activeChannels.add(messageChannel);
 
     if (onTyping != null) {
       final typingChannel = 'private-thread.$threadId.typing';
-      await _client.subscribe(
+      await _realtimeBridge.subscribe(
         channelName: typingChannel,
-        onEvent: (event) => onTyping(event.data == 'typing'),
+        handler: (event) {
+          final data = event.data;
+          if (data is String) {
+            onTyping(data == 'typing');
+          } else {
+            final payload = _realtimeBridge.decodeEvent(event);
+            onTyping(payload?['status'] == 'typing');
+          }
+        },
       );
+      _activeChannels.add(typingChannel);
     }
   }
 
   Future<void> disconnect() async {
-    await _client.disconnect();
+    for (final channel in _activeChannels) {
+      await _realtimeBridge.unsubscribe(channel);
+    }
+    _activeChannels.clear();
   }
 }

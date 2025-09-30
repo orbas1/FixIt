@@ -14,6 +14,7 @@ class AuthTokenStore {
   final FlutterSecureStorage _secureStorage;
   final Session _session = Session();
   static const String _secureKey = 'fixit_auth_token';
+  static const String _refreshSecureKey = 'fixit_refresh_token';
 
   String? get token => _preferences.getString(Session().accessToken);
 
@@ -31,12 +32,31 @@ class AuthTokenStore {
   }
 
   Future<void> write(String token) async {
-    await _preferences.setString(_session.accessToken, token);
-    await _secureStorage.write(key: _secureKey, value: token);
+    await writeTokens(accessToken: token);
+  }
+
+  Future<void> writeTokens({
+    required String accessToken,
+    String? refreshToken,
+  }) async {
+    await _preferences.setString(_session.accessToken, accessToken);
+    await _secureStorage.write(key: _secureKey, value: accessToken);
+    if (refreshToken != null && refreshToken.isNotEmpty) {
+      await _secureStorage.write(key: _refreshSecureKey, value: refreshToken);
+    }
+  }
+
+  Future<String?> readRefreshToken() async {
+    return _secureStorage.read(key: _refreshSecureKey);
+  }
+
+  Future<void> clearRefreshToken() async {
+    await _secureStorage.delete(key: _refreshSecureKey);
   }
 
   Future<void> clear() async {
     await _preferences.remove(_session.accessToken);
     await _secureStorage.delete(key: _secureKey);
+    await _secureStorage.delete(key: _refreshSecureKey);
   }
 }

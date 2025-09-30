@@ -1,4 +1,6 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,13 +8,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../common/languages/language_change.dart';
 import '../common/theme/theme_service.dart';
 import '../providers/index.dart';
+import '../services/auth/auth_token_store.dart';
+import '../services/realtime/app_realtime_bridge.dart';
+import '../services/state/app_state_store.dart';
 
 class AppProviderRegistry {
   static List<SingleChildWidget> buildProviders(
     BuildContext context,
     SharedPreferences sharedPreferences,
   ) {
+    final getIt = GetIt.instance;
     return [
+      ChangeNotifierProvider(
+        create: (_) => AppStateStore(
+          connectivity: getIt<Connectivity>(),
+          tokenStore: getIt<AuthTokenStore>(),
+          realtimeBridge: getIt<AppRealtimeBridge>(),
+        )..initialize(),
+      ),
       ChangeNotifierProvider(create: (_) => ThemeService(sharedPreferences)),
       ChangeNotifierProvider(create: (_) => SplashProvider()),
       ChangeNotifierProvider(

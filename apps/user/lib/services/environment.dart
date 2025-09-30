@@ -49,6 +49,9 @@ class EnvironmentStore {
   String get paymentBaseUrl => environment.api.paymentUrl;
   String get playStoreUrl => environment.store.playStoreUrl;
   String get userAppPlayStoreUrl => environment.store.userAppPlayStoreUrl;
+  RealtimeConfiguration get realtime => environment.realtime;
+  Uri get refreshUri => environment.api.refreshUri(apiBaseUrl);
+  String get realtimeAuthUrl => environment.realtime.authUri(apiBaseUrl).toString();
 
   Map<String, String> headers({String? token}) {
     final headers = <String, String>{
@@ -70,6 +73,8 @@ String get paymentUrl => environmentStore.paymentBaseUrl;
 String get playstoreUrl => environmentStore.playStoreUrl;
 String get userAppPlayStoreUrl => environmentStore.userAppPlayStoreUrl;
 Locale get currentLocale => environmentStore.locale;
+RealtimeConfiguration get realtimeConfiguration => environmentStore.realtime;
+Uri get refreshUri => environmentStore.refreshUri;
 
 Map<String, String>? headersToken(String? token) => environmentStore.headers(token: token);
 Map<String, String>? get headers => environmentStore.headers();
