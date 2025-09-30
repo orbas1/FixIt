@@ -13,6 +13,9 @@ import 'package:fixit_user/screens/app_pages_screens/support_ticket_screen/suppo
 import 'package:fixit_user/screens/app_pages_screens/video_call/video_call.dart';
 import 'package:fixit_user/screens/app_pages_screens/affiliate/affiliate_hub_screen.dart';
 import 'package:fixit_user/screens/app_pages_screens/disputes/dispute_detail_screen.dart';
+import 'package:fixit_user/screens/app_pages_screens/disputes/dispute_center_screen.dart';
+import 'package:fixit_user/screens/app_pages_screens/escrow/escrow_center_screen.dart';
+import 'package:fixit_user/screens/app_pages_screens/storefront/storefront_browser_screen.dart';
 import 'package:fixit_user/screens/discover/discover_screen.dart';
 import 'package:fixit_user/screens/feed/feed_screen.dart';
 import 'package:fixit_user/screens/feed/feed_job_detail_screen.dart';
@@ -160,6 +163,18 @@ class AppRouter {
       GoRoute(
         path: routeName.feed,
         builder: (context, state) => const FeedScreen(),
+      ),
+      GoRoute(
+        path: routeName.storefronts,
+        builder: (context, state) => const StorefrontBrowserScreen(),
+      ),
+      GoRoute(
+        path: routeName.escrowCenter,
+        builder: (context, state) => const EscrowCenterScreen(),
+      ),
+      GoRoute(
+        path: routeName.disputeCenter,
+        builder: (context, state) => const DisputeCenterScreen(),
       ),
       GoRoute(
         path: routeName.productDetails,
@@ -400,6 +415,8 @@ class AppRouter {
     '/providerChatScreen',
     '/servicemanDetailScreen',
     '/affiliate',
+    '/escrows',
+    '/disputes',
   };
 
   static const List<String> _publicPrefixes = [

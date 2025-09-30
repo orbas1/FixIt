@@ -9,6 +9,9 @@ class RouteName {
   final String checkout = '/checkout';
   final String disputeDetails = '/disputes/:id';
   final String affiliate = '/affiliate';
+  final String disputeCenter = '/disputes';
+  final String escrowCenter = '/escrows';
+  final String storefronts = '/storefronts';
   final String settings = '/settings';
   final String onBoarding ='/onBoarding';
   final String login ='/login';
