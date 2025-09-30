@@ -48,3 +48,6 @@ apps/**/.flutter-plugins
 apps/**/.flutter-plugins-dependencies
 apps/**/.packages
 apps/**/pubspec.lock
+
+# Module vendor assets
+Modules/*/node_modules/
