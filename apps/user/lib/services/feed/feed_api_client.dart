@@ -101,4 +101,20 @@ class FeedApiClient {
     final response = await _dio.get<Map<String, dynamic>>(baseUrl, queryParameters: query.toJson());
     return FeedResponse.fromJson(response.data ?? {});
   }
+
+  Future<FeedJobModel> fetchJobDetail(int id) async {
+    final response = await _dio.get<Map<String, dynamic>>('$baseUrl/$id');
+    final data = response.data;
+    if (data == null) {
+      throw StateError('Empty response while fetching job detail for id $id');
+    }
+    final payload = data['data'];
+    if (payload is Map<String, dynamic>) {
+      return FeedJobModel.fromJson(Map<String, dynamic>.from(payload));
+    }
+    if (data is Map<String, dynamic>) {
+      return FeedJobModel.fromJson(Map<String, dynamic>.from(data));
+    }
+    throw StateError('Unexpected payload for job $id');
+  }
 }

@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -16,8 +17,11 @@ import 'common/theme/app_theme.dart';
 import 'config.dart';
 import 'helper/notification.dart';
 import 'providers/common_providers/currency_provider.dart';
+import 'routes/route_method.dart';
 import 'services/environment.dart';
 import 'services/logging/app_logger.dart';
+import 'services/state/app_state_store.dart';
+import 'services/state/user_session_store.dart';
 
 final AppLogger _logger = AppLogger.instance;
 
@@ -65,10 +69,23 @@ class RouteToPage extends StatefulWidget {
 }
 
 class _RouteToPageState extends State<RouteToPage> {
+  GoRouter? _router;
+
   @override
   void initState() {
     super.initState();
     CustomNotificationController().initFirebaseMessaging();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final appStateStore = Provider.of<AppStateStore>(context);
+    final sessionStore = Provider.of<UserSessionStore>(context);
+    _router ??= AppRouter(
+      appStateStore: appStateStore,
+      sessionStore: sessionStore,
+    ).router;
   }
 
   @override
@@ -82,9 +99,13 @@ class _RouteToPageState extends State<RouteToPage> {
 
           final provider = Provider.of<LanguageProvider>(context, listen: true);
 
-          return MaterialApp(
+          final router = _router;
+          if (router == null) {
+            return const SizedBox.shrink();
+          }
+          return MaterialApp.router(
             title: 'Fixit User',
-            navigatorKey: navigatorKey,
+            routerConfig: router,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.fromType(ThemeType.light).themeData,
             darkTheme: AppTheme.fromType(ThemeType.dark).themeData,
@@ -97,8 +118,6 @@ class _RouteToPageState extends State<RouteToPage> {
               GlobalCupertinoLocalizations.delegate,
             ],
             themeMode: theme.theme,
-            initialRoute: "/",
-            routes: appRoute.route,
             builder: (context, child) {
               return Directionality(
                 textDirection: lang.locale?.languageCode == 'ar'

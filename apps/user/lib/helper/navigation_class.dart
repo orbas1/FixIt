@@ -1,66 +1,51 @@
+import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
+
 import '../config.dart';
 
 class NavigationClass {
-  pushNamedAndRemoveUntil(context, pageName, {arg}) =>
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        pageName,
-        arguments: arg,
-        (route) => false,
-      );
-
-  pushNamed(context, pageName, {arg}) async {
-    final result = await Navigator.pushNamed(
-      context,
-      pageName,
-      arguments: arg,
-    );
-    return result;
+  Future<T?> pushNamed<T>(BuildContext context, String location,
+      {Object? arg}) {
+    return GoRouter.of(context).push<T>(location, extra: arg);
   }
 
-  push(context, pageName, {arg}) async {
-    final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => pageName,
-        ));
-    return result;
-  }
-
-  pop(context, {arg}) {
-    Navigator.pop(context, arg);
-  }
-
-  popAndPushNamed(context, pageName, {arg, result}) {
-    Navigator.popAndPushNamed(
-      context,
-      pageName,
-      arguments: arg,
-      result: result,
+  Future<T?> push<T>(BuildContext context, Widget page, {Object? arg}) {
+    return Navigator.of(context).push<T>(
+      MaterialPageRoute(builder: (_) => page, settings: RouteSettings(arguments: arg)),
     );
   }
 
-  pushReplacementNamed(context, pageName, {args}) {
-    Navigator.pushReplacementNamed(
-      context,
-      pageName,
-      arguments: args,
-    );
+  void pop(BuildContext context, {Object? arg}) {
+    if (GoRouter.of(context).canPop()) {
+      GoRouter.of(context).pop(arg);
+    } else {
+      Navigator.of(context).maybePop(arg);
+    }
   }
 
-  pushAndRemoveUntil(context, {args}) {
-    Navigator.of(context).pushAndRemoveUntil(
-      // the new route
-      MaterialPageRoute(
-        builder: (BuildContext context) => MultiProvider(providers: [
-          ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
-        ], child: const LoginScreen()),
-      ),
+  Future<T?> popAndPushNamed<T>(BuildContext context, String location,
+      {Object? arg, Object? result}) {
+    if (GoRouter.of(context).canPop()) {
+      GoRouter.of(context).pop(result);
+    }
+    return GoRouter.of(context).pushReplacement<T>(location, extra: arg);
+  }
 
-      // this function should return true when we're done removing routes
-      // but because we want to remove all other screens, we make it
-      // always return false
-      (Route route) => false,
-    );
+  Future<T?> pushReplacementNamed<T>(BuildContext context, String location,
+      {Object? args}) {
+    return GoRouter.of(context).pushReplacement<T>(location, extra: args);
+  }
+
+  void pushNamedAndRemoveUntil(BuildContext context, String location,
+      {Object? arg}) {
+    GoRouter.of(context).go(location, extra: arg);
+  }
+
+  void pushAndRemoveUntil(BuildContext context, {String? location, Object? args}) {
+    if (location != null) {
+      GoRouter.of(context).go(location, extra: args);
+    } else {
+      GoRouter.of(context).go(routeName.login, extra: args);
+    }
   }
 }
