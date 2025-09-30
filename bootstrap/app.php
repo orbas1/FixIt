@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Foundation\Application;
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -11,11 +13,9 @@
 |
 */
 
-$app = new Illuminate\Foundation\Application(
+$app = new Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
-
-$app = ini_app(dirname(__DIR__));
 
 /*
 |--------------------------------------------------------------------------
@@ -54,4 +54,4 @@ $app->singleton(
 |
 */
 
-return singleton($app);
+return $app;
