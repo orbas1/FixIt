@@ -270,12 +270,13 @@ General rules for all migrations:
 
 * **tags**: `id`, `slug`, `name`, `kind ENUM('skill','service','tool','category')` (unique `slug+kind`).
 * **taggables**: `tag_id`, `taggable_type`, `taggable_id` (composite index).
-* **search_snapshots**: `id`, `subject_type`, `subject_id`, `doc JSON`, `updated_at` (indexed); materializes render‑ready docs for Scout.
+* **search_snapshots**: `id`, `subject_type`, `subject_id`, `doc JSON`, `updated_at` (indexed); materializes render-ready docs for Meilisearch via Scout adapters.
 * **ratings_agg**: `user_id` unique, `avg_rating DECIMAL(3,2)`, `jobs_done INT`, `on_time_pct DECIMAL(5,2)`.
 
 ### Implementation Notes
 
-* Indexer jobs write to Scout/Meilisearch; LFU cache for hot queries; query parser transforms single‑box input + filters to typed query.
+* Laravel Scout adapters target **Meilisearch** with curated searchable attributes, filterable facets, sortable fields, typo tolerance, and proximity rules per entity. Synonym dictionaries, stopwords, and the `distinctAttribute` policy live in version-controlled JSON beside migrations.
+* A query orchestration pipeline normalizes mixed input into structured Meilisearch calls: language detection → tokenizer (handles emojis, plurals, slang) → filter composer (geo radius, availability windows, price bands, rating thresholds) → facet distribution fetch → optional hybrid/vector fallback for semantic matches.
 
 ### Acceptance
 
@@ -449,8 +450,8 @@ For each table above, deliver:
 
 ### 3.5 Unified Search
 
-* Index docs for Jobs, Providers, Services, Products. Weighted fields: text, tags, distance, rating, completion rate, responsiveness.
-* Query parser: one input box + advanced filters spec.
+* **Indexing & Freshness:** Build Meilisearch tasks per entity (jobs, providers, services, products) with Scout observers, delta queues, and nightly full rebuilds. Weight searchable attributes (title, skills, geo, completion rate, responsiveness) and enforce SLA dashboards for lag or failed syncs.
+* **Query Execution & Observability:** Translate a single smart input into composed Meilisearch searches with facets, geo filters, personalization tokens, and `matchingStrategy=last` for strict modes. Emit metrics for latency, click-through, and zero-result diagnostics with replay queues.
 
 ### 3.6 Ads/Banners
 
@@ -1515,26 +1516,44 @@ CSP_ENABLED=true
    Owner: BE • Est.: M • Deps: none
    Deliverables: migrations, Eloquent models, factories/seeders
    DoD: migrate:fresh works; factories generate 100 seeded jobs with geo & photos.
+   Subtasks:
+   - **Task 1A — Domain schema authoring & referential integrity**: Draft migration files for every table listed (jobs, job_items, bids, job_questions, job_events, media) with indices, foreign keys, cascading rules, enum defaults, and SRID constraints. Document column purposes, data types, and nullability assumptions in `docs/data/live-feed-schema.md`, and align naming conventions with existing Laravel models to prevent mismatches.
+   - **Task 1B — Factory & seeder validation pipeline**: Build model factories/seeders that populate realistic job, bid, and media records with geospatial fields and blurhash metadata. Script `php artisan migrate:fresh --seed` within CI to verify migrations, ensure seeding volume targets (≥100 jobs with attachments) and capture troubleshooting steps in the runbook.
 2. Feed API & Policies — /feed, /jobs/{id}, posting jobs/bids/questions, RFC7807 errors
    Owner: BE • Est.: L • Deps: A1
    Deliverables: controllers, FormRequests, Policies, OpenAPI spec
    DoD: Postman tests pass; policy matrix covered.
+   Subtasks:
+   - **Task 2A — Endpoint scaffolding & validation contracts**: Implement controllers, routes, and FormRequest classes covering feed listing, job retrieval, creation, bidding, and Q&A. Capture JSON schemas and error handling patterns (RFC7807) in the OpenAPI spec, including pagination, sorting, and guardrail behaviors.
+   - **Task 2B — Authorization matrix & integration smoke tests**: Encode policies for roles (consumer, provider, admin) with matrix documentation, enforce with feature tests, and compose Postman/Curl scripts validating responses, ensuring unauthorized paths fail gracefully while legitimate flows succeed end-to-end.
 3. Sockets & Events — Pusher/Socket.IO channels feed, job.{id}.*
    Owner: BE • Est.: M • Deps: A2
    Deliverables: broadcast events, channel auth, outbox workers
    DoD: WS latency ≤ 1s p95 under 500 concurrent.
+   Subtasks:
+   - **Task 3A — Event definition & dispatch orchestration**: Define Laravel events/broadcasts for feed updates, job changes, bids, and Q&A interactions, ensuring payload shape parity with REST responses. Configure queue assignments, retry strategies, and outbox patterns for guaranteed delivery.
+   - **Task 3B — Channel authentication & performance validation**: Implement broadcasting auth endpoints, tighten ACLs per job/user, and execute WebSocket load tests validating sub-second latency at scale. Document instrumentation, thresholds, and fallback behaviors in `docs/realtime/live-feed.md`.
 4. Web UI Cards — JobCard with blurhash, filters drawer, map toggle
    Owner: FE • Est.: M • Deps: A2
    Deliverables: responsive grid, ARIA labels, skeletons
    DoD: Lighthouse a11y ≥ 95; CLS < 0.02.
+   Subtasks:
+   - **Task 4A — Component architecture & design system integration**: Build responsive JobCard, list/grid wrappers, skeleton loaders, and map toggle controls with Tailwind tokens and accessible ARIA annotations. Ensure blurhash placeholder support and theme alignment documented in Storybook or equivalent.
+   - **Task 4B — Filtering UX & performance tuning**: Implement filter drawer state management, URL syncing, analytics hooks, and virtualization strategies where needed. Run Lighthouse audits, record CLS metrics, and capture remediation playbook for regressions.
 5. Flutter Screens — Feed list, detail, Q&A/Bids tabs
    Owner: Mobile • Est.: L • Deps: A2/A3
    Deliverables: Riverpod controllers, Retrofit client, offline cache (Hive)
    DoD: offline read works; bid/Q&A optimistic update reconciles.
+   Subtasks:
+   - **Task 5A — UI composition & navigation wiring**: Craft Feed list/detail widgets, tab navigation for bids/Q&A, and reusable components with responsive layouts and accessibility semantics. Hook into Flutter routing to share state between consumer/provider personas.
+   - **Task 5B — Data layer synchronization & offline strategy**: Configure Retrofit clients, Riverpod providers, caching policies via Hive, and optimistic mutation handling for bids/Q&A. Validate offline reads, sync conflict resolution, and error surfacing with integration tests.
 6. Tests — unit (ranking), integration (API), E2E (socket)
    Owner: QA/BE/Mobile • Est.: M • Deps: A2–A5
    Deliverables: PHPUnit, Cypress, Flutter integration tests
    DoD: CI green; coverage ≥ 80%.
+   Subtasks:
+   - **Task 6A — Automated test suite authoring & coverage instrumentation**: Build PHPUnit coverage for backend ranking logic, Cypress scenarios for feed filtering, and Flutter widget/integration suites covering offline/online transitions. Track coverage metrics and enforce thresholds in CI.
+   - **Task 6B — Test data, fixtures, and monitoring of flakiness**: Create deterministic seed data, mock services for sockets, and reliability dashboards capturing flake rates. Document rerun strategies, quarantine procedures, and troubleshooting guides.
 
 ### B. Taxes & Zones
 
@@ -1542,140 +1561,308 @@ CSP_ENABLED=true
    Owner: BE • Est.: S
    Deliverables: migrations + seed zones
    DoD: spatial index online.
+   Subtasks:
+   - **Task B1A — Spatial schema creation & integrity rules**: Build migrations for tax_profiles, zone_polygons, and geo_cache tables with SRID enforcement, composite indexes, and FK relationships. Document GIS assumptions (coordinate reference systems, precision) and ensure compatibility with MySQL spatial functions.
+   - **Task B1B — Seed dataset preparation & validation**: Produce seed scripts ingesting canonical tax zones and geo-polygons, including QA scripts that calculate bounding boxes, detect overlaps, and verify spatial indexes via sample queries.
 2. Admin Zone Editor — Leaflet draw, polygon CRUD, H3 overlay
    Owner: FE • Est.: M • Deps: B1
    Deliverables: editor page, validation, preview
    DoD: self‑intersections prevented; save succeeds.
+   Subtasks:
+   - **Task B2A — UX layout & drawing toolkit integration**: Implement Leaflet map canvas with draw/edit tools, H3 overlay visualization, form controls, and accessible keyboard navigation. Define API contracts for create/update/delete operations.
+   - **Task B2B — Validation workflow & persistence testing**: Build client/server validators preventing self-intersections, hole inversions, and degenerate polygons. Script automated Cypress/E2E tests that simulate zone creation, editing, and failure scenarios with clear error messaging.
 3. Tax Engine — compute for job/order
    Owner: BE • Est.: M • Deps: B1/B2
    Deliverables: TaxEngine service, unit tests
    DoD: golden tests pass; rounding compliant.
+   Subtasks:
+   - **Task B3A — Rules modeling & calculator implementation**: Design TaxEngine service that maps jobs/orders to jurisdictional rates, exemptions, and surcharges. Encode configuration-driven rules and ensure rounding/legal compliance documented in `docs/taxes/engine.md`.
+   - **Task B3B — Regression harness & integration touchpoints**: Create golden datasets for typical tax scenarios, run PHPUnit snapshot comparisons, and integrate engine outputs into checkout/order flows with contract tests verifying serialized totals.
 4. Checkout Integration — show tax lines (web + mobile), receipts
    Owner: FE/Mobile • Est.: M • Deps: B3
    Deliverables: UI, PDF receipts
    DoD: amounts match server within 0.01.
+   Subtasks:
+   - **Task B4A — Frontend presentation & UX messaging**: Update checkout screens (web/mobile) with tax line items, tooltip explanations, and localization support. Ensure responsive layout, accessibility, and analytics instrumentation for tax disclosures.
+   - **Task B4B — Receipt generation & reconciliation testing**: Extend receipt PDFs/emails to include tax breakdowns, align currency formatting, and verify server-client parity via automated tests comparing computed totals (precision to ±0.01).
 
 ### C. Unified Search
 
-1. Schemas — Meilisearch index settings, synonyms, stopwords
+1. Schema Domain Modeling — enumerate job, provider, service, and product attributes with normalization rules and tag relationships.
    Owner: BE • Est.: S
-   Deliverables: index bootstrap script
-   DoD: indexes created.
-2. Indexers — snapshot writers & queue jobs
-   Owner: BE • Est.: M • Deps: C1
-   Deliverables: observed models write snapshots
-   DoD: reindex < 10 min for 100k docs.
-3. Query Endpoint — /search with filters & cursor
-   Owner: BE • Est.: M • Deps: C2
-   Deliverables: SearchController + service
-   DoD: p95 ≤ 300ms warm.
-4. Web Grid & Filters — chips, modal, result cards
-   Owner: FE • Est.: M • Deps: C3
-   DoD: keyboard accessible; saved filters.
-5. Flutter Search Grid — responsive grid, chips
-   Owner: Mobile • Est.: M • Deps: C3
-   DoD: smooth scroll; offline recent queries.
-6. Ranking Tests — NDCG harness
-   Owner: BE/DS • Est.: S • Deps: C3–C5
-   DoD: NDCG@10 ≥ 0.85 baseline.
+   Deliverables: ERD update, document contracts, tag taxonomy matrix.
+   DoD: schema doc signed off by search + product.
+   Subtasks:
+   - **Task C1A — Entity inventory & attribute cataloging**: Audit existing domains (jobs, providers, services, products) to list required attributes, normalization strategies, localization needs, and privacy constraints. Produce an ERD update and glossary capturing ownership and refresh cadences.
+   - **Task C1B — Taxonomy governance & contract documentation**: Define tag hierarchies, synonym relationships, and canonical identifiers. Publish API/data contracts detailing field names, validation ranges, and versioning expectations for ingestion.
+2. Meilisearch Index Configuration — create per-entity indexes with searchable/sortable/faceted fields, synonyms, stopwords, and typo tolerance tuned per locale.
+   Owner: BE • Est.: S • Deps: C1
+   Deliverables: `database/search/indexes/*.json`, bootstrap artisan command, CI validation.
+   DoD: `php artisan search:indexes` provisions Meilisearch in local + staging.
+   Subtasks:
+   - **Task C2A — Index template authoring & deployment tooling**: Draft JSON index configs for each entity (jobs/providers/services/products) specifying searchable attributes, faceting, ranking rules, and locale-specific tolerance. Implement artisan bootstrap command to sync definitions.
+   - **Task C2B — Quality gates & automated verification**: Add CI checks ensuring index configuration validity, verifying synonyms/stopwords coverage, and capturing drift alerts. Document how to snapshot and restore Meilisearch configs across environments.
+3. Snapshot Writers — Eloquent observers + queue jobs that transform records into canonical search docs (with geo hashes, media blurhash, availability windows).
+   Owner: BE • Est.: M • Deps: C1–C2
+   Deliverables: observers, transformers, integration tests.
+   DoD: CRUD events enqueue snapshots; dead-letter queue empty.
+   Subtasks:
+   - **Task C3A — Transformer design & enrichment pipeline**: Implement transformer classes that normalize models into search documents with geospatial hashes, media metadata, and availability windows. Ensure consistent schema versioning and serialization.
+   - **Task C3B — Observer wiring & queue reliability**: Attach Eloquent observers/listeners to CRUD events, dispatch queue jobs per entity, and configure dead-letter monitoring. Build integration tests covering create/update/delete flows and verifying message payload integrity.
+4. Sync & Monitoring — batch reindex command, Horizon dashboard panels, and alerting for drift/lag (age of last sync, failure counts).
+   Owner: BE • Est.: M • Deps: C3
+   Deliverables: `search:reindex` artisan job, metrics emitters, Alertmanager rules.
+   DoD: 100k doc rebuild < 10 min; alerts fire on simulated failures.
+   Subtasks:
+   - **Task C4A — Reindex tooling & throughput optimization**: Create artisan commands/jobs for batch rebuilds with chunking, concurrency controls, and progress logging. Benchmark against 100k document targets and document tuning levers.
+   - **Task C4B — Observability dashboards & alert thresholds**: Instrument Horizon/metrics exporters to track queue lag, sync age, and failure counts. Configure dashboards and Alertmanager rules, including simulated failure drills with runbook updates.
+5. Query Endpoint Pipeline — `/search` controller with request validation, feature flag guardrails, and composition into Meilisearch queries (filters, sorting, pagination cursors).
+   Owner: BE • Est.: M • Deps: C3
+   Deliverables: controller, service class, contract tests, OpenAPI spec.
+   DoD: p95 ≤ 300 ms warm with analytics logs emitted.
+   Subtasks:
+   - **Task C5A — Controller/service implementation & guardrails**: Build `/search` endpoints with request validation, feature flag gating, and orchestration of Meilisearch query assembly (filters, sorting, pagination cursors). Document response schemas in the OpenAPI spec.
+   - **Task C5B — Performance benchmarking & analytics instrumentation**: Run load tests to confirm p95 ≤ 300 ms, capture query analytics/logging, and establish dashboards or logs for monitoring search behavior.
+6. Ranking & Personalization Layer — apply boosting (proximity, responsiveness, conversion), rerank pinned/sponsored items, and capture click/feedback events for analytics.
+   Owner: BE/DS • Est.: M • Deps: C5
+   Deliverables: ranking config, event schema, experiment hooks.
+   DoD: personalization toggle verified; events land in warehouse.
+   Subtasks:
+   - **Task C6A — Ranking rule design & rerank strategies**: Configure Meilisearch ranking rules, boosting parameters, and pinned/sponsored item logic with documentation on rationale and fallback behaviors.
+   - **Task C6B — Personalization signals & analytics pipeline**: Implement click/feedback event capture, route data to warehouse, and expose toggles/feature flags for personalization experiments with validation tests ensuring data completeness.
+7. Web Search Shell — responsive grid/list views, skeleton loaders, keyboard/ARIA support, and result instrumentation (impression + click emitters).
+   Owner: FE • Est.: M • Deps: C5
+   Deliverables: React/Vue components, Cypress smoke tests.
+   DoD: Lighthouse a11y ≥ 95; tracking beacons validated.
+   Subtasks:
+   - **Task C7A — Component implementation & interaction patterns**: Create search results grid/list components, skeleton loaders, pagination controls, and keyboard navigability with ARIA compliance. Integrate with design tokens and SSR/CSR constraints.
+   - **Task C7B — Instrumentation & quality assurance**: Wire impression/click tracking, run Cypress smoke tests, measure Lighthouse accessibility/performance scores, and document mitigations for any regressions.
+8. Web Advanced Interactions — filter modal with facet counts, saved searches, instant chips, and voice input fallback.
+   Owner: FE • Est.: M • Deps: C7
+   Deliverables: state management store, persistence API, UX specs.
+   DoD: saved search CRUD works; voice search polyfills degrade gracefully.
+   Subtasks:
+   - **Task C8A — Advanced filter UI & state orchestration**: Implement filter modals, facet count display, instant chip interactions, and saved search management with persistent storage. Ensure compatibility with URL/search params and collaborative states.
+   - **Task C8B — Voice input & resilience strategy**: Integrate Web Speech API/alternative fallbacks, define accessibility cues, and design graceful degradation paths. Include automated tests covering saved search CRUD and voice fallback toggles.
+9. Flutter Search Screens — Riverpod controllers, Retrofit client, list/grid layouts, analytics hooks.
+   Owner: Mobile • Est.: M • Deps: C5
+   Deliverables: screens, widgets, golden tests.
+   DoD: smooth scroll 60 fps on mid-tier device; analytics matched to web.
+   Subtasks:
+   - **Task C9A — Screen architecture & UI consistency**: Build Flutter screens for search results, detail views, and filters with adaptive layouts, theming, and accessibility semantics. Maintain parity with web design tokens and navigation structures.
+   - **Task C9B — Data flow & analytics parity**: Implement Riverpod controllers, Retrofit clients, caching layers, and analytics hooks that mirror web event schemas. Validate golden tests and ensure performance targets through profiling.
+10. Flutter Enhancements — offline cache, saved filters, voice input, and background sync for recent queries.
+   Owner: Mobile • Est.: M • Deps: C9
+   Deliverables: Hive boxes, background worker, accessibility review.
+   DoD: offline mode returns cached hits; voice dictation accessible.
+   Subtasks:
+   - **Task C10A — Offline cache & saved filter persistence**: Configure Hive boxes and persistence strategies for cached search results and saved filters, including cache invalidation policies and migration scripts.
+   - **Task C10B — Voice input integration & background sync**: Add voice search capabilities with accessibility support, background workers for refreshing recent queries, and monitoring to ensure minimal battery impact.
+11. Ranking Dataset Prep — labeled relevance dataset, click logs import, and NDCG baseline computation.
+   Owner: BE/DS • Est.: S • Deps: C3
+   Deliverables: dataset scripts, storage buckets, baseline report.
+   DoD: baseline NDCG@10 ≥ 0.85; dataset refreshed weekly.
+   Subtasks:
+   - **Task C11A — Data sourcing & labeling workflow**: Aggregate click logs, curated judgments, and metadata into a normalized dataset with versioning, labeling guidelines, and storage lifecycle policies.
+   - **Task C11B — Baseline computation & reporting**: Build scripts to compute NDCG@K metrics, generate baseline reports, and schedule refresh jobs ensuring weekly updates with integrity checks.
+12. Ranking Automation — CI job to run offline evals, regression thresholds, and dashboard visualizations for search quality.
+   Owner: BE/DS • Est.: S • Deps: C6, C11
+   Deliverables: GitHub Action workflow, Looker/Metabase dashboard.
+   DoD: CI blocks on regression; dashboard auto-updates daily.
+   Subtasks:
+   - **Task C12A — Continuous evaluation workflow engineering**: Implement CI pipelines (e.g., GitHub Actions) running offline relevance evaluations with regression thresholds, artifacts, and notifications on failure.
+   - **Task C12B — Visualization & stakeholder reporting**: Create dashboards/Looker/Metabase views surfacing key metrics, schedule daily data refreshes, and document consumption guidelines for product/search stakeholders.
 
 ### D. Escrow & Disputes
 
 1. Escrow Service — Stripe intents, transfers, refunds
    Owner: BE • Est.: L • Deps: keys, KYC
    DoD: webhooks verified; idempotent.
+   Subtasks:
+   - **Task D1A — Payment flow implementation & ledger mapping**: Configure Stripe PaymentIntents, transfer groups, and ledger recording for charges, holds, releases, and refunds. Document idempotency keys, currency handling, and reconciliation processes.
+   - **Task D1B — Webhook hardening & failure recovery**: Implement webhook endpoints with signature verification, retry/backoff policies, and monitoring dashboards. Create automated tests simulating edge cases (partial refunds, failures) with runbook guidance.
 2. Dispute Workflow — stages, timers, evidence
    Owner: BE • Est.: L • Deps: D1
    DoD: auto‑advance on deadlines.
+   Subtasks:
+   - **Task D2A — Lifecycle modeling & automation**: Define dispute stages, timers, and auto-advancement rules in code, including SLA definitions, notifications, and audit logs.
+   - **Task D2B — Evidence handling & compliance checks**: Build file upload handling, redaction workflows, and compliance validation for stored evidence. Test deadline triggers, notifications, and manual override flows.
 3. Admin Console — settlement math, actions
    Owner: FE • Est.: M • Deps: D2
    DoD: PDFs generated; audit trail.
+   Subtasks:
+   - **Task D3A — Admin UI & workflow orchestration**: Create admin screens for dispute review, settlement adjustments, and action logging with permission controls and accessibility compliance.
+   - **Task D3B — Financial validation & audit trails**: Integrate backend APIs calculating settlement math, render ledger summaries, and ensure all actions produce traceable audit events. Include Cypress/manual QA scripts verifying end-to-end flows.
 4. Notifications — push/email templates
    Owner: BE/Mobile • Est.: S • Deps: D2
    DoD: delivery confirmed.
+   Subtasks:
+   - **Task D4A — Template authoring & localization support**: Draft transactional email/push templates for each dispute stage, support localization tokens, and align with brand guidelines.
+   - **Task D4B — Delivery configuration & monitoring**: Configure notification routing (mail provider, FCM/APNS), create integration tests verifying delivery, and set up monitoring dashboards with alerting on failures.
 5. E2E — simulate dispute to settlement
    Owner: QA • Est.: M • Deps: D1–D4
    DoD: passes in CI.
+   Subtasks:
+   - **Task D5A — Scenario scripting & automation**: Develop comprehensive end-to-end test scripts covering dispute initiation, escalation, evidence submission, and settlement resolutions. Automate flows via PHPUnit/Cypress/Postman as appropriate.
+   - **Task D5B — Environment orchestration & reporting**: Provision seeded data, sandbox Stripe credentials, and scheduling to run E2E flows in CI. Capture reports, track flake rates, and document remediation steps.
 
 ### E. Storefront
 
 1. Catalog & Orders — products, variants, orders, coupons
    Owner: BE • Est.: L
+   Subtasks:
+   - **Task E1A — Catalog domain modeling & API scaffolding**: Define database schema/models for products, variants, coupons, and orders with inventory tracking, pricing, and localization support. Generate REST endpoints for CRUD operations and document them in the API spec.
+   - **Task E1B — Lifecycle workflows & promotion logic**: Implement coupon application rules, inventory reservation, and order state transitions. Write unit/integration tests ensuring multi-variant orders, discount stacking rules, and cancellation paths behave as expected.
 2. Provider UI — store editor, product forms
    Owner: FE • Est.: M
+   Subtasks:
+   - **Task E2A — Storefront authoring experience**: Build React/Vue screens for managing store metadata, branding, and product catalogs with validation, preview modes, and accessibility compliance.
+   - **Task E2B — Product form enhancements & media handling**: Implement dynamic product forms supporting variants, media uploads, and inventory controls. Add autosave, error messaging, and analytics instrumentation for provider interactions.
 3. Checkout — taxes, shipping, payment
    Owner: FE/Mobile • Est.: M
+   Subtasks:
+   - **Task E3A — Customer checkout flow implementation**: Design responsive checkout steps (cart review, address, shipping, payment) with state management, validation, and loading states across web/mobile.
+   - **Task E3B — Service integration & reconciliation tests**: Integrate tax engine outputs, shipping rate providers, and payment gateways. Build automated tests verifying pricing accuracy, error handling, and receipt generation.
 4. Fulfillment Webhooks — Shippo/EasyPost
    Owner: BE • Est.: S
+   Subtasks:
+   - **Task E4A — Webhook endpoint implementation**: Create endpoints to handle shipping status updates, label generation, and tracking info from Shippo/EasyPost with signature validation and logging.
+   - **Task E4B — Order state synchronization & monitoring**: Update orders based on webhook events, trigger customer notifications, and set up monitoring/alerting for failed deliveries or webhook retries.
 5. Tests — end‑to‑end order
    Owner: QA • Est.: M
    DoD: place order → label → tracking updates.
+   Subtasks:
+   - **Task E5A — Scenario coverage & automation scripting**: Build automated tests covering cart creation, checkout completion, payment capture, and fulfillment tracking updates.
+   - **Task E5B — Data management & regression reporting**: Prepare fixtures, manage seeded datasets, and produce CI reports validating end-to-end flows with alerting on regression failures.
 
 ### F. Ads & Banners
 
 1. Slot Service — registry, targeting, capping
    Owner: BE • Est.: M
+   Subtasks:
+   - **Task F1A — Inventory modeling & API contracts**: Define slot registry data model, targeting attributes, and capping rules. Build backend services/endpoints and document payload schemas.
+   - **Task F1B — Delivery logic & simulation tests**: Implement allocation algorithms honoring capping/targeting, and create simulation scripts ensuring fairness, priority handling, and failover behaviors.
 2. Campaign Mgmt — admin UI
    Owner: FE • Est.: M
+   Subtasks:
+   - **Task F2A — Campaign CRUD interface design**: Build admin pages for creating/editing campaigns, creatives, budgets, and schedules with validation and preview capabilities.
+   - **Task F2B — Workflow safeguards & analytics**: Implement approval flows, change history, and reporting charts. Ensure accessibility and integrate telemetry capturing campaign performance metrics.
 3. Client Renderers — web <AdSlot/>, Flutter AdSlotWidget
    Owner: FE/Mobile • Est.: M
+   Subtasks:
+   - **Task F3A — Component development & responsive behavior**: Implement reusable ad slot components for web and Flutter with lazy loading, responsive sizing, and placeholder handling.
+   - **Task F3B — Telemetry & quality validation**: Wire impression/click tracking, A/B flagging, and measure performance impact (CLS, LCP). Build automated tests verifying rendering and fallbacks.
 4. Tracking — impression/click beacons
    Owner: BE • Est.: S
    DoD: CLS < 0.02; metrics reconcile ±2%.
+   Subtasks:
+   - **Task F4A — Beacon ingestion & storage**: Create APIs for receiving impression/click events, batch persistence, and deduplication strategies. Align data schema with analytics warehouse.
+   - **Task F4B — Reconciliation & reporting quality checks**: Build jobs/dashboards comparing beacons against serving logs, enforce ±2% variance thresholds, and monitor CLS/performance metrics.
 
 ### G. Affiliates
 
 1. Tracking — redirector, cookies, attribution
    Owner: BE • Est.: M
+   Subtasks:
+   - **Task G1A — Affiliate redirector & attribution logic**: Implement redirect service handling link IDs, UTM parameters, and cookie/session storage for attribution, including fraud protections.
+   - **Task G1B — Data pipeline & compliance audits**: Build processes exporting attribution data to analytics/finance systems, document privacy compliance, and set up monitoring for suspicious activity.
 2. Dashboard — KPIs, link builder, statements
    Owner: FE • Est.: M
+   Subtasks:
+   - **Task G2A — Partner-facing UI & KPI visualization**: Create dashboards showing earnings, clicks, conversions with filtering and responsive layouts.
+   - **Task G2B — Statement generation & link management**: Implement link builder tools, exportable statements, and notification hooks. Ensure accessibility and integrate analytics tracking.
 3. Payouts Export — CSV/Stripe Connect
    Owner: BE/Finance • Est.: S
    DoD: payouts match ledger.
+   Subtasks:
+   - **Task G3A — Data aggregation & reconciliation scripts**: Compile affiliate earnings, adjust for refunds/chargebacks, and reconcile totals with ledger data.
+   - **Task G3B — Export automation & review workflows**: Produce CSV exports or Stripe Connect transfers with approval gates, logging, and QA checks ensuring payouts match ledger figures.
 
 ### H. Security, Moderation, Scanning
 
 1. Rule Engine — text filters, actions
    Owner: BE • Est.: M
+   Subtasks:
+   - **Task H1A — Moderation policy modeling & rule authoring**: Implement configurable rule engine for text/media filtering with pattern libraries, severity levels, and action mappings.
+   - **Task H1B — Enforcement integration & logging**: Hook rule engine into key entry points (jobs, chat, reviews), log actions, and create dashboards for moderation review.
 2. AV Pipeline — quarantine + ClamAV + VT
    Owner: BE/Infra • Est.: M
+   Subtasks:
+   - **Task H2A — File scanning infrastructure setup**: Configure ClamAV services, VirusTotal integrations, and quarantine storage with retry policies.
+   - **Task H2B — Workflow orchestration & alerting**: Integrate scanning pipeline with upload flows, notify moderation team on detections, and document incident response procedures.
 3. Admin Queues — moderation console
    Owner: FE • Est.: M
    DoD: malicious samples blocked in tests.
+   Subtasks:
+   - **Task H3A — Review UI & triage experience**: Build admin interface for reviewing flagged content, applying actions, and managing work queues with accessibility compliance.
+   - **Task H3B — Metrics & QA automation**: Add analytics tracking review throughput, create QA scripts verifying malicious samples are caught, and produce documentation for moderation workflows.
 
 ### I. UI/UX Overhaul
 
 1. Design Tokens — theme & Tailwind parity
    Owner: Design/FE/Mobile • Est.: S
+   Subtasks:
+   - **Task I1A — Token inventory & system alignment**: Audit existing design tokens, define color/typography/spacing scales, and ensure Tailwind/theme parity across web/mobile.
+   - **Task I1B — Distribution tooling & documentation**: Implement token build pipelines (Style Dictionary, etc.), publish packages, and document usage guidelines for engineers/designers.
 2. Card Patterns — Job/Provider/Product
    Owner: FE/Mobile • Est.: M
+   Subtasks:
+   - **Task I2A — Component library implementation**: Create reusable card components for jobs/providers/products with responsive layouts, skeleton states, and interaction states.
+   - **Task I2B — Variant coverage & QA**: Document card variants, ensure accessibility, run visual regression tests, and integrate components into Storybook/design system catalog.
 3. Dashboards — role‑aware widgets
    Owner: FE • Est.: M
+   Subtasks:
+   - **Task I3A — Information architecture & widget design**: Define layout for consumer/provider/admin dashboards with prioritized KPIs, filters, and personalization rules.
+   - **Task I3B — Implementation & data integration**: Develop dashboard widgets, connect to APIs, and add telemetry for widget interactions with automated tests verifying role-based access.
 4. Accessibility — audits & fixes
    Owner: QA/FE/Mobile • Est.: S
    DoD: WCAG 2.2 AA across.
+   Subtasks:
+   - **Task I4A — Audit execution & remediation backlog**: Run automated/manual accessibility audits (axe, Lighthouse, screen reader), document issues, and prioritize fixes.
+   - **Task I4B — Remediation implementation & verification**: Address identified issues, add regression tests, and capture compliance evidence for WCAG 2.2 AA certification.
 
 ### J. Performance
 
 1. DB Indexes — add & verify
    Owner: BE/DBA • Est.: S
+   Subtasks:
+   - **Task J1A — Index strategy & implementation**: Analyze query plans, propose new indexes, and apply them with migration scripts including rollbacks.
+   - **Task J1B — Validation & monitoring**: Benchmark query performance before/after, ensure no regressions, and add monitoring for slow queries with documentation of findings.
 2. Caching — Redis windows for feed/search
    Owner: BE • Est.: S
+   Subtasks:
+   - **Task J2A — Cache design & invalidation rules**: Define caching strategy for feed/search endpoints, TTL policies, and cache key structures.
+   - **Task J2B — Implementation & observability**: Implement Redis caching layers, add cache hit/miss metrics, and conduct load tests verifying performance gains.
 3. Image Pipeline — Imgproxy
    Owner: Infra/FE • Est.: S
+   Subtasks:
+   - **Task J3A — Infrastructure setup & configuration**: Deploy Imgproxy with secure presets, caching, and CDN integration.
+   - **Task J3B — Client integration & quality checks**: Update frontend/mobile image requests to use Imgproxy URLs, validate quality/perf metrics, and document fallback strategies.
 4. Bundle Audit — code split, lazy, remove heavy deps
    Owner: FE • Est.: S
    DoD: budgets met.
+   Subtasks:
+   - **Task J4A — Bundle analysis & opportunity catalog**: Audit bundle sizes, identify heavy dependencies, and propose code splitting/lazy loading opportunities with prioritized backlog.
+   - **Task J4B — Optimization implementation & regression tracking**: Execute selected optimizations, update build configs, and monitor bundle size budgets with automated alerts.
 
 ### K. Mobile Parity
 
 1. Screens — implement all new UIs
    Owner: Mobile • Est.: XL
+   Subtasks:
+   - **Task K1A — Layout implementation & navigation wiring**: Build Flutter screens covering the full set of new flows (feed, search, store, escrow, disputes) with navigation, theming, and responsiveness.
+   - **Task K1B — Component reuse & accessibility validation**: Ensure shared components follow design tokens, add accessibility semantics, and create widget tests verifying interactions.
 2. Background Services — sockets, push, sync
    Owner: Mobile • Est.: M
+   Subtasks:
+   - **Task K2A — Real-time connectivity & push integrations**: Implement WebSocket listeners, push notification handlers, and reconnection strategies for Flutter apps.
+   - **Task K2B — Sync orchestration & battery safeguards**: Manage background sync jobs, data caching, and scheduling with monitoring for battery/network usage and fallback paths.
 3. Alpha Groups — TestFlight/Play (12 testers)
    Owner: PM/Mobile • Est.: S
    DoD: testers complete smoke run no blockers.
+   Subtasks:
+   - **Task K3A — Release management & distribution**: Configure TestFlight/Play Console tracks, prepare release notes, and manage build approvals for alpha testers.
+   - **Task K3B — Feedback loop & QA tracking**: Establish feedback channels, triage bugs from testers, and report status weekly with resolution SLAs.
 
 ---
 
@@ -2324,8 +2511,8 @@ With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **
 52. [ ] Execute 10.5–10.9 Affiliate fraud controls, API/events, dashboards, admin tooling, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 53. [ ] Execute 11.1–11.2 Zones standards with SRID, H3 computation, and storage — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 54. [ ] Execute 11.3–11.7 Zone matching, backfill, geocoding, permissions, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-55. [ ] Execute 12.1–12.3 Search index, scoring, and normalization logic — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-56. [ ] Execute 12.4–12.8 Query parsing, personalization, feedback loops, performance, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+55. [ ] Execute 12.1–12.3 Meilisearch index tuning, relevancy scoring, and document normalization — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+56. [ ] Execute 12.4–12.8 Query parsing, Meilisearch personalization, feedback loops, performance, and acceptance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 57. [ ] Map 13) Dispute system user journeys and escalation handling — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 58. [ ] Map 14) Payments & Escrow scenarios for lifecycle coverage — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 59. [ ] Map 15) Storefront eCommerce scenarios across inventory, carts, and fulfillment — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
