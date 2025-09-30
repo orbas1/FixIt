@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../config.dart';
 import '../../firebase/firebase_api.dart';
@@ -18,10 +19,15 @@ import '../../models/call_model.dart';
 import '../../models/chat_model.dart';
 import '../../models/message_model.dart';
 import '../../screens/app_pages_screens/profile_detail_screen/layouts/selection_option_layout.dart';
+import '../../services/security/file_security_service.dart';
 
 enum MessageType { text, image, video, offer }
 
 class ChatProvider with ChangeNotifier {
+  ChatProvider({FileSecurityService? fileSecurityService})
+      : _fileSecurityService = fileSecurityService ?? GetIt.I<FileSecurityService>();
+
+  final FileSecurityService _fileSecurityService;
   final TextEditingController controller = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final FocusNode chatFocus = FocusNode();
@@ -621,10 +627,23 @@ class ChatProvider with ChangeNotifier {
   Future<void> getImage(context, ImageSource source) async {
     try {
       final ImagePicker picker = ImagePicker();
-      imageFile = await picker.pickImage(source: source);
+      final picked = await picker.pickImage(source: source);
 
-      if (imageFile != null) {
+      if (picked != null) {
+        try {
+          Fluttertoast.showToast(msg: 'Scanning attachment…');
+          await _fileSecurityService.evaluateXFile(picked, useCase: FileUseCase.image);
+        } on FileSecurityException catch (error) {
+          Fluttertoast.showToast(
+            msg: error.message,
+            backgroundColor: appColor(context).red,
+          );
+          return;
+        }
+
         route.pop(context);
+        imageFile = picked;
+        Fluttertoast.showToast(msg: 'Attachment ready');
         await uploadFile(context);
       }
 

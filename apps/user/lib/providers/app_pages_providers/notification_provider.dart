@@ -3,8 +3,23 @@ import 'dart:developer';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fixit_user/config.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../services/notifications/notification_preferences.dart';
 
 class NotificationProvider with ChangeNotifier {
+  NotificationProvider({NotificationPreferenceStore? preferenceStore})
+      : _preferenceStore = preferenceStore ?? GetIt.I<NotificationPreferenceStore>() {
+    _bootstrapPreferences();
+  }
+
+  final NotificationPreferenceStore _preferenceStore;
+  Map<NotificationCategory, bool> categoryPreferences = {
+    for (final category in NotificationCategory.values) category: true,
+  };
+  QuietHoursSettings quietHours = const QuietHoursSettings(enabled: false, startMinute: 22 * 60, endMinute: 7 * 60);
+
   bool isNotification = false;
   AnimationController? animationController;
   List<NotificationModel> notificationList = [];
@@ -33,6 +48,13 @@ class NotificationProvider with ChangeNotifier {
       await animationController!.forward();
       await animationController!.reverse();
     }
+  }
+
+  Future<void> _bootstrapPreferences() async {
+    final categories = await _preferenceStore.loadCategories();
+    categoryPreferences = categories;
+    quietHours = _preferenceStore.loadQuietHours();
+    notifyListeners();
   }
 
   getNotificationList(context) async {
@@ -299,8 +321,42 @@ class NotificationProvider with ChangeNotifier {
     for (var data in notificationList) {
       if (data.readAt == null) {
         count++;
-      }
+  }
+
+  Future<void> updateCategory(NotificationCategory category, bool enabled) async {
+    categoryPreferences[category] = enabled;
+    notifyListeners();
+    await _preferenceStore.setCategory(category, enabled);
+  }
+
+  Future<void> updateQuietHours({required bool enabled, required TimeOfDay start, required TimeOfDay end}) async {
+    final startMinutes = start.hour * 60 + start.minute;
+    final endMinutes = end.hour * 60 + end.minute;
+    quietHours = QuietHoursSettings(enabled: enabled, startMinute: startMinutes, endMinute: endMinutes);
+    notifyListeners();
+    await _preferenceStore.saveQuietHours(quietHours);
+  }
+
+  String quietHoursLabel(BuildContext context) {
+    if (!quietHours.enabled) {
+      return 'Disabled';
     }
+    final startHour = quietHours.startMinute ~/ 60;
+    final startMinute = quietHours.startMinute % 60;
+    final endHour = quietHours.endMinute ~/ 60;
+    final endMinute = quietHours.endMinute % 60;
+    return '${_formatTime(startHour, startMinute)} - ${_formatTime(endHour, endMinute)}';
+  }
+
+  String _formatTime(int hour, int minute) {
+    final context = navigatorKey.currentContext;
+    if (context == null) {
+      return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+    }
+    final time = TimeOfDay(hour: hour % 24, minute: minute % 60);
+    return time.format(context);
+  }
+}
     return count;
   }
 

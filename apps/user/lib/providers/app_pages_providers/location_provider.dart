@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:fixit_user/config.dart';
 import 'package:fixit_user/models/current_zone_model.dart';
@@ -6,12 +7,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../screens/app_pages_screens/current_location_screen/layouts/google.dart';
 import '../../widgets/alert_message_common.dart';
 import 'dart:ui' as ui;
+import '../../services/location/location_service.dart';
 
 class LocationProvider with ChangeNotifier {
+  LocationProvider() {
+    _bindLocationStream();
+    _hydrateInitialLocation();
+  }
+
+  final LocationService _locationService = GetIt.I<LocationService>();
+  StreamSubscription<LocationSnapshot>? _locationSubscription;
+
   AnimationController? animationController;
   bool isPositionedRight = false;
   bool isAnimateOver = false, isBottom = true;
@@ -22,7 +33,6 @@ class LocationProvider with ChangeNotifier {
   int primaryAddress = 0;
   CameraPosition? cameraPosition;
   Set<Marker> markers = {};
-  Position? position1;
   GoogleMapController? mapController;
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
   List<PrimaryAddress> addressList = [];
@@ -36,8 +46,24 @@ class LocationProvider with ChangeNotifier {
   List<StateModel> stateList = [];
   ScrollController scrollController = ScrollController();
 
+  void _bindLocationStream() {
+    _locationSubscription ??= _locationService.stream.listen((snapshot) {
+      position = LatLng(snapshot.latitude, snapshot.longitude);
+      notifyListeners();
+    });
+  }
+
+  Future<void> _hydrateInitialLocation() async {
+    final snapshot = await _locationService.loadPersistedSnapshot();
+    if (snapshot != null) {
+      position = LatLng(snapshot.latitude, snapshot.longitude);
+      notifyListeners();
+    }
+  }
+
   @override
   void dispose() {
+    _locationSubscription?.cancel();
     scrollController.dispose();
     super.dispose();
   }
@@ -113,22 +139,22 @@ class LocationProvider with ChangeNotifier {
 
   // created method for getting user current location
   Future getUserCurrentLocation(context, {isRoute = false}) async {
-    Geolocator.requestPermission().then((value) async {
-      position1 = await Geolocator.getCurrentPosition(
-          locationSettings:
-              const LocationSettings(accuracy: LocationAccuracy.high));
-
-      position = LatLng(position1!.latitude, position1!.longitude);
+    try {
+      final snapshot = await _locationService.ensureLatest(context: context);
+      position = LatLng(snapshot.latitude, snapshot.longitude);
       notifyListeners();
-      getAddressFromLatLng(context);
+      await getAddressFromLatLng(context);
       if (isRoute) {
         route.pushNamed(context, routeName.currentLocation);
       }
       log("POS :$position");
-    }).onError((error, stackTrace) async {
-      await Geolocator.requestPermission();
-      log("ERROR $error");
-    });
+    } catch (error, stackTrace) {
+      log('Location fetch error: $error', stackTrace: stackTrace);
+      Fluttertoast.showToast(
+        msg: language(context, translations?.locationPermissionDenied ?? 'Location permission is required to determine nearby jobs.'),
+        backgroundColor: appColor(context).red,
+      );
+    }
   }
 
   fetchCurrent(context) async {

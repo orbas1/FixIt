@@ -17,6 +17,11 @@ import '../services/http/auth_refresh_interceptor.dart';
 import '../services/http/telemetry_interceptor.dart';
 import '../services/logging/http_metrics_recorder.dart';
 import '../services/realtime/app_realtime_bridge.dart';
+import '../services/location/ip_location_client.dart';
+import '../services/location/location_service.dart';
+import '../services/security/file_security_service.dart';
+import '../services/notifications/notification_preferences.dart';
+import '../helper/notification.dart';
 
 class DependencyContainer {
   DependencyContainer(this._getIt);
@@ -136,5 +141,37 @@ class DependencyContainer {
         tokenStore: authTokenStore,
       ),
     );
+
+    final ipLocationClient = IpLocationClient(httpClient: dio);
+    if (_getIt.isRegistered<IpLocationClient>()) {
+      _getIt.unregister<IpLocationClient>();
+    }
+    _getIt.registerSingleton<IpLocationClient>(ipLocationClient);
+
+    final locationService = LocationService(
+      ipLocationClient: ipLocationClient,
+      preferences: sharedPreferences,
+    );
+    if (_getIt.isRegistered<LocationService>()) {
+      _getIt.unregister<LocationService>();
+    }
+    _getIt.registerSingleton<LocationService>(locationService);
+
+    if (_getIt.isRegistered<FileSecurityService>()) {
+      _getIt.unregister<FileSecurityService>();
+    }
+    _getIt.registerSingleton<FileSecurityService>(const FileSecurityService());
+
+    if (_getIt.isRegistered<NotificationPreferenceStore>()) {
+      _getIt.unregister<NotificationPreferenceStore>();
+    }
+    _getIt.registerSingleton<NotificationPreferenceStore>(
+      NotificationPreferenceStore(preferences: sharedPreferences),
+    );
+
+    if (_getIt.isRegistered<PushNotificationService>()) {
+      _getIt.unregister<PushNotificationService>();
+    }
+    _getIt.registerSingleton<PushNotificationService>(PushNotificationService.instance);
   }
 }

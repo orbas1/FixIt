@@ -95,6 +95,7 @@ dependencies:
   googleapis_auth: ^1.6.0
   image_picker: ^1.1.2
   mime: any
+  crypto: ^3.0.3
   dropdown_search: ^6.0.1
   http_parser: any
   flutter_local_notifications: ^18.0.0
