@@ -1,19 +1,17 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\TwoFactor\Http\Controllers\MfaChallengeController;
+use Modules\TwoFactor\Http\Controllers\TwoFactorController;
 
-/*
-    |--------------------------------------------------------------------------
-    | API Routes
-    |--------------------------------------------------------------------------
-    |
-    | Here is where you can register API routes for your application. These
-    | routes are loaded by the RouteServiceProvider within a group which
-    | is assigned the "api" middleware group. Enjoy building your API!
-    |
-*/
+Route::prefix('v1/security')->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('mfa', [TwoFactorController::class, 'status']);
+        Route::post('mfa/setup', [TwoFactorController::class, 'setup']);
+        Route::post('mfa/confirm', [TwoFactorController::class, 'confirm']);
+        Route::post('mfa/recovery-codes', [TwoFactorController::class, 'regenerateRecoveryCodes']);
+        Route::delete('mfa', [TwoFactorController::class, 'disable']);
+    });
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
-    Route::get('twofactor', fn (Request $request) => $request->user())->name('twofactor');
+    Route::post('mfa/challenge', [MfaChallengeController::class, 'verify']);
 });

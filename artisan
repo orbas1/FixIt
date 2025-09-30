@@ -1,9 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use Illuminate\Contracts\Console\Kernel;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 define('LARAVEL_START', microtime(true));
 
@@ -11,16 +9,6 @@ define('LARAVEL_START', microtime(true));
 require __DIR__.'/vendor/autoload.php';
 
 // Bootstrap Laravel and handle the command...
-$app = require_once __DIR__.'/bootstrap/app.php';
+$status = (require_once __DIR__.'/bootstrap/app.php')->handleCommand(new ArgvInput);
 
-/** @var Kernel $kernel */
-$kernel = $app->make(Kernel::class);
-
-$input = new ArgvInput();
-$output = new ConsoleOutput();
-
-$status = $kernel->handle($input, $output);
-
-$kernel->terminate($input, $status);
-
-exit($status);
+close($status);

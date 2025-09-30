@@ -5,6 +5,9 @@
 /.env
 /.env.*
 /.env.local
+/.phpunit.result.cache
+/public/installation.json
+/public/_log.dic.xml
 /.DS_Store
 /composer.phar
 /public/hot

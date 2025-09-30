@@ -2498,7 +2498,7 @@ With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **
 39. [x] Execute 6.1–6.2 Backend performance and caching enhancements — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
 40. [x] Execute 6.3–6.4 Asset optimization and API transport improvements — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
 41. [x] Execute 6.5–6.6 Mobile runtime optimizations, observability gates, and acceptance metrics — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
-42. [ ] Deliver 7.1–7.2 Identity, MFA, and authorization protections — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
+42. [x] Deliver 7.1–7.2 Identity, MFA, and authorization protections — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
 43. [ ] Deliver 7.3–7.5 Payments, file security, and abuse mitigation safeguards — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 44. [ ] Deliver 7.6–7.8 Secrets management, AppSec automation, and privacy compliance — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
 45. [ ] Deliver 7.9–7.10 Security runbooks, incident response, and acceptance testing — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100

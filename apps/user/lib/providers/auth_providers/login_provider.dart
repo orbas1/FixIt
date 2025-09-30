@@ -19,6 +19,82 @@ class LoginProvider with ChangeNotifier {
   final FocusNode passwordFocus = FocusNode();
   bool isPassword = true;
 
+  Future<void> finalizeAuthenticatedSession(BuildContext context,
+      {String? successMessage}) async {
+    pref ??= await SharedPreferences.getInstance();
+    isGuest = false;
+    notifyListeners();
+    pref!.setBool(session.isContinueAsGuest, false);
+
+    final commonApi = Provider.of<CommonApiProvider>(context, listen: false);
+    await commonApi.selfApi(context);
+
+    final userRole = userModel?.role;
+    log("USER:::$userRole");
+    if (userRole != null && userRole != "user") {
+      hideLoading(context);
+      log("Unauthorized role detected: $userRole");
+      Fluttertoast.showToast(
+        msg: "This action is unauthorized for non-user roles.",
+        backgroundColor: appColor(context).red,
+      );
+      return;
+    }
+
+    final dashCtrl = Provider.of<DashboardProvider>(context, listen: false);
+    final review = Provider.of<MyReviewProvider>(context, listen: false);
+    final notifyCtrl = Provider.of<NotificationProvider>(context, listen: false);
+
+    dashCtrl.getBookingHistory(context);
+    review.getMyReview(context);
+    notifyCtrl.getNotificationList(context);
+
+    final token = pref?.getString(session.accessToken);
+    log("TOKEN :%sss$token");
+    await commonApi.selfApi(context);
+    commonApi.getDashboardHome(context);
+    commonApi.getDashboardHome2(context);
+
+    hideLoading(context);
+    emailController.text = '';
+    passwordController.text = '';
+
+    if (pref!.getString(session.booking) != null) {
+      final int? lastServiceId = pref!.getInt("lastOpenedServiceId");
+      route.pushReplacementNamed(
+        context,
+        routeName.servicesDetailsScreen,
+        args: {'serviceId': lastServiceId},
+      );
+    } else {
+      route.pushReplacementNamed(context, routeName.dashboard);
+    }
+
+    final userData = pref!.getString(session.user);
+    if (userData != null) {
+      final locationCtrl = Provider.of<LocationProvider>(context, listen: false);
+      await locationCtrl.getLocationList(context);
+      await locationCtrl.getCountryState();
+
+      if (context.mounted) {
+        final cartCtrl = Provider.of<CartProvider>(context, listen: false);
+        cartCtrl.onReady(context);
+      }
+      pref!.remove(session.isContinueAsGuest);
+    }
+
+    Fluttertoast.showToast(
+      msg: successMessage ?? "Login Successfully",
+      backgroundColor: const Color(0xff5465FF),
+    );
+
+    if (!context.mounted) {
+      hideLoading(context);
+    }
+
+    notifyListeners();
+  }
+
   onLogin(context) {
     FocusManager.instance.primaryFocus?.unfocus();
     /*  route.pushReplacementNamed(context, routeName.dashboard);*/
@@ -31,6 +107,27 @@ class LoginProvider with ChangeNotifier {
     emailController.text = "user@example.com";
     passwordController.text = "123456789";
     notifyListeners();
+  }
+
+  Future<void> _handleMfaRequired(
+    BuildContext context,
+    Map<String, dynamic> payload,
+    String? message,
+  ) async {
+    final mfaProvider =
+        Provider.of<MfaChallengeProvider>(context, listen: false);
+
+    mfaProvider.initializeChallenge(
+      payload: payload,
+      email: emailController.text.trim(),
+      message: message,
+    );
+
+    hideLoading(context);
+
+    if (context.mounted) {
+      route.pushNamed(context, routeName.mfaVerification, args: payload);
+    }
   }
 
   // password see tap
@@ -152,90 +249,30 @@ class LoginProvider with ChangeNotifier {
       await apiServices
           .postApi(api.login, jsonEncode(body))
           .then((value) async {
-        if (value.isSuccess!) {
-          isGuest = false;
-          notifyListeners();
-          pref!.setBool(session.isContinueAsGuest, false);
-          log("DDDDDDDDDDDD");
-          final commonApi =
-              Provider.of<CommonApiProvider>(context, listen: false);
-          await commonApi.selfApi(context);
-
-          final userRole = userModel!.role;
-          log("USER:::$userRole");
-          if (userRole != "user") {
-            hideLoading(context);
-            log("Unauthorized role detected: $userRole");
-            Fluttertoast.showToast(
-              msg: "This action is unauthorized for non-user roles.",
-              backgroundColor: appColor(context).red,
-            );
+        if (value.isSuccess == true) {
+          await finalizeAuthenticatedSession(context,
+              successMessage: value.message);
+        } else if (value.data is Map) {
+          final payload = Map<String, dynamic>.from(value.data as Map);
+          final requiresMfa =
+              payload['requires_mfa'] == true || payload['requiresMfa'] == true;
+          if (requiresMfa) {
+            await _handleMfaRequired(context, payload, value.message);
             return;
           }
-
-          // ✅ All logic continues below (no longer in else block)
-
-          final dashCtrl =
-              Provider.of<DashboardProvider>(context, listen: false);
-          final review = Provider.of<MyReviewProvider>(context, listen: false);
-          final notifyCtrl =
-              Provider.of<NotificationProvider>(context, listen: false);
-
-          dashCtrl.getBookingHistory(context);
-          review.getMyReview(context);
-          notifyCtrl.getNotificationList(context);
-
-          String? token = pref?.getString(session.accessToken);
-          log("TOKEN :%sss$token");
-          await commonApi.selfApi(context);
-          commonApi.getDashboardHome(context);
-          commonApi.getDashboardHome2(context);
           hideLoading(context);
-          emailController.text = '';
-          passwordController.text = '';
-          log("message=-=-=-=-=-${pref?.getString(session.booking)}");
-          if (pref!.getString(session.booking) != null) {
-            log("message=-=-=-=-=-1${pref!.getString(session.booking)}");
-            int? lastServiceId = pref!.getInt("lastOpenedServiceId");
-            log("lastServiceId::${lastServiceId}");
-            route.pushReplacementNamed(
-              context,
-              routeName.servicesDetailsScreen,
-              args: {'serviceId': lastServiceId},
-            );
-          } else {
-            route.pushReplacementNamed(context, routeName.dashboard);
-          }
-
-          dynamic userData = pref!.getString(session.user);
-          if (userData != null) {
-            log("message=============> $userData");
-            final locationCtrl =
-                Provider.of<LocationProvider>(context, listen: false);
-            await locationCtrl.getLocationList(context);
-            await locationCtrl.getCountryState();
-
-            if (context.mounted) {
-              final cartCtrl =
-                  Provider.of<CartProvider>(context, listen: false);
-              cartCtrl.onReady(context);
-            }
-            pref!.remove(session.isContinueAsGuest);
-          }
-
           Fluttertoast.showToast(
-              msg: value.message, backgroundColor: Color(0xff5465FF));
-
-          if (!context.mounted) {
-            hideLoading(context);
-          }
-
-          notifyListeners();
+            msg: value.message.isNotEmpty
+                ? value.message
+                : "Unable to process your request.",
+            backgroundColor: appColor(context).red,
+          );
         } else {
           hideLoading(context);
-          print("object======> ${value.message}");
           Fluttertoast.showToast(
-            msg: value.message,
+            msg: value.message.isNotEmpty
+                ? value.message
+                : "Unable to process your request.",
             backgroundColor: appColor(context).red,
           );
         }

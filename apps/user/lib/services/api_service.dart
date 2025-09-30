@@ -205,46 +205,57 @@ class ApiServices {
 
         var responseData = response.data;
         log("response 1: ${response.statusCode}");
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          //get response
-
-          if (apiName.contains("login") ||
-              apiName.contains("register") ||
-              apiName.contains("social/login") ||
-              apiName.contains("social/verifyOtp") ||
-              apiName.contains("social/verifySendOtp")) {
-            log("RESPONJSE : ${response.data}");
-            await pref.setString(
-                session.accessToken, responseData['access_token']);
-            //set data to class
-            apiData.message =
-                apiName.contains("login") || apiName.contains("social/login")
-                    ? "Login Successfully"
-                    : "Register Successfully";
-            apiData.isSuccess = true;
-            apiData.data = "";
-            return apiData;
-          } else {
-            if (isData) {
-              // log("AAA :$responseData");
-              apiData.message = responseData["message"] ?? "";
-              apiData.isSuccess = true;
-              apiData.data = responseData;
-              return apiData;
-            } else {
-              apiData.message = responseData["message"] ?? "";
-              apiData.isSuccess = true;
-              apiData.data = responseData["data"];
-              return apiData;
-            }
-          }
-        } else {
-          log("RESPONJSE 1: ${response.data}");
-          apiData.message = responseData["message"];
+        final statusCode = response.statusCode ?? 0;
+        if (statusCode == 202) {
+          apiData.message = responseData["message"] ?? "";
           apiData.isSuccess = false;
-          apiData.data = 0;
+          apiData.data = responseData;
           return apiData;
         }
+
+        if (statusCode == 200 || statusCode == 201) {
+          if (responseData is Map<String, dynamic> &&
+              responseData['access_token'] != null) {
+            final String accessToken = responseData['access_token'] as String;
+            final refreshToken = responseData['refresh_token'];
+            if (refreshToken is String && refreshToken.isNotEmpty) {
+              await _tokenStore.writeTokens(
+                  accessToken: accessToken, refreshToken: refreshToken);
+            } else {
+              await _tokenStore.write(accessToken);
+            }
+
+            final bool isLoginEndpoint =
+                apiName.contains("/login") || apiName.contains("social/login");
+            final bool isRegisterEndpoint = apiName.contains("register");
+
+            apiData.message = responseData["message"] ??
+                (isLoginEndpoint
+                    ? "Login Successfully"
+                    : (isRegisterEndpoint ? "Register Successfully" : "Success"));
+            apiData.isSuccess = true;
+            apiData.data = responseData;
+            return apiData;
+          }
+
+          if (isData) {
+            apiData.message = responseData["message"] ?? "";
+            apiData.isSuccess = true;
+            apiData.data = responseData;
+            return apiData;
+          }
+
+          apiData.message = responseData["message"] ?? "";
+          apiData.isSuccess = true;
+          apiData.data = responseData["data"] ?? responseData;
+          return apiData;
+        }
+
+        log("RESPONJSE 1: ${response.data}");
+        apiData.message = responseData["message"] ?? "";
+        apiData.isSuccess = false;
+        apiData.data = responseData;
+        return apiData;
       } catch (e) {
         if (e is DioException) {
           if (e.type == DioExceptionType.badResponse) {
@@ -406,8 +417,7 @@ class ApiServices {
           //get response
 
           if (isData) {
-            /*  await pref.setString(
-                session.accessToken, responseData['access_token']);*/
+            /*  await _tokenStore.write(responseData['access_token']);*/
             //set data to class
             apiData.message = "";
             apiData.isSuccess = true;

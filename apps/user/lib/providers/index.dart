@@ -1,6 +1,7 @@
 export '../providers/auth_providers/on_boarding_provider.dart';
 export '../providers/common_providers/loading_provider.dart';
 export '../providers/auth_providers/login_provider.dart';
+export '../providers/auth_providers/mfa_challenge_provider.dart';
 export '../providers/auth_providers/splash_provider.dart';
 export '../providers/auth_providers/login_with_phone_provider.dart';
 export '../providers/auth_providers/verify_otp_provider.dart';
