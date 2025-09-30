@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import '../../../../config.dart';
+import '../../../../widgets/ad_slot_widget.dart';
 import 'horizontal_blog_list.dart';
 import 'new_job_request_layout.dart';
 
@@ -16,28 +17,17 @@ class HomeBody extends StatelessWidget {
         /*   onInit: () => Future.delayed(
             const Duration(milliseconds: 100), () => dash.getCoupons()), */
         child: ListView(children: [
-          Column(children: [
-            if (commonApi.dashboardModel != null &&
-                commonApi.dashboardModel!.banners!.isNotEmpty)
-              BannerLayout(
-                  bannerList: commonApi.dashboardModel!.banners,
-                  onPageChanged: (index, reason) => value.onSlideBanner(index),
-                  onTap: commonApi.isLoading == true
-                      ? (type, id) {
-                          log("object=-===-=-=-=-=-=-=-=-=");
-                        }
-                      : (type, id) => value.onBannerTap(context, type, id)),
-            if (dash.bannerList.length > 1 &&
-                dash.bannerList.any((banner) => banner.media!.isNotEmpty))
-              const VSpace(Sizes.s12),
-            if (dash.bannerList.length > 1 &&
-                dash.bannerList.any((banner) => banner.media!.isNotEmpty))
-              DotIndicator(
-                  list: dash.bannerList, selectedIndex: value.selectIndex),
-            if (dash.bannerList.isNotEmpty &&
-                dash.bannerList.any((banner) => banner.media!.isNotEmpty))
-              const VSpace(Sizes.s20)
-          ]),
+          Column(
+            children: [
+              AdSlotWidget(
+                slot: 'home_special_offers',
+                margin: const EdgeInsets.symmetric(horizontal: Insets.i20),
+                borderRadius: BorderRadius.circular(AppRadius.r12),
+                onPlacementTap: (item) => value.onPlacementTap(context, item),
+              ),
+              const VSpace(Sizes.s20),
+            ],
+          ),
           if (commonApi.dashboardModel != null &&
               commonApi.dashboardModel!.coupons!.isNotEmpty)
             Column(children: [

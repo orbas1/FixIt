@@ -22,6 +22,9 @@ import '../services/location/location_service.dart';
 import '../services/security/file_security_service.dart';
 import '../services/security/security_incident_service.dart';
 import '../services/notifications/notification_preferences.dart';
+import '../services/ads/placement_api_client.dart';
+import '../services/ads/placement_cache.dart';
+import '../services/ads/placement_repository.dart';
 import '../helper/notification.dart';
 
 class DependencyContainer {
@@ -142,6 +145,27 @@ class DependencyContainer {
         tokenStore: authTokenStore,
       ),
     );
+
+    final placementCache = PlacementCache();
+    if (_getIt.isRegistered<PlacementCache>()) {
+      _getIt.unregister<PlacementCache>();
+    }
+    _getIt.registerSingleton<PlacementCache>(placementCache);
+
+    final placementApiClient = PlacementApiClient(httpClient: dio);
+    if (_getIt.isRegistered<PlacementApiClient>()) {
+      _getIt.unregister<PlacementApiClient>();
+    }
+    _getIt.registerSingleton<PlacementApiClient>(placementApiClient);
+
+    final placementRepository = PlacementRepository(
+      apiClient: placementApiClient,
+      cache: placementCache,
+    );
+    if (_getIt.isRegistered<PlacementRepository>()) {
+      _getIt.unregister<PlacementRepository>();
+    }
+    _getIt.registerSingleton<PlacementRepository>(placementRepository);
 
     final ipLocationClient = IpLocationClient(httpClient: dio);
     if (_getIt.isRegistered<IpLocationClient>()) {

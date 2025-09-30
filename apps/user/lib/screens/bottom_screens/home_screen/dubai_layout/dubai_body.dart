@@ -9,6 +9,7 @@ import 'package:fixit_user/screens/bottom_screens/home_screen/layouts/special_of
 import 'package:fixit_user/screens/bottom_screens/home_screen/toronto_layout/toronto_coupon_layout.dart';
 
 import '../../../../config.dart';
+import '../../../../widgets/ad_slot_widget.dart';
 import 'dubai_coupon.dart';
 
 class DubaiBody extends StatelessWidget {
@@ -116,36 +117,13 @@ class DubaiBody extends StatelessWidget {
                 child: Column(
                   children: [
                     /// Show Home Banners
-                    Column(
-                      children: [
-                        if (commonApi.dashboardModel!.banners!.isNotEmpty)
-                          BannerLayout(
-                              isDubai: true,
-                              bannerList: commonApi.dashboardModel!.banners,
-                              onPageChanged: (index, reason) =>
-                                  value.onSlideBanner(index),
-                              onTap: commonApi.isLoading == true
-                                  ? (type, id) {
-                                      print("object=-===-=-=-=-=-=-=-=-=");
-                                    }
-                                  : (type, id) =>
-                                      value.onBannerTap(context, type, id)),
-                        if (dash.bannerList.length > 1 &&
-                            dash.bannerList
-                                .any((banner) => banner.media!.isNotEmpty))
-                          const VSpace(Sizes.s12),
-                        if (dash.bannerList.length > 1 &&
-                            dash.bannerList
-                                .any((banner) => banner.media!.isNotEmpty))
-                          DotIndicator(
-                              list: dash.bannerList,
-                              selectedIndex: value.selectIndex),
-                        if (dash.bannerList.isNotEmpty &&
-                            dash.bannerList
-                                .any((banner) => banner.media!.isNotEmpty))
-                          const VSpace(Sizes.s20),
-                      ],
+                    AdSlotWidget(
+                      slot: 'home_special_offers',
+                      margin: const EdgeInsets.symmetric(horizontal: Insets.i20),
+                      borderRadius: BorderRadius.circular(AppRadius.r12),
+                      onPlacementTap: (item) => value.onPlacementTap(context, item),
                     ),
+                    const VSpace(Sizes.s20),
                     const VSpace(Sizes.s25),
 
                     /// Top Categories

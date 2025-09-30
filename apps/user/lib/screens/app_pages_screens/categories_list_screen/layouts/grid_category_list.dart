@@ -28,7 +28,6 @@ class GridCategoryList extends StatelessWidget {
                 data: value.categoryList[index],
                 onTap: () {
                   log("value.categoryList[index]:${value.categoryList[index].id}");
-                  category.fetchBannerAdsData(context);
                   category.demoList = [];
                   category
                       .getCategoryService(id: value.categoryList[index].id)

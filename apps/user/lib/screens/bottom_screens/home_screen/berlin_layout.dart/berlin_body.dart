@@ -11,6 +11,7 @@ import 'package:fixit_user/screens/bottom_screens/home_screen/berlin_layout.dart
 import 'package:fixit_user/screens/bottom_screens/home_screen/dubai_layout/dubai_services.dart';
 import 'package:fixit_user/screens/bottom_screens/home_screen/layouts/horizontal_blog_list.dart';
 import 'package:fixit_user/screens/bottom_screens/home_screen/layouts/special_offers_layout.dart';
+import 'package:fixit_user/widgets/ad_slot_widget.dart';
 
 class BerlinBody extends StatelessWidget {
   const BerlinBody({super.key});
@@ -174,24 +175,15 @@ class BerlinBody extends StatelessWidget {
                             height: Sizes.s100, child: BerlineCategories())
                         .padding(left: Insets.i20),
                     Column(children: [
-                      if (commonApi.dashboardModel != null &&
-                          commonApi.dashboardModel!.banners!.isNotEmpty)
-                        BannerLayout(
-                            isBerlin: true,
-                            isDubai: true,
-                            bannerList: commonApi.dashboardModel!.banners,
-                            onPageChanged: (index, reason) =>
-                                value.onSlideBanner(index),
-                            onTap: commonApi.isLoading == true
-                                ? (type, id) {
-                                    print("object=-===-=-=-=-=-=-=-=-=");
-                                  }
-                                : (type, id) =>
-                                    value.onBannerTap(context, type, id)),
+                      AdSlotWidget(
+                        slot: 'home_special_offers',
+                        margin: const EdgeInsets.symmetric(horizontal: Insets.i20),
+                        borderRadius: BorderRadius.circular(AppRadius.r12),
+                        showNavigationButtons: true,
+                        onPlacementTap: (item) => value.onPlacementTap(context, item),
+                      ),
                     ]),
-                    if (commonApi.dashboardModel != null &&
-                        commonApi.dashboardModel!.banners!.isNotEmpty)
-                      const VSpace(Sizes.s25),
+                    const VSpace(Sizes.s25),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

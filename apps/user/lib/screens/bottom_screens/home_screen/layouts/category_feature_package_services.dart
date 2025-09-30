@@ -57,7 +57,6 @@ class CategoryFeaturePackageServices extends StatelessWidget {
                           selectedIndex: dash.topSelected,
                           data: homeCategoryList[index],
                           onTap: () {
-                            categoryDetails.fetchBannerAdsData(context);
                             /* categoryDetails.hasCategoryList.clear();
                             categoryDetails.hasCategoryList.addAll(
                               (commonApi.dashboardModel!.categories?[index]
