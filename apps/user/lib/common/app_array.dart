@@ -425,6 +425,10 @@ class AppArray {
           'icon': eSvgAssets.categories
         },
         {
+          'title': translations!.securityCenter,
+          'icon': eSvgAssets.lock,
+        },
+        {
           'title': translations!.privacyPolicy,
           'icon': eSvgAssets.privacy,
         }

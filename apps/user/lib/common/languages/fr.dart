@@ -202,6 +202,17 @@ dynamic fr = {
   'excellent': "Excellent",
   'saySomething': "Dis quelque chose de plus",
   'rateApp': "Application de taux",
+  'securityCenter': "Centre de sécurité",
+  'securityCenterHeadline':
+      "Suivez les incidents en cours, l'état de mitigation et les mises à jour du runbook de l'équipe sécurité.",
+  'noSecurityIncidents': "Tout est calme : aucun incident de sécurité actif pour le moment.",
+  'openIncidentsLabel': "Incidents actifs",
+  'securityRunbookCta':
+      "Consultez le runbook pour les étapes de mitigation, les contacts d'escalade et les tâches post-incident.",
+  'viewRunbook': "Ouvrir le runbook de sécurité",
+  'statusLabel': "Statut",
+  'detectedAt': "Détecté",
+  'mitigationHeading': "Mitigation en cours",
   'privacyPolicy': "Politique de confidentialité",
   'privacyPolicyDescription':
       "Gérez la façon dont nous utilisons vos données. Ajustez les préférences et demandez une exportation ou une suppression quand vous le souhaitez.",

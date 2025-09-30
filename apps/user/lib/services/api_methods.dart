@@ -74,6 +74,7 @@ class ApiMethods {
   String mfaRecoveryCodes = '$apiUrl/v1/security/mfa/recovery-codes';
   String mfaDisable = '$apiUrl/v1/security/mfa';
   String verifyMfaChallenge = '$apiUrl/v1/security/mfa/challenge';
+  String securityIncidents = '$apiUrl/v1/security/incidents';
 
   String providerReview = '$apiUrl/provider/reviews';
   String customService = '$apiUrl/custom-offer-service';

@@ -44,8 +44,6 @@ class AppSettingProvider with ChangeNotifier {
       showLayout(context);
       // showDialog(context: context, builder: (context) => AlertDialog(content: ,),);
     } else if (index == 1) {
-      //   currencyBottomSheet(context);
-      // } else if (index == 2) {
       route.pushNamed(context, routeName.changeLanguage);
     } else if (index == 2) {
       route.pushNamed(context, routeName.changePass);
@@ -58,6 +56,8 @@ class AppSettingProvider with ChangeNotifier {
     } else if (index == 6) {
       route.pushNamed(context, routeName.storefronts);
     } else if (index == 7) {
+      route.pushNamed(context, routeName.securityCenter);
+    } else if (index == 8) {
       route.pushNamed(context, routeName.privacy);
     }
   }
