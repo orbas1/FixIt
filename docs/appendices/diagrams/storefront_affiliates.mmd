@@ -1,0 +1,17 @@
+erDiagram
+    STORES ||--o{ PRODUCTS : lists
+    STORES ||--o{ SHIPPINGPROFILES : configures
+    PRODUCTS }o--|| STORES : sold_by
+    ORDERS }o--|| STORES : placed_for
+    ORDERS ||--o{ ORDERITEMS : includes
+    ORDERITEMS }o--|| PRODUCTS : for_product
+    ORDERS ||--o{ FULFILLMENTS : fulfills
+    FULFILLMENTS }o--|| ORDERS : belongs_to
+    AFFILIATES ||--o{ AFFILIATELINKS : campaigns
+    AFFILIATEATTRIBUTIONS }o--|| AFFILIATELINKS : derived_from
+    AFFILIATEATTRIBUTIONS }o--|| ORDERS : monetizes
+    AFFILIATEPAYOUTS }o--|| AFFILIATES : settles
+
+%% Diagram highlights eCommerce flows from catalog through attribution and payout.
+%% SHIPPINGPROFILES anchor fulfilment pricing/logic referenced during checkout.
+%% FULFILLMENTS capture shipping status updates and webhook evidence.

@@ -1,0 +1,14 @@
+erDiagram
+    MODERATIONRULES ||--o{ MODERATIONFLAGS : triggers
+    MODERATIONFLAGS }o--|| USERS : raised_against
+    MODERATIONFLAGS }o--|| JOBS : job_context
+    MODERATIONFLAGS }o--|| DISPUTES : dispute_context
+    FILESCANS }o--|| MEDIA : inspects
+    MEDIA }o--|| USERS : owned_by
+    DISPUTES ||--o{ DISPUTEMESSAGES : contains
+    DISPUTES ||--o{ DISPUTEEVENTS : audits
+    DISPUTEEVENTS }o--|| USERS : acted_by
+
+%% Moderation flags reference offending jobs/disputes for triage workflows.
+%% File scans cover user-uploaded media across jobs, store assets, and disputes.
+%% Dispute audit trails provide compliance-ready evidence for regulators.
