@@ -27,6 +27,7 @@ class RouteName {
   final String latestBlogViewAll = 'latestBlogViewAll';
   final String popularServiceScreen = 'popularServiceScreen';
   final String appSetting = 'appSetting';
+  final String taxCompliance = 'taxCompliance';
   final String changePassword = 'changePassword';
   final String changeLanguage = 'changeLanguage';
   final String companyDetails = 'companyDetails';

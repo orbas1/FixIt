@@ -10,6 +10,9 @@ class Translation {
   String? enterPassword;
   String? forgotPassword;
   String? loginNow;
+  String? demoSeedCredentialsTitle;
+  String? demoSeedProviderCredentials;
+  String? demoSeedSecurityNote;
   String? orContinue;
   String? phone;
   String? loginWithPhone;
@@ -280,6 +283,52 @@ class Translation {
   String? idVerification;
   String? alertZone;
   String? appSetting;
+  String? providerTaxCompliance;
+  String? taxProfile;
+  String? legalBusinessName;
+  String? enterLegalBusinessName;
+  String? taxIdentifier;
+  String? enterTaxIdentifier;
+  String? maskedTaxIdentifier;
+  String? complianceStatus;
+  String? lastVerifiedAt;
+  String? countryCode;
+  String? enterCountryCode;
+  String? regionCode;
+  String? enterRegionCode;
+  String? metadataNotes;
+  String? enterMetadataNotes;
+  String? createTaxProfileFirst;
+  String? privacyConsent;
+  String? privacyConsentDescription;
+  String? saveChanges;
+  String? taxRates;
+  String? addTaxRate;
+  String? editRate;
+  String? selectTax;
+  String? zone;
+  String? selectZone;
+  String? rateValue;
+  String? calculationType;
+  String? exclusive;
+  String? inclusive;
+  String? defaultRate;
+  String? registrationNumber;
+  String? enterRegistrationNumber;
+  String? jurisdictionCountry;
+  String? jurisdictionRegion;
+  String? complianceFlags;
+  String? enterComplianceFlags;
+  String? noTaxRates;
+  String? confirmDeleteRate;
+  String? confirmDeleteRateDescription;
+  String? auditTrail;
+  String? noAuditEvents;
+  String? action;
+  String? performedBy;
+  String? payload;
+  String? notAvailable;
+  String? updatedAt;
   String? darkTheme;
   String? updateNotification;
   String? changeCurrency;
@@ -940,6 +989,52 @@ class Translation {
     this.idVerification,
     this.alertZone,
     this.appSetting,
+    this.providerTaxCompliance,
+    this.taxProfile,
+    this.legalBusinessName,
+    this.enterLegalBusinessName,
+    this.taxIdentifier,
+    this.enterTaxIdentifier,
+    this.maskedTaxIdentifier,
+    this.complianceStatus,
+    this.lastVerifiedAt,
+    this.countryCode,
+    this.enterCountryCode,
+    this.regionCode,
+    this.enterRegionCode,
+    this.metadataNotes,
+    this.enterMetadataNotes,
+    this.createTaxProfileFirst,
+    this.privacyConsent,
+    this.privacyConsentDescription,
+    this.saveChanges,
+    this.taxRates,
+    this.addTaxRate,
+    this.editRate,
+    this.selectTax,
+    this.zone,
+    this.selectZone,
+    this.rateValue,
+    this.calculationType,
+    this.exclusive,
+    this.inclusive,
+    this.defaultRate,
+    this.registrationNumber,
+    this.enterRegistrationNumber,
+    this.jurisdictionCountry,
+    this.jurisdictionRegion,
+    this.complianceFlags,
+    this.enterComplianceFlags,
+    this.noTaxRates,
+    this.confirmDeleteRate,
+    this.confirmDeleteRateDescription,
+    this.auditTrail,
+    this.noAuditEvents,
+    this.action,
+    this.performedBy,
+    this.payload,
+    this.notAvailable,
+    this.updatedAt,
     this.darkTheme,
     this.updateNotification,
     this.changeCurrency,
@@ -1328,6 +1423,9 @@ class Translation {
     password = json['password'] ?? "";
     enterPassword = json['enterPassword'] ?? "";
     forgotPassword = json['forgotPassword'] ?? "";
+    demoSeedCredentialsTitle = json['demoSeedCredentialsTitle'] ?? "";
+    demoSeedProviderCredentials = json['demoSeedProviderCredentials'] ?? "";
+    demoSeedSecurityNote = json['demoSeedSecurityNote'] ?? "";
     loginNow = json['loginNow'] ?? "";
     orContinue = json['orContinue'] ?? "";
     phone = json['phone'] ?? "";
@@ -1602,6 +1700,52 @@ class Translation {
     idVerification = json['idVerification'] ?? "";
     alertZone = json['alertZone'] ?? "";
     appSetting = json['appSetting'] ?? "";
+    providerTaxCompliance = json['providerTaxCompliance'] ?? "";
+    taxProfile = json['taxProfile'] ?? "";
+    legalBusinessName = json['legalBusinessName'] ?? "";
+    enterLegalBusinessName = json['enterLegalBusinessName'] ?? "";
+    taxIdentifier = json['taxIdentifier'] ?? "";
+    enterTaxIdentifier = json['enterTaxIdentifier'] ?? "";
+    maskedTaxIdentifier = json['maskedTaxIdentifier'] ?? "";
+    complianceStatus = json['complianceStatus'] ?? "";
+    lastVerifiedAt = json['lastVerifiedAt'] ?? "";
+    countryCode = json['countryCode'] ?? "";
+    enterCountryCode = json['enterCountryCode'] ?? "";
+    regionCode = json['regionCode'] ?? "";
+    enterRegionCode = json['enterRegionCode'] ?? "";
+    metadataNotes = json['metadataNotes'] ?? "";
+    enterMetadataNotes = json['enterMetadataNotes'] ?? "";
+    createTaxProfileFirst = json['createTaxProfileFirst'] ?? "";
+    privacyConsent = json['privacyConsent'] ?? "";
+    privacyConsentDescription = json['privacyConsentDescription'] ?? "";
+    saveChanges = json['saveChanges'] ?? "";
+    taxRates = json['taxRates'] ?? "";
+    addTaxRate = json['addTaxRate'] ?? "";
+    editRate = json['editRate'] ?? "";
+    selectTax = json['selectTax'] ?? "";
+    zone = json['zone'] ?? "";
+    selectZone = json['selectZone'] ?? "";
+    rateValue = json['rateValue'] ?? "";
+    calculationType = json['calculationType'] ?? "";
+    exclusive = json['exclusive'] ?? "";
+    inclusive = json['inclusive'] ?? "";
+    defaultRate = json['defaultRate'] ?? "";
+    registrationNumber = json['registrationNumber'] ?? "";
+    enterRegistrationNumber = json['enterRegistrationNumber'] ?? "";
+    jurisdictionCountry = json['jurisdictionCountry'] ?? "";
+    jurisdictionRegion = json['jurisdictionRegion'] ?? "";
+    complianceFlags = json['complianceFlags'] ?? "";
+    enterComplianceFlags = json['enterComplianceFlags'] ?? "";
+    noTaxRates = json['noTaxRates'] ?? "";
+    confirmDeleteRate = json['confirmDeleteRate'] ?? "";
+    confirmDeleteRateDescription = json['confirmDeleteRateDescription'] ?? "";
+    auditTrail = json['auditTrail'] ?? "";
+    noAuditEvents = json['noAuditEvents'] ?? "";
+    action = json['action'] ?? "";
+    performedBy = json['performedBy'] ?? "";
+    payload = json['payload'] ?? "";
+    notAvailable = json['notAvailable'] ?? "";
+    updatedAt = json['updatedAt'] ?? "";
     darkTheme = json['darkTheme'] ?? "";
     updateNotification = json['updateNotification'] ?? "";
     changeCurrency = json['changeCurrency'] ?? "";
@@ -1995,6 +2139,9 @@ class Translation {
     data['enterPassword'] = enterPassword;
     data['forgotPassword'] = forgotPassword;
     data['loginNow'] = loginNow;
+    data['demoSeedCredentialsTitle'] = demoSeedCredentialsTitle;
+    data['demoSeedProviderCredentials'] = demoSeedProviderCredentials;
+    data['demoSeedSecurityNote'] = demoSeedSecurityNote;
     data['orContinue'] = orContinue;
     data['phone'] = phone;
     data['loginWithPhone'] = loginWithPhone;
@@ -2266,6 +2413,52 @@ class Translation {
     data['idVerification'] = idVerification;
     data['alertZone'] = alertZone;
     data['appSetting'] = appSetting;
+    data['providerTaxCompliance'] = providerTaxCompliance;
+    data['taxProfile'] = taxProfile;
+    data['legalBusinessName'] = legalBusinessName;
+    data['enterLegalBusinessName'] = enterLegalBusinessName;
+    data['taxIdentifier'] = taxIdentifier;
+    data['enterTaxIdentifier'] = enterTaxIdentifier;
+    data['maskedTaxIdentifier'] = maskedTaxIdentifier;
+    data['complianceStatus'] = complianceStatus;
+    data['lastVerifiedAt'] = lastVerifiedAt;
+    data['countryCode'] = countryCode;
+    data['enterCountryCode'] = enterCountryCode;
+    data['regionCode'] = regionCode;
+    data['enterRegionCode'] = enterRegionCode;
+    data['metadataNotes'] = metadataNotes;
+    data['enterMetadataNotes'] = enterMetadataNotes;
+    data['createTaxProfileFirst'] = createTaxProfileFirst;
+    data['privacyConsent'] = privacyConsent;
+    data['privacyConsentDescription'] = privacyConsentDescription;
+    data['saveChanges'] = saveChanges;
+    data['taxRates'] = taxRates;
+    data['addTaxRate'] = addTaxRate;
+    data['editRate'] = editRate;
+    data['selectTax'] = selectTax;
+    data['zone'] = zone;
+    data['selectZone'] = selectZone;
+    data['rateValue'] = rateValue;
+    data['calculationType'] = calculationType;
+    data['exclusive'] = exclusive;
+    data['inclusive'] = inclusive;
+    data['defaultRate'] = defaultRate;
+    data['registrationNumber'] = registrationNumber;
+    data['enterRegistrationNumber'] = enterRegistrationNumber;
+    data['jurisdictionCountry'] = jurisdictionCountry;
+    data['jurisdictionRegion'] = jurisdictionRegion;
+    data['complianceFlags'] = complianceFlags;
+    data['enterComplianceFlags'] = enterComplianceFlags;
+    data['noTaxRates'] = noTaxRates;
+    data['confirmDeleteRate'] = confirmDeleteRate;
+    data['confirmDeleteRateDescription'] = confirmDeleteRateDescription;
+    data['auditTrail'] = auditTrail;
+    data['noAuditEvents'] = noAuditEvents;
+    data['action'] = action;
+    data['performedBy'] = performedBy;
+    data['payload'] = payload;
+    data['notAvailable'] = notAvailable;
+    data['updatedAt'] = updatedAt;
     data['darkTheme'] = darkTheme;
     data['updateNotification'] = updateNotification;
     data['changeCurrency'] = changeCurrency;
@@ -2938,6 +3131,54 @@ class Translation {
       idVerification: "ID Verification",
       alertZone: "Alert Zone",
       appSetting: "App Setting",
+      providerTaxCompliance: "Tax Compliance",
+      taxProfile: "Tax Profile",
+      legalBusinessName: "Legal Business Name",
+      enterLegalBusinessName: "Enter Legal Business Name",
+      taxIdentifier: "Tax Identifier",
+      enterTaxIdentifier: "Enter Tax Identifier",
+      maskedTaxIdentifier: "Masked Tax Identifier",
+      complianceStatus: "Compliance Status",
+      lastVerifiedAt: "Last Verified",
+      countryCode: "Country Code",
+      enterCountryCode: "Enter Country Code",
+      regionCode: "Region/State Code",
+      enterRegionCode: "Enter Region/State Code",
+      metadataNotes: "Internal Notes",
+      enterMetadataNotes: "Add internal notes for compliance reviewers",
+      createTaxProfileFirst: "Create your tax profile first",
+      privacyConsent: "Privacy Consent",
+      privacyConsentDescription:
+          "I consent to storing my compliance data and audit history.",
+      saveChanges: "Save",
+      taxRates: "Jurisdictional Tax Rates",
+      addTaxRate: "Add Tax Rate",
+      editRate: "Edit Rate",
+      selectTax: "Select Tax",
+      zone: "Zone",
+      selectZone: "Select Zone",
+      rateValue: "Rate (%)",
+      calculationType: "Calculation Type",
+      exclusive: "Exclusive",
+      inclusive: "Inclusive",
+      defaultRate: "Default Rate",
+      registrationNumber: "Registration Number",
+      enterRegistrationNumber: "Enter Registration Number",
+      jurisdictionCountry: "Jurisdiction Country Code",
+      jurisdictionRegion: "Jurisdiction Region/State",
+      complianceFlags: "Compliance Flags",
+      enterComplianceFlags: "Comma separated compliance flags",
+      noTaxRates: "No tax rates configured yet.",
+      confirmDeleteRate: "Delete this tax rate?",
+      confirmDeleteRateDescription:
+          "Deleting a rate immediately stops it from being applied to future bookings.",
+      auditTrail: "Audit Trail",
+      noAuditEvents: "No audit events recorded yet.",
+      action: "Action",
+      performedBy: "Performed By",
+      payload: "Payload",
+      notAvailable: "Not Available",
+      updatedAt: "Updated At",
       darkTheme: "Dark Theme",
       updateNotification: "Update Notification",
       changeCurrency: "Change Currency",

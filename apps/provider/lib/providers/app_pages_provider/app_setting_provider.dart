@@ -51,6 +51,8 @@ class AppSettingProvider with ChangeNotifier {
       route.pushNamed(context, routeName.changeLanguage);
     } else if (index == 3) {
       route.pushNamed(context, routeName.changePassword);
+    } else if (index == 4) {
+      route.pushNamed(context, routeName.taxCompliance);
     }
   }
 
