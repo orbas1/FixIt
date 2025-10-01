@@ -1,0 +1,25 @@
+erDiagram
+    USERS ||--|| PROFILES : maintains
+    USERS ||--o{ JOBS : posts
+    USERS ||--o{ BIDS : submits
+    USERS ||--o{ JOBQUESTIONS : asks
+    USERS ||--o{ DISPUTES : participates
+    USERS ||--o{ AFFILIATES : converts
+    USERS ||--o{ STORES : operates
+    USERS ||--o{ RATINGSAGG : owns
+    USERS ||--o{ MODERATIONFLAGS : can_trigger
+    PROFILES ||--o{ MEDIA : attaches
+    JOBS ||--o{ JOBITEMS : contains
+    JOBS ||--o{ JOBEVENTS : tracks
+    JOBS ||--o{ ESCROWS : funds
+    JOBS ||--o{ DISPUTES : can_escalate
+    TAGS ||--o{ TAGGABLES : classify
+    USERS ||--o{ TAGGABLES : curates
+    MEDIA ||--o{ FILESCANS : secures
+
+%% Entity definitions
+%% USERS: marketplace actors including providers, buyers, admins.
+%% PROFILES: extended metadata and payout configuration for a user.
+%% TAGS/TAGGABLES: polymorphic tagging for search/recommendations.
+%% MEDIA/FILESCANS: asset storage with antivirus verdicts.
+%% RATINGSAGG: denormalized performance metrics per provider.

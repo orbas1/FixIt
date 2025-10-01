@@ -1,0 +1,26 @@
+erDiagram
+    JOBS ||--o{ ESCROWS : funds
+    ESCROWS ||--o{ ESCROWMILESTONES : segments
+    ESCROWS ||--o{ TRANSACTIONS : records
+    JOBS ||--o{ BIDS : receives
+    BIDS }o--|| USERS : offered_by
+    JOBS }o--|| USERS : requested_by
+    DISPUTES ||--o{ DISPUTEMESSAGES : logs
+    DISPUTES ||--o{ DISPUTEEVENTS : audits
+    DISPUTES }o--|| JOBS : relates_to
+    DISPUTES }o--|| ESCROWS : governs
+    AFFILIATES ||--o{ AFFILIATELINKS : tracks
+    AFFILIATES ||--o{ AFFILIATEATTRIBUTIONS : credits
+    ORDERS ||--o{ ORDERITEMS : contains
+    ORDERS ||--o{ FULFILLMENTS : ships
+    ORDERS }o--|| STORES : placed_in
+    STORES }o--|| USERS : owned_by
+    TAXPROFILES }o--o{ STORES : configures
+    TAXPROFILES }o--o{ ORDERS : applied_to
+    TAXPROFILES }o--o{ ESCROWS : referenced_by
+    ZONEPOLYGONS ||--o{ TAXPROFILES : bounds
+
+%% ESCROWS: holds funds until release/refund; ties to transactions and payouts.
+%% DISPUTES: lifecycle bridging jobs and escrows with message/event audit.
+%% ORDERS: storefront transactions with fulfillment flows.
+%% TAXPROFILES/ZONEPOLYGONS: geographic compliance and rate application.
