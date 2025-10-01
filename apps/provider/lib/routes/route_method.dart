@@ -23,6 +23,7 @@ import '../screens/app_pages_screens/provider_chat_screen/provider_chat_screen.d
 import '../screens/app_pages_screens/service_add_ons/service_add_on_list.dart';
 import '../screens/app_pages_screens/services_details_screen/home_service_details.dart';
 import '../widgets/no_internet_screen.dart';
+import '../screens/app_pages_screens/tax_compliance_screen/tax_compliance_screen.dart';
 
 class AppRoute {
   Map<String, Widget Function(BuildContext)> route = {
@@ -53,6 +54,7 @@ class AppRoute {
     routeName.latestBlogViewAll: (p0) => const LatestBlogViewAll(),
     routeName.popularServiceScreen: (p0) => const PopularServiceScreen(),
     routeName.appSetting: (p0) => const AppSettingScreen(),
+    routeName.taxCompliance: (p0) => const TaxComplianceScreen(),
     routeName.changePassword: (p0) => const ChangePasswordScreen(),
     routeName.changeLanguage: (p0) => const ChangeLanguageScreen(),
     routeName.companyDetails: (p0) => const CompanyDetailsScreen(),

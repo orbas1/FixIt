@@ -461,7 +461,8 @@ class AppArray {
         },
         /*     {'title': translations!.changeCurrency, 'icon': eSvgAssets.currency}, */
         {'title': translations!.changeLanguage, 'icon': eSvgAssets.translate},
-        {'title': translations!.changePassword, 'icon': eSvgAssets.lock}
+        {'title': translations!.changePassword, 'icon': eSvgAssets.lock},
+        {'title': translations!.providerTaxCompliance, 'icon': eSvgAssets.receipt}
       ];
 
   List<Map<String, dynamic>> get currencyList => [
