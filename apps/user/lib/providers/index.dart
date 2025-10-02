@@ -62,3 +62,4 @@ export '../providers/app_pages_providers/feed/feed_provider.dart';
 export '../providers/app_pages_providers/feed/feed_job_detail_provider.dart';
 export '../providers/security/privacy_preference_provider.dart';
 export '../providers/security/security_incident_provider.dart';
+export '../providers/compliance/data_governance_provider.dart';

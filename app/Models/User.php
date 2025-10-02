@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Concerns\HasMultiFactorAuthentication;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\PrivacyConsent;
+use App\Models\TrustedDevice;
+use App\Models\ZeroTrustAccessEvent;
 use App\Enums\BookingEnumSlug;
 use App\Enums\RoleEnum;
 use App\Helpers\Helpers;
@@ -186,6 +188,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     public function getLocationCordinatesAttribute($value)
     {
         return json_decode($value, true);
+    }
+
+    public function trustedDevices(): HasMany
+    {
+        return $this->hasMany(TrustedDevice::class);
+    }
+
+    public function zeroTrustAccessEvents(): HasMany
+    {
+        return $this->hasMany(ZeroTrustAccessEvent::class);
     }
 
     public function subscriptions()

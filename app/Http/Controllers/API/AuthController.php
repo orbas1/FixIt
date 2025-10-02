@@ -25,9 +25,15 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
+use App\Services\Security\ZeroTrustEvaluator;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
+    public function __construct(private readonly ZeroTrustEvaluator $zeroTrustEvaluator)
+    {
+    }
+
     public function register(Request $request)
     {
         DB::beginTransaction();
@@ -269,11 +275,23 @@ class AuthController extends Controller
                 throw new Exception(__('passwords.incorrect_password'), 400);
             }
 
+            $mfaRequirementProblem = $this->enforceMfaRequirement($user);
+            if ($mfaRequirementProblem instanceof JsonResponse) {
+                return $mfaRequirementProblem;
+            }
+
+            $context = [
+                'ip' => $request->ip(),
+                'user_agent' => (string) $request->userAgent(),
+                'device_identifier' => $request->header('X-Device-Id'),
+            ];
+
             if ($user->hasMfaEnabled()) {
                 $challenge = $user->startMfaChallenge([
                     'ip' => $request->ip(),
                     'user_agent' => (string) $request->userAgent(),
                     'fcm_token' => $request->fcm_token,
+                    'device_identifier' => $context['device_identifier'],
                 ]);
 
                 return response()->json([
@@ -284,7 +302,46 @@ class AuthController extends Controller
                     'methods' => ['totp', 'recovery_code'],
                     'recovery_codes_remaining' => $user->availableRecoveryCodesCount(),
                     'message' => __('Two-factor authentication required.'),
+                    'zero_trust' => [
+                        'decision' => 'challenge',
+                        'signals' => ['mfa_pending'],
+                        'risk_score' => null,
+                    ],
                 ], 202);
+            }
+
+            $decision = $this->zeroTrustEvaluator->evaluate($user, $context);
+
+            if ($decision->isDenied()) {
+                return $this->problemResponse(
+                    'https://fixit.security/problems/zero-trust-denied',
+                    __('Access blocked by conditional access'),
+                    403,
+                    __('Your account requires additional verification before continuing.'),
+                    [
+                        'zero_trust' => [
+                            'decision' => $decision->decision(),
+                            'risk_score' => $decision->riskScore(),
+                            'signals' => $decision->signals(),
+                        ],
+                    ]
+                );
+            }
+
+            if ($decision->requiresChallenge()) {
+                return $this->problemResponse(
+                    'https://fixit.security/problems/zero-trust-challenge',
+                    __('Additional verification required'),
+                    423,
+                    __('We detected unusual activity. Enable multi-factor authentication to continue.'),
+                    [
+                        'zero_trust' => [
+                            'decision' => $decision->decision(),
+                            'risk_score' => $decision->riskScore(),
+                            'signals' => $decision->signals(),
+                        ],
+                    ]
+                );
             }
 
             if ($request->fcm_token) {
@@ -293,9 +350,19 @@ class AuthController extends Controller
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
+            $device = $this->zeroTrustEvaluator->lastEvaluatedDevice();
+            if ($device !== null && !$device->isApproved()) {
+                $device->approve('password_login');
+            }
+
             return [
                 'access_token' => $token,
                 'success' => true,
+                'zero_trust' => [
+                    'decision' => $decision->decision(),
+                    'risk_score' => $decision->riskScore(),
+                    'signals' => $decision->signals(),
+                ],
             ];
 
         } catch (Exception $e) {
@@ -395,6 +462,50 @@ class AuthController extends Controller
         }
 
         return $user;
+    }
+
+    private function enforceMfaRequirement(User $user): ?JsonResponse
+    {
+        $requireMfaRoles = array_map('strtolower', config('zero_trust.enforcement.require_mfa_roles', []));
+        if (empty($requireMfaRoles)) {
+            return null;
+        }
+
+        $roleIntersection = $user->getRoleNames()
+            ->map(static fn (string $role) => strtolower($role))
+            ->intersect($requireMfaRoles);
+
+        if ($roleIntersection->isEmpty()) {
+            return null;
+        }
+
+        if ($user->hasMfaEnabled()) {
+            return null;
+        }
+
+        return $this->problemResponse(
+            'https://fixit.security/problems/mfa-required',
+            __('Multi-factor authentication required'),
+            428,
+            __('Your role mandates multi-factor authentication. Please enroll before logging in.'),
+            [
+                'roles' => $roleIntersection->values()->all(),
+            ]
+        );
+    }
+
+    private function problemResponse(string $type, string $title, int $status, string $detail, array $additional = []): JsonResponse
+    {
+        return response()->json(
+            array_merge([
+                'type' => $type,
+                'title' => $title,
+                'status' => $status,
+                'detail' => $detail,
+            ], $additional),
+            $status,
+            ['Content-Type' => 'application/problem+json']
+        );
     }
 
     public function logout(Request $request)

@@ -51,44 +51,11 @@ class ApiServices {
     APIDataClass apiData =
         APIDataClass(message: 'No data', isSuccess: false, data: '0');
     if (e is DioException) {
-      if (e.type == DioExceptionType.badResponse) {
-        final response = e.response;
-        if (response!.statusCode == 403) {
-          apiData.message = response.data.toString();
-          apiData.isSuccess = false;
-          apiData.data = response.statusCode;
-
-          return apiData;
-        } else {
-          if (response.data != null) {
-            apiData.message = response.data['message'];
-            apiData.isSuccess = false;
-            apiData.data = 0;
-            return apiData;
-          } else {
-            log("EROROROROROR :$response");
-            apiData.message = response.data.toString();
-            apiData.isSuccess = false;
-            apiData.data = 0;
-            return apiData;
-          }
-        }
-      } else {
-        final response = e.response;
-        if (response != null && response.data != null) {
-          final Map responseData = json.decode(response.data as String) as Map;
-          apiData.message = responseData['message'] as String;
-          apiData.isSuccess = false;
-          apiData.data = 0;
-          return apiData;
-        } else {
-          log("EROROROROROR :${response!.statusCode}");
-          apiData.message = response!.statusCode.toString();
-          apiData.isSuccess = false;
-          apiData.data = 0;
-          return apiData;
-        }
-      }
+      final payload = _extractErrorPayload(e.response);
+      apiData.message = payload['detail'] ?? payload['message'] ?? '';
+      apiData.isSuccess = false;
+      apiData.data = payload.isEmpty ? 0 : payload;
+      return apiData;
     } else {
       log("EROROROROROR :$apiData.message");
       apiData.message = "";
@@ -258,43 +225,18 @@ class ApiServices {
         return apiData;
       } catch (e) {
         if (e is DioException) {
-          if (e.type == DioExceptionType.badResponse) {
-            final response = e.response;
-            log("EEEEE : $response");
-
-            if (response!.data != null) {
-              apiData.message = response.data['message'];
-              apiData.isSuccess = false;
-              apiData.data = 0;
-              return apiData;
-            } else {
-              apiData.message = response.data.toString();
-              apiData.isSuccess = false;
-              apiData.data = 0;
-              return apiData;
-            }
-          } else {
-            final response = e.response;
-            if (response != null && response.data != null) {
-              final Map responseData =
-                  json.decode(response.data as String) as Map;
-              apiData.message = responseData['message'] as String;
-              apiData.isSuccess = false;
-              apiData.data = 0;
-              return apiData;
-            } else {
-              apiData.message = response!.statusCode.toString();
-              apiData.isSuccess = false;
-              apiData.data = 0;
-              return apiData;
-            }
-          }
-        } else {
-          apiData.message = "";
+          final payload = _extractErrorPayload(e.response);
+          apiData.message =
+              payload['detail'] ?? payload['message'] ?? 'Request failed.';
           apiData.isSuccess = false;
-          apiData.data = 0;
+          apiData.data = payload.isEmpty ? 0 : payload;
           return apiData;
         }
+
+        apiData.message = '';
+        apiData.isSuccess = false;
+        apiData.data = 0;
+        return apiData;
       }
     }
   }
@@ -478,6 +420,32 @@ class ApiServices {
         }
       }
     }
+  }
+
+  Map<String, dynamic> _extractErrorPayload(Response? response) {
+    if (response == null) {
+      return {};
+    }
+
+    return _coerceResponseBody(response.data)
+      ..putIfAbsent('status', () => response.statusCode);
+  }
+
+  Map<String, dynamic> _coerceResponseBody(dynamic data) {
+    if (data is Map<String, dynamic>) {
+      return Map<String, dynamic>.from(data);
+    }
+
+    if (data is String && data.isNotEmpty) {
+      try {
+        final decoded = json.decode(data);
+        if (decoded is Map<String, dynamic>) {
+          return Map<String, dynamic>.from(decoded);
+        }
+      } catch (_) {}
+    }
+
+    return {};
   }
 }
 

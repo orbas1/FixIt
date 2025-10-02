@@ -8,9 +8,13 @@ use App\Models\Banner;
 use App\Models\Bid;
 use App\Models\Blog;
 use App\Models\Currency;
+use App\Models\DataAsset;
+use App\Models\DataResidencyZone;
+use App\Models\DpiaRecord;
 use App\Models\Customer;
 use App\Models\Document;
 use App\Models\Escrow;
+use App\Models\NetworkZone;
 use App\Models\Secret;
 use App\Models\SecurityIncident;
 use App\Models\Service;
@@ -18,21 +22,27 @@ use App\Models\ServicePackage;
 use App\Models\ServiceRequest;
 use App\Models\Setting;
 use App\Models\SystemLang;
+use App\Models\TrustedDevice;
 use App\Models\Tag;
 use App\Models\Tax;
 use App\Models\Thread;
 use App\Models\TimeSlot;
 use App\Models\User;
 use App\Models\WithdrawRequest;
+use App\Models\ZeroTrustAccessEvent;
 use App\Models\Zone;
 use App\Policies\BankDetailPolicy;
 use App\Policies\BannerPolicy;
 use App\Policies\BidPolicy;
 use App\Policies\BlogPolicy;
 use App\Policies\CurrencyPolicy;
+use App\Policies\DataAssetPolicy;
+use App\Policies\DataResidencyZonePolicy;
+use App\Policies\DpiaRecordPolicy;
 use App\Policies\CustomerPolicy;
 use App\Policies\DocumentPolicy;
 use App\Policies\EscrowPolicy;
+use App\Policies\NetworkZonePolicy;
 use App\Policies\ServicemanPolicy;
 use App\Policies\SecretPolicy;
 use App\Policies\SecurityIncidentPolicy;
@@ -41,6 +51,7 @@ use App\Policies\ServicePolicy;
 use App\Policies\ServiceRequestPolicy;
 use App\Policies\SettingPolicy;
 use App\Policies\SystemLangPolicy;
+use App\Policies\TrustedDevicePolicy;
 use App\Policies\TagPolicy;
 use App\Policies\TaxPolicy;
 use App\Policies\ThreadPolicy;
@@ -48,6 +59,7 @@ use App\Policies\TimeSlotPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\WithdrawRequestPolicy;
 use App\Policies\ZonePolicy;
+use App\Policies\ZeroTrustAccessEventPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Modules\Subscription\Entities\Plan;
@@ -66,6 +78,9 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         Customer::class => CustomerPolicy::class,
         Currency::class => CurrencyPolicy::class,
+        DataAsset::class => DataAssetPolicy::class,
+        DataResidencyZone::class => DataResidencyZonePolicy::class,
+        DpiaRecord::class => DpiaRecordPolicy::class,
         Document::class => DocumentPolicy::class,
         Service::class => ServicePolicy::class,
         SystemLang::class => SystemLangPolicy::class,
@@ -87,6 +102,9 @@ class AuthServiceProvider extends ServiceProvider
         Escrow::class => EscrowPolicy::class,
         Secret::class => SecretPolicy::class,
         SecurityIncident::class => SecurityIncidentPolicy::class,
+        NetworkZone::class => NetworkZonePolicy::class,
+        TrustedDevice::class => TrustedDevicePolicy::class,
+        ZeroTrustAccessEvent::class => ZeroTrustAccessEventPolicy::class,
     ];
 
     /**

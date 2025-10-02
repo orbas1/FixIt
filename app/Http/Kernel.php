@@ -73,5 +73,6 @@ class Kernel extends HttpKernel
         'maintenance' =>  \App\Http\Middleware\CheckMaintenanceMode::class,
         'canAny' => AuthorizeCanAny::class,
         'route.access' => \App\Http\Middleware\CheckRouteAccess::class,
+        'zero-trust.enforce' => \App\Http\Middleware\EnforceZeroTrust::class,
     ];
 }

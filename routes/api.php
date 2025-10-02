@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\DataAssetController;
+use App\Http\Controllers\API\DataResidencyZoneController;
+use App\Http\Controllers\API\DpiaRecordController;
+use App\Http\Controllers\API\MfaChallengeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +23,11 @@ Route::post('/webhooks/stripe', [\App\Http\Controllers\Webhook\StripeWebhookCont
 
 Route::group(['middleware' => ['localization']], function () {
 
-    Route::prefix('v1/security')->middleware(['auth:sanctum'])->group(function () {
+    Route::post('v1/security/mfa/challenge', [MfaChallengeController::class, 'verify'])
+        ->middleware('throttle:6,1')
+        ->name('security.mfa.challenge.verify');
+
+    Route::prefix('v1/security')->middleware(['auth:sanctum', 'zero-trust.enforce'])->group(function () {
         Route::get('incidents', [\App\Http\Controllers\API\SecurityIncidentController::class, 'index'])
             ->name('security.incidents.index');
         Route::post('incidents', [\App\Http\Controllers\API\SecurityIncidentController::class, 'store'])
@@ -34,6 +42,20 @@ Route::group(['middleware' => ['localization']], function () {
             ->name('security.incidents.resolve');
         Route::post('incidents/{incident:public_id}/close', [\App\Http\Controllers\API\SecurityIncidentController::class, 'close'])
             ->name('security.incidents.close');
+
+        Route::apiResource('network-zones', \App\Http\Controllers\API\NetworkZoneController::class);
+        Route::apiResource('trusted-devices', \App\Http\Controllers\API\TrustedDeviceController::class)
+            ->only(['index', 'update', 'destroy']);
+        Route::apiResource('zero-trust-events', \App\Http\Controllers\API\ZeroTrustAccessEventController::class)
+            ->only(['index', 'show']);
+    });
+
+    Route::prefix('v1/governance')->middleware(['auth:sanctum', 'zero-trust.enforce'])->group(function () {
+        Route::apiResource('data-residency-zones', DataResidencyZoneController::class);
+        Route::apiResource('data-assets', DataAssetController::class);
+        Route::post('data-assets/{data_asset}/dpia/ensure', [DataAssetController::class, 'ensureDpia'])
+            ->name('governance.data-assets.ensure-dpia');
+        Route::apiResource('dpia-records', DpiaRecordController::class);
     });
 
     Route::post('/login', 'App\Http\Controllers\API\AuthController@login');
