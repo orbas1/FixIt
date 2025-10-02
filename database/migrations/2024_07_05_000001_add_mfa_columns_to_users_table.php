@@ -8,8 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('mfa_secret')->nullable()->after('default_payment_method_id');
+        $anchor = 'default_payment_method_id';
+        if (! Schema::hasColumn('users', $anchor)) {
+            $anchor = Schema::hasColumn('users', 'stripe_customer_id')
+                ? 'stripe_customer_id'
+                : 'remember_token';
+        }
+
+        Schema::table('users', function (Blueprint $table) use ($anchor) {
+            $table->string('mfa_secret')->nullable()->after($anchor);
             $table->string('mfa_pending_secret')->nullable()->after('mfa_secret');
             $table->timestamp('mfa_pending_secret_created_at')->nullable()->after('mfa_pending_secret');
             $table->timestamp('mfa_enabled_at')->nullable()->after('mfa_pending_secret_created_at');

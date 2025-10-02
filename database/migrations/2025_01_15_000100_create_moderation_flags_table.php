@@ -21,7 +21,6 @@ return new class extends Migration
             $table->foreignId('resolved_by_id')->nullable()->constrained('users')->nullOnDelete();
             $table->text('resolution_notes')->nullable();
             $table->timestamps();
-            $table->index(['flaggable_type', 'flaggable_id']);
         });
     }
 
