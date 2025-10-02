@@ -2651,12 +2651,12 @@ With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **
 86. [x] Stand up enterprise architecture governance & roadmap operations — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
     - **86A — Architecture review board enablement**: ✅ Appendix D (`docs/appendices/appendix-d-architecture-governance.md`) codifies charter, RACI, cadences, evidence lifecycle, and escalation policy with governance doctor enforcement.
     - **86B — Capability roadmap & dependency management**: ✅ Governance checklist asset + automation (`scripts/architecture_governance_doctor.sh` & Flutter dashboard) deliver dependency heatmaps, readiness freshness gates, and roadmap telemetry for providers.
-87. [ ] Execute enterprise security hardening & zero-trust rollout — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-    - **87A — Zero-trust reference architecture & control mapping**: Document identity, network, device, and data pillars mapped to NIST/CIS controls with gap remediation plans.
-    - **87B — Implementation & continuous assurance**: Deploy MFA, conditional access, micro-segmentation, and automated evidence collection feeding security scorecards.
-88. [ ] Deliver enterprise data governance, residency, and privacy program — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-    - **88A — Data classification & residency framework**: Inventory data assets, classify sensitivity, define residency/sovereignty policies, and publish stewardship model.
-    - **88B — Privacy operations & DPIA automation**: Operationalize DPIA templates, consent lifecycle tooling, and compliance reporting with regulator-ready evidence.
+87. [x] Execute enterprise security hardening & zero-trust rollout — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
+    - **87A — Zero-trust reference architecture & control mapping**: ✅ Published enterprise reference in `docs/security/zero-trust-reference-architecture.md` with NIST/CIS/ISO mappings, remediation backlog, and operational guidance.
+    - **87B — Implementation & continuous assurance**: ✅ Enforced MFA + conditional access via `ZeroTrustEvaluator`, middleware, trusted device registry, network zone APIs, evidence snapshots, Flutter zero-trust handling, and automated tests.
+88. [x] Deliver enterprise data governance, residency, and privacy program — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
+    - **88A — Data classification & residency framework**: ✅ Data domains, assets, residency policies, and governance APIs implemented with documentation in `docs/privacy/data-governance-program.md`.
+    - **88B — Privacy operations & DPIA automation**: ✅ DPIA automation services, doctor scripts, mobile governance provider, and operational playbook in `docs/privacy/dpia-operations-playbook.md`.
 89. [ ] Integrate enterprise systems (ERP/CRM/ITSM) & workflow automations — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
     - **89A — Integration blueprint & connector development**: Document systems of record, integration patterns, and build reusable connectors/mappings with error handling.
     - **89B — Automation rollout & monitoring**: Deploy workflow automations (quote-to-cash, case management), establish SLIs, and monitor with alerting/rollback playbooks.

@@ -35,6 +35,11 @@ return [
             'root' => public_path(),
         ],
 
+        'security_evidence' => [
+            'driver' => 'local',
+            'root' => storage_path('app/security'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

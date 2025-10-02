@@ -260,11 +260,18 @@ class LoginProvider with ChangeNotifier {
             await _handleMfaRequired(context, payload, value.message);
             return;
           }
+
+          final zeroTrust = payload['zero_trust'];
+          if (zeroTrust is Map<String, dynamic>) {
+            await _handleZeroTrustChallenge(context, zeroTrust, payload);
+            return;
+          }
+
           hideLoading(context);
           Fluttertoast.showToast(
-            msg: value.message.isNotEmpty
-                ? value.message
-                : "Unable to process your request.",
+            msg: (payload['detail'] ?? value.message ??
+                    "Unable to process your request.")
+                .toString(),
             backgroundColor: appColor(context).red,
           );
         } else {
@@ -282,6 +289,39 @@ class LoginProvider with ChangeNotifier {
       notifyListeners();
       log("CATCH login: $e====> $s");
     }
+  }
+
+  Future<void> _handleZeroTrustChallenge(
+    BuildContext context,
+    Map<String, dynamic> zeroTrust,
+    Map<String, dynamic> payload,
+  ) async {
+    hideLoading(context);
+
+    final decision = zeroTrust['decision']?.toString() ?? 'challenge';
+    final riskScore = zeroTrust['risk_score'];
+    final signals = (zeroTrust['signals'] as List?)
+            ?.map((signal) => signal.toString())
+            .toList() ??
+        const [];
+    final detail = payload['detail']?.toString() ??
+        'Additional verification is required.';
+
+    final messageBuffer = StringBuffer(detail);
+    if (riskScore != null) {
+      messageBuffer.write(' (risk score: $riskScore)');
+    }
+    if (signals.isNotEmpty) {
+      messageBuffer.write('\nSignals: ${signals.join(', ')}');
+    }
+
+    Fluttertoast.showToast(
+      msg: messageBuffer.toString(),
+      backgroundColor: decision == 'deny'
+          ? appColor(context).red
+          : appColor(context).pending,
+      toastLength: Toast.LENGTH_LONG,
+    );
   }
 
   continueAsGuestTap(context) async {
