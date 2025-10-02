@@ -1,0 +1,161 @@
+%% Mermaid diagram describing current FixIt phone (Flutter) applications
+%% Includes admin, customer, and provider mobile experiences with supporting flows and Firebase services.
+
+flowchart TB
+    subgraph AdminMobile[Admin Mobile App]
+        direction TB
+        AdminMobileEntry(["Login"])
+        AdminMFA{{"MFA Prompt"}}
+        AdminTabs[["Dashboard Tabs\nOverview | Users | Work Orders | Alerts | Settings"]]
+        AdminOverview[["Overview Screen\nKPI cards\nAlerts list\nPull-to-refresh"]]
+        AdminUsers[["Users Screen\nFilter chips\nSwipe actions: Suspend | Reset Password | Switch Partner"]]
+        AdminWorkOrders[["Work Orders Screen\nSegments: Scheduled | In Progress | Escalated"]]
+        AdminAlerts[["Alerts Screen\nSeverity color coding\nDispatch Now CTA"]]
+        AdminSettings[["Settings Screen\nAccount\nNotifications\nOperations\nPreferences\nSecurity"]]
+        DeviceTrust{{"Device Trust Check\n/api/mobile/devices"}}
+        VerificationCode[["Email Verification Code Prompt"]]
+        DeepLinks[["Deep Links\nPush → Tab + Work Order detail"]]
+        OfflineBanner[["Offline Handling\nBanner + queued actions"]]
+        SettingsSync[("PATCH /api/mobile/admin/settings\nHydrated bloc cache")]
+        AdminMobileEntry --> AdminMFA
+        AdminMFA --> AdminTabs
+        AdminTabs --> AdminOverview
+        AdminTabs --> AdminUsers
+        AdminTabs --> AdminWorkOrders
+        AdminTabs --> AdminAlerts
+        AdminTabs --> AdminSettings
+        AdminTabs --> DeepLinks
+        AdminOverview --> OfflineBanner
+        AdminUsers --> DeviceTrust
+        DeviceTrust -->|"Untrusted"| VerificationCode
+        AdminSettings --> SettingsSync
+        AdminWorkOrders --> DeepLinks
+        AdminAlerts --> DeepLinks
+    end
+
+    subgraph CustomerMobile[Customer Mobile App]
+        direction TB
+        CustomerHome[["Home Feed\nSearch\nQuick actions: Book Service | Browse Packages | Track Work Order"]]
+        CustomerBooking(("Book Service Flow"))
+        Step1[["Step 1: Category + Desired Outcome"]]
+        Step2[["Step 2: Location + Visit Window"]]
+        Step3[["Step 3: Materials (Customer vs Provider)"]]
+        Step4[["Step 4: Review + Submit"]]
+        AvailabilityCheck{{"Visit Window Available?"}}
+        HazardCheck{{"Hazardous Materials?"}}
+        AlternativeModal[["Alternatives Modal"]]
+        StoragePrompt[["Storage Instructions Confirmation"]]
+        CustomerWorkOrders[["Work Orders Tab\nList with CTAs: Chat | Update | Pay | Extend Warranty"]]
+        WorkOrderTimeline[["Work Order Timeline\nButtons: Message Provider | Add Update | Raise Issue | Request Crew Change"]]
+        IssueType{{"Issue Type?\nDelay | Quality | Safety"}}
+        EvidenceUpload[["Upload Evidence"]]
+        CrewAvailability{{"Crew Availability Check"}}
+        PaymentCTA[["Payment CTA\nEmbedded checkout"]]
+        MessagesTab[["Messages Tab\nChat threads\nPush routing"]]
+        WalletTab[["Wallet & Warranty Tab\nBalance\nAdd card\nWithdraw\nCoverage"]]
+        AddCardFlow[["Add Card (Stripe SDK)" ]]
+        CardDeclined{{"Card Declined?"}}
+        PayPalFallback[["Offer PayPal Fallback"]]
+        ProfileTab[["Profile Tab\nSettings\nAddresses\nNotifications\nHousehold members\nDelete account"]]
+        NotificationToggles[["Notification Settings\nWork orders\nPromotions\nSecurity\nWarranty"]]
+        SecurityPinned[["Security toggle pinned (cannot disable)"]]
+        WarrantyReminder[["Warranty reminder pinned if expiring"]]
+        CustomerHome --> CustomerBooking
+        CustomerBooking --> Step1 --> Step2 --> Step3 --> Step4
+        Step2 --> AvailabilityCheck
+        AvailabilityCheck -- "No" --> AlternativeModal
+        Step3 --> HazardCheck
+        HazardCheck -- "Yes" --> StoragePrompt
+        Step4 --> PaymentCTA
+        CustomerHome --> CustomerWorkOrders
+        CustomerWorkOrders --> WorkOrderTimeline
+        WorkOrderTimeline --> IssueType
+        IssueType --> EvidenceUpload
+        WorkOrderTimeline --> CrewAvailability
+        CustomerWorkOrders --> PaymentCTA
+        CustomerHome --> MessagesTab
+        MessagesTab --> NotificationToggles
+        NotificationToggles --> SecurityPinned
+        NotificationToggles --> WarrantyReminder
+        CustomerHome --> WalletTab
+        WalletTab --> AddCardFlow
+        AddCardFlow --> CardDeclined
+        CardDeclined -- "Yes" --> PayPalFallback
+        WalletTab --> PaymentCTA
+        CustomerHome --> ProfileTab
+    end
+
+    subgraph ProviderMobile[Provider Mobile App]
+        direction TB
+        ProviderDashboard[["Dashboard\nMetrics\nPending leads\nQuick actions"]]
+        ProviderLeads[["Leads Tab\nCard stack with swipe"]]
+        AcceptLead{{"Swipe Right?"}}
+        DeclineLead{{"Swipe Left?"}}
+        DeclineReasons[["Decline Reason Picker\nBusy | Out of Scope | Price"]]
+        PriceSuggest[["Suggest alternate package or refer partner"]]
+        EmergencyBadge[["Emergency Lead Countdown"]]
+        ProviderWorkOrders[["Work Orders Tab\nPipeline\nProgress updates with photo upload"]]
+        CompletionPhotos[["Photo Requirement\nBefore & After"]]
+        SafetyChecklist[["Safety Checklist\nGas shutoff\nEquipment lockout"]]
+        ProviderCalendar[["Calendar Tab\nBlock time\nAssign crew"]]
+        ProviderInventory[["Inventory Tab\nConsumables\nReorder triggers"]]
+        ReorderPrompt{{"Low stock?"}}
+        PurchaseOrder[["Create Purchase Order\nSuggest suppliers"]]
+        ProviderEarnings[["Earnings Tab\nWeekly summary\nExport"]]
+        ProviderSettings[["Settings\nAvailability\nCoverage zones\nNotifications\nBank accounts\nCompliance docs"]]
+        CalendarSync{{"Calendar Sync Toggle"}}
+        OSInstructions[["OS Permissions Instructions"]]
+        BankLink[["Bank Account Linking\nPlaid or Manual"]]
+        ProviderDashboard --> ProviderLeads
+        ProviderDashboard --> ProviderWorkOrders
+        ProviderDashboard --> ProviderCalendar
+        ProviderDashboard --> ProviderInventory
+        ProviderDashboard --> ProviderEarnings
+        ProviderDashboard --> ProviderSettings
+        ProviderLeads --> AcceptLead
+        AcceptLead -- "Yes" --> ProviderWorkOrders
+        ProviderLeads --> DeclineLead
+        DeclineLead -- "Yes" --> DeclineReasons
+        DeclineReasons --> PriceSuggest
+        ProviderLeads --> EmergencyBadge
+        ProviderWorkOrders --> CompletionPhotos
+        CompletionPhotos --> SafetyChecklist
+        ProviderWorkOrders --> SafetyChecklist
+        ProviderInventory --> ReorderPrompt
+        ReorderPrompt -- "Yes" --> PurchaseOrder
+        ProviderSettings --> CalendarSync
+        CalendarSync -- "Permission denied" --> OSInstructions
+        ProviderSettings --> BankLink
+    end
+
+    subgraph FirebaseServices[Firebase Integrations]
+        direction TB
+        AuthProviders[["Auth Providers\nEmail/Password | Google | Apple"]]
+        MFASMS[["MFA via SMS"]]
+        CustomClaims[["Custom Claims\nrole: admin/provider/customer"]]
+        NotificationsCol[("Firestore: notifications")]
+        DeviceTokens[("Firestore: device_tokens")]
+        ServiceAreas[("Firestore: service_areas")]
+        CrewStatus[("Firestore: crew_status")]
+        AuditLogs[("Firestore: audit_logs")]
+        CloudMessaging[["Cloud Messaging\nTopics: global, job_{id}, crew_{id}, admin_alerts"]]
+        StorageBucket[("Storage: uploads/temporary\nrequires scanned=true" )]
+        Functions[["Cloud Functions\nonNotificationCreate\nonUserCreate"]]
+        AuthProviders --> MFASMS
+        AuthProviders --> CustomClaims
+        DeviceTokens --> CloudMessaging
+        NotificationsCol --> Functions
+        Functions --> CloudMessaging
+        Functions --> DeviceTokens
+    end
+
+    AdminMobile --> DeviceTokens
+    CustomerMobile --> DeviceTokens
+    ProviderMobile --> DeviceTokens
+    AdminMobile --> NotificationsCol
+    CustomerMobile --> NotificationsCol
+    ProviderMobile --> NotificationsCol
+    DeviceTokens --> CloudMessaging
+    CloudMessaging --> AdminMobile
+    CloudMessaging --> CustomerMobile
+    CloudMessaging --> ProviderMobile
