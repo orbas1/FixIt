@@ -36,8 +36,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use RuntimeException;
-use Stripe\StripeClient;
+use Laravel\Dusk\DuskServiceProvider;
 use Spatie\Translatable\Facades\Translatable;
+use Stripe\StripeClient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -48,6 +49,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        if ($this->app->environment('local', 'testing')) {
+            $this->app->register(DuskServiceProvider::class);
+        }
+
         $this->app->singleton(ComplianceReporter::class);
         $this->app->singleton(EscrowLedgerService::class);
         $this->app->singleton(LinkRedirectService::class);

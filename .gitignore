@@ -5,6 +5,7 @@
 /.env
 /.env.*
 !.env.example
+!.env.dusk.local.example
 /.env.local
 /.phpunit.result.cache
 /public/installation.json
