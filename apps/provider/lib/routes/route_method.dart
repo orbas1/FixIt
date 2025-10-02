@@ -17,6 +17,7 @@ import '../screens/app_pages_screens/custom_job_request/job_request_details/job_
 import '../screens/app_pages_screens/custom_job_request/job_request_details/job_request_details.dart';
 import '../screens/app_pages_screens/custom_job_request/job_request_list/job_request_list.dart';
 import '../screens/app_pages_screens/maintenance_mode.dart';
+import '../screens/app_pages_screens/environment_checklist_screen/environment_checklist_screen.dart';
 
 import '../screens/app_pages_screens/provider_chat_screen/offer_screen.dart';
 import '../screens/app_pages_screens/provider_chat_screen/provider_chat_screen.dart';
@@ -55,6 +56,8 @@ class AppRoute {
     routeName.popularServiceScreen: (p0) => const PopularServiceScreen(),
     routeName.appSetting: (p0) => const AppSettingScreen(),
     routeName.taxCompliance: (p0) => const TaxComplianceScreen(),
+    routeName.environmentChecklist: (p0) =>
+        const EnvironmentChecklistScreen(),
     routeName.changePassword: (p0) => const ChangePasswordScreen(),
     routeName.changeLanguage: (p0) => const ChangeLanguageScreen(),
     routeName.companyDetails: (p0) => const CompanyDetailsScreen(),

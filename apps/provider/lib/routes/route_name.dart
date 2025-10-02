@@ -86,4 +86,5 @@ class RouteName {
   final String helpSupport = '/helpSupport';
   final String appDetails = 'appDetails';
   final String serviceAddOnList = 'serviceAddOnList';
+  final String environmentChecklist = 'environmentChecklist';
 }

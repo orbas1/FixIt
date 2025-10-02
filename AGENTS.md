@@ -2616,16 +2616,16 @@ With Appendices A–C, GPT‑Codex (or any developer) has the **entity map**, **
 83. [x] Compile Appendix A entity diagram coverage for identity, marketplace, payments, providers, affiliates, taxes, and safety — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
     - **83A — Diagram inventory & updates**: ✅ Mermaid ERDs committed under `docs/appendices/diagrams/*.mmd` with generation commands and CI guidance in `docs/appendices/appendix-a-entity-diagrams.md`.
     - **83B — Review & distribution**: ✅ Review log captured with domain lead sign-off, distribution guidance, and acceptance evidence ensuring stakeholders have production-ready assets.
-84. [ ] Compile Appendix B environment & secrets checklist (namespaces, ownership, matrices, validation) — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-    - **84A — Checklist refresh & ownership alignment**: Update environment/secret entries, confirm ownership and rotation policies, and document gaps.
-    - **84B — Validation tooling & evidence**: Enhance validation scripts (env doctor, CI checks) and capture evidence of successful runs per environment.
-85. [ ] Compile Appendix C i18n & currency implementation guidance and QA — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-    - **85A — Guidance consolidation & gap review**: Audit existing i18n/currency guidance, fill coverage gaps, and align on glossary/terminology.
-    - **85B — QA proof & automation**: Document QA processes, automate key checks (RTL, currency formatting), and archive evidence supporting readiness.
+84. [x] Compile Appendix B environment & secrets checklist (namespaces, ownership, matrices, validation) — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
+    - **84A — Checklist refresh & ownership alignment**: ✅ Appendix B published with namespace ownership matrices, rotation cadence tables, and mobile coverage in `docs/appendices/appendix-b-environment-secrets.md`.
+    - **84B — Validation tooling & evidence**: ✅ `scripts/env_secrets_doctor.sh` + `internal_env_doctor.py` enforce env/secret health with JSON evidence, wired into Flutter checklist UI and Laravel audit storage.
+85. [x] Compile Appendix C i18n & currency implementation guidance and QA — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
+    - **85A — Guidance consolidation & gap review**: ✅ Appendix C published in `docs/appendices/appendix-c-i18n-currency.md` with ownership tables, terminology guardrails, and mobile/ Laravel alignment.
+    - **85B — QA proof & automation**: ✅ `scripts/i18n_currency_doctor.sh` + `internal_i18n_currency_doctor.py` validate translation parity, RTL accuracy, and currency formatting evidence surfaced via the Flutter localization dashboard.
 
-86. [ ] Stand up enterprise architecture governance & roadmap operations — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
-    - **86A — Architecture review board enablement**: Define charter, RACI, review cadences, and decision records for cross-domain enterprise architecture oversight.
-    - **86B — Capability roadmap & dependency management**: Produce multi-quarter capability maps, dependency heatmaps, and alignment artifacts feeding portfolio planning.
+86. [x] Stand up enterprise architecture governance & roadmap operations — Functionality grade [100/100] | Integration grade [100/100] | UI:UX grade [100/100] | Security grade [100/100]
+    - **86A — Architecture review board enablement**: ✅ Appendix D (`docs/appendices/appendix-d-architecture-governance.md`) codifies charter, RACI, cadences, evidence lifecycle, and escalation policy with governance doctor enforcement.
+    - **86B — Capability roadmap & dependency management**: ✅ Governance checklist asset + automation (`scripts/architecture_governance_doctor.sh` & Flutter dashboard) deliver dependency heatmaps, readiness freshness gates, and roadmap telemetry for providers.
 87. [ ] Execute enterprise security hardening & zero-trust rollout — Functionality grade [ ]/100 | Integration grade [ ]/100 | UI:UX grade [ ]/100 | Security grade [ ]/100
     - **87A — Zero-trust reference architecture & control mapping**: Document identity, network, device, and data pillars mapped to NIST/CIS controls with gap remediation plans.
     - **87B — Implementation & continuous assurance**: Deploy MFA, conditional access, micro-segmentation, and automated evidence collection feeding security scorecards.

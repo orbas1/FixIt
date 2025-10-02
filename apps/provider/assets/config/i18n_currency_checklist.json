@@ -1,0 +1,300 @@
+{
+  "generated_at": "2024-06-20T00:00:00Z",
+  "locales": [
+    {
+      "code": "en",
+      "name": "English (United States)",
+      "rtl": false,
+      "expected": {
+        "flutter_coverage": 1.0,
+        "laravel_coverage": 1.0,
+        "missing_flutter_keys": [],
+        "missing_laravel_keys": []
+      },
+      "currency_profile": "USD"
+    },
+    {
+      "code": "fr",
+      "name": "Français (France)",
+      "rtl": false,
+      "expected": {
+        "flutter_coverage": 1.0,
+        "laravel_coverage": 0.982466,
+        "missing_flutter_keys": [],
+        "missing_laravel_keys": [
+          "ServicesToday",
+          "_method",
+          "advertisement",
+          "approved",
+          "at_least_two_services_required",
+          "booking.note",
+          "booking.select_exactly_servicemen",
+          "bookingsToday",
+          "boostNow",
+          "boostNowSeeYourBusinessGrow",
+          "coupon.is_apply_all ",
+          "custom_sms_gateways.0",
+          "failed_to_send_email",
+          "getMeetingLink",
+          "invalid_custom_offer",
+          "joinMeeting",
+          "notification_mark_as_read",
+          "notification_not_found",
+          "past",
+          "paused",
+          "please_select_a_file_smaller_than",
+          "provider.friday",
+          "provider.monday",
+          "provider.please_fill_company_details_additional_service",
+          "provider.please_fill_company_details_package",
+          "provider.please_fill_company_details_service",
+          "provider.please_fill_company_details_serviceman",
+          "provider.please_upload_documents_first_additional_service",
+          "provider.please_upload_documents_first_package",
+          "provider.please_upload_documents_first_service",
+          "provider.please_upload_documents_first_serviceman",
+          "provider.saturday",
+          "provider.sunday",
+          "provider.thursday",
+          "provider.tuesday",
+          "provider.type_is_not_company",
+          "provider.wednesday",
+          "providerReviews",
+          "running",
+          "service.add_on_total_price",
+          "service.qty",
+          "servicePrice",
+          "settings.become_provider",
+          "settings.become_provider_help",
+          "settings.enter_zoom_account_id",
+          "settings.enter_zoom_client_key",
+          "settings.enter_zoom_client_secret",
+          "settings.zoom",
+          "settings.zoom_account_id",
+          "settings.zoom_account_id_help",
+          "settings.zoom_client_key",
+          "settings.zoom_client_key_help",
+          "settings.zoom_client_secret",
+          "settings.zoom_client_secret_help",
+          "specialOffers",
+          "standOutBeSeen",
+          "tomorrow",
+          "unauthorized_action",
+          "unavailableService",
+          "upcoming",
+          "you_do_not_have_permission_to_access_this_resource"
+        ]
+      },
+      "currency_profile": "EUR_FR"
+    },
+    {
+      "code": "es",
+      "name": "Español (España)",
+      "rtl": false,
+      "expected": {
+        "flutter_coverage": 1.0,
+        "laravel_coverage": null,
+        "missing_flutter_keys": [],
+        "missing_laravel_keys": []
+      },
+      "currency_profile": "EUR_ES"
+    },
+    {
+      "code": "ar",
+      "name": "العربية (الإمارات)",
+      "rtl": true,
+      "expected": {
+        "flutter_coverage": 1.0,
+        "laravel_coverage": 0.97643,
+        "missing_flutter_keys": [],
+        "missing_laravel_keys": [
+          "advertisement",
+          "approved",
+          "at_least_two_services_required",
+          "booking.note",
+          "booking.select_exactly_servicemen",
+          "bookingsToday",
+          "coupon.is_apply_all ",
+          "custom.address.required",
+          "custom.alternative_name.required_if",
+          "custom.alternative_phone.required_if",
+          "custom.city.required",
+          "custom.city.string",
+          "custom.code.required",
+          "custom.country_id.exists",
+          "custom.country_id.required",
+          "custom.email.email",
+          "custom.email.unique",
+          "custom.latitude.latitude_longitude",
+          "custom.latitude.required",
+          "custom.longitude.latitude_longitude",
+          "custom.longitude.required",
+          "custom.name.max",
+          "custom.phone.digits_between",
+          "custom.phone.required",
+          "custom.phone.unique",
+          "custom.postal_code.required",
+          "custom.role_id.exists",
+          "custom.state_id.exists",
+          "custom.state_id.required",
+          "custom.type.required",
+          "custom.type.string",
+          "custom.unique_category_zone",
+          "custom.user_id.exists",
+          "custom.user_id.nullable",
+          "custom_sms_gateways.0",
+          "failed_to_send_email",
+          "getMeetingLink",
+          "incorrect_password",
+          "invalid_otp_or_phone",
+          "joinMeeting",
+          "logged_out",
+          "notification_mark_as_read",
+          "notification_not_found",
+          "otp",
+          "otp_sent",
+          "passowrd_does_not_match",
+          "password_confirmation",
+          "paused",
+          "please_select_a_file_smaller_than",
+          "provider.please_fill_company_details_additional_service",
+          "provider.please_fill_company_details_package",
+          "provider.please_fill_company_details_service",
+          "provider.please_fill_company_details_serviceman",
+          "provider.please_upload_documents_first_additional_service",
+          "provider.please_upload_documents_first_package",
+          "provider.please_upload_documents_first_service",
+          "provider.please_upload_documents_first_serviceman",
+          "provider.type_is_not_company",
+          "providerReviews",
+          "running",
+          "service.add_on_total_price",
+          "service.qty",
+          "servicePrice",
+          "settings.become_provider",
+          "settings.become_provider_help",
+          "settings.enter_zoom_account_id",
+          "settings.enter_zoom_client_key",
+          "settings.enter_zoom_client_secret",
+          "settings.zoom",
+          "settings.zoom_account_id",
+          "settings.zoom_account_id_help",
+          "settings.zoom_client_key",
+          "settings.zoom_client_key_help",
+          "settings.zoom_client_secret",
+          "settings.zoom_client_secret_help",
+          "specialOffers",
+          "theme_options.blogs_status_help",
+          "token_invalid",
+          "unauthorized_action",
+          "unavailableService",
+          "user_deactivated",
+          "you_do_not_have_permission_to_access_this_resource"
+        ]
+      },
+      "currency_profile": "AED"
+    }
+  ],
+  "currency_profiles": [
+    {
+      "code": "USD",
+      "symbol": "$",
+      "symbol_position": "left",
+      "decimal_digits": 2,
+      "decimal_separator": ".",
+      "thousands_separator": ",",
+      "samples": [
+        {
+          "amount": 0,
+          "expected": "$0.00",
+          "locale": "en_US"
+        },
+        {
+          "amount": 1234.5,
+          "expected": "$1,234.50",
+          "locale": "en_US"
+        },
+        {
+          "amount": -42,
+          "expected": "-$42.00",
+          "locale": "en_US"
+        }
+      ]
+    },
+    {
+      "code": "EUR_FR",
+      "symbol": "€",
+      "symbol_position": "right",
+      "decimal_digits": 2,
+      "decimal_separator": ",",
+      "thousands_separator": " ",
+      "samples": [
+        {
+          "amount": 0,
+          "expected": "0,00€",
+          "locale": "fr_FR"
+        },
+        {
+          "amount": 1234.5,
+          "expected": "1 234,50€",
+          "locale": "fr_FR"
+        },
+        {
+          "amount": -99.95,
+          "expected": "-99,95€",
+          "locale": "fr_FR"
+        }
+      ]
+    },
+    {
+      "code": "EUR_ES",
+      "symbol": "€",
+      "symbol_position": "right",
+      "decimal_digits": 2,
+      "decimal_separator": ",",
+      "thousands_separator": ".",
+      "samples": [
+        {
+          "amount": 0,
+          "expected": "0,00€",
+          "locale": "es_ES"
+        },
+        {
+          "amount": 1234.5,
+          "expected": "1.234,50€",
+          "locale": "es_ES"
+        },
+        {
+          "amount": -19.99,
+          "expected": "-19,99€",
+          "locale": "es_ES"
+        }
+      ]
+    },
+    {
+      "code": "AED",
+      "symbol": "د.إ",
+      "symbol_position": "right",
+      "decimal_digits": 2,
+      "decimal_separator": ".",
+      "thousands_separator": ",",
+      "samples": [
+        {
+          "amount": 0,
+          "expected": "0.00د.إ",
+          "locale": "ar_AE"
+        },
+        {
+          "amount": 1234.5,
+          "expected": "1,234.50د.إ",
+          "locale": "ar_AE"
+        },
+        {
+          "amount": -75.25,
+          "expected": "-75.25د.إ",
+          "locale": "ar_AE"
+        }
+      ]
+    }
+  ]
+}

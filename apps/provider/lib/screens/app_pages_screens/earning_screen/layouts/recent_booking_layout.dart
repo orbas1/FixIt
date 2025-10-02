@@ -9,6 +9,8 @@ class RecentBookingLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final value = Provider.of<DashboardProvider>(context, listen: true);
+    final double totalAmount =
+        double.tryParse(data?.total?.toString() ?? '') ?? 0.0;
     return Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -17,13 +19,10 @@ class RecentBookingLayout extends StatelessWidget {
                   .textColor(appColor(context).appTheme.darkText)),
           Row(children: [
             Text(
-                language(
-                    context,
-                    symbolPosition
-                        ? "${getSymbol(context)}${currency(context).currencyVal * data!.total!}"
-                        : "${currency(context).currencyVal * data!.total!}${getSymbol(context)}"),
-                style: appCss.dmDenseBold18
-                    .textColor(appColor(context).appTheme.primary)),
+              formatCurrency(context, totalAmount),
+              style: appCss.dmDenseBold18
+                  .textColor(appColor(context).appTheme.primary),
+            ),
             const HSpace(Sizes.s8),
             if (data!.coupon != null)
               Text(language(context, "(${data!.coupon!.amount})"),

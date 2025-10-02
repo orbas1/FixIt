@@ -53,6 +53,8 @@ class AppSettingProvider with ChangeNotifier {
       route.pushNamed(context, routeName.changePassword);
     } else if (index == 4) {
       route.pushNamed(context, routeName.taxCompliance);
+    } else if (index == 5) {
+      route.pushNamed(context, routeName.environmentChecklist);
     }
   }
 
