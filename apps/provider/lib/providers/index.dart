@@ -24,6 +24,8 @@ export '../providers/app_pages_provider/add_servicemen_provider.dart';
 export '../providers/app_pages_provider/latest_blog_details_provider.dart';
 export '../providers/bottom_providers/profile_provider.dart';
 export '../providers/app_pages_provider/app_setting_provider.dart';
+export '../providers/app_pages_provider/i18n_currency_checklist_provider.dart';
+export '../providers/app_pages_provider/architecture_governance_provider.dart';
 export '../providers/auth_provider/change_password_provider.dart';
 export '../providers/app_pages_provider/company_detail_provider.dart';
 export '../providers/app_pages_provider/profile_detail_provider.dart';
@@ -66,6 +68,7 @@ export '../providers/app_pages_provider/view_location_provider.dart';
 export '../providers/app_pages_provider/provider_details_provider.dart';
 export '../providers/app_pages_provider/payment_provider.dart';
 export '../providers/app_pages_provider/checkout_web_view_provider.dart';
+export '../providers/app_pages_provider/environment_checklist_provider.dart';
 
 
 

@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:fixit_provider/providers/app_pages_provider/ads_detail_provider.dart';
 import 'package:fixit_provider/providers/app_pages_provider/ads_provider.dart';
 import 'package:fixit_provider/providers/app_pages_provider/app_details_provider.dart';
+import 'package:fixit_provider/providers/app_pages_provider/architecture_governance_provider.dart';
 import 'package:fixit_provider/providers/app_pages_provider/boost_provider.dart';
+import 'package:fixit_provider/providers/app_pages_provider/environment_checklist_provider.dart';
 import 'package:fixit_provider/providers/app_pages_provider/home_add_new_service_provider.dart';
 import 'package:fixit_provider/providers/app_pages_provider/offer_chat_provider.dart';
 import 'package:camera/camera.dart';
@@ -149,6 +151,12 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider(create: (_) => TimeSlotProvider()),
               ChangeNotifierProvider(create: (_) => PackageListProvider()),
               ChangeNotifierProvider(create: (_) => ProviderDetailsProvider()),
+              ChangeNotifierProvider(
+                  create: (_) => EnvironmentChecklistProvider()),
+              ChangeNotifierProvider(
+                  create: (_) => ArchitectureGovernanceProvider()),
+              ChangeNotifierProvider(
+                  create: (_) => I18nCurrencyChecklistProvider()),
               ChangeNotifierProvider(create: (_) => PackageDetailProvider()),
               ChangeNotifierProvider(create: (_) => AddPackageProvider()),
               ChangeNotifierProvider(create: (_) => SelectServiceProvider()),

@@ -41,13 +41,14 @@ class EarningScreen extends StatelessWidget {
                                                 .appTheme
                                                 .whiteBg)),
                                     Text(
-                                        symbolPosition
-                                            ? "${getSymbol(context)}${(currency(context).currencyVal * commissionList!.total!).toStringAsFixed(2)}"
-                                            : "${(currency(context).currencyVal * commissionList!.total!).toStringAsFixed(2)}${getSymbol(context)}",
-                                        style: appCss.dmDenseBold18.textColor(
-                                            appColor(context)
-                                                .appTheme
-                                                .whiteColor))
+                                      formatCurrency(
+                                        context,
+                                        commissionList!.total ?? 0,
+                                      ),
+                                      style: appCss.dmDenseBold18.textColor(
+                                        appColor(context).appTheme.whiteColor,
+                                      ),
+                                    )
                                   ]).paddingSymmetric(horizontal: Insets.i20)),
                         const VSpace(Sizes.s30),
                         if (commissionList!.histories!.isNotEmpty)

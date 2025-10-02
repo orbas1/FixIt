@@ -35,23 +35,41 @@ class WalletBalanceLayout extends StatelessWidget {
                                 Text(language(context, translations!.walletBal),
                                     style: appCss.dmDenseMedium15.textColor(
                                         appColor(context).appTheme.whiteColor)),
-                                Text(
-                                    symbolPosition
-                                        ? "${getSymbol(context)}${(currency(context).currencyVal * ((double.tryParse(userModel?.providerWallet?.balance?.toString() ?? '') ?? 0.0))).toStringAsFixed(2)}"
-                                        : "${(currency(context).currencyVal * ((double.tryParse(userModel?.providerWallet?.balance?.toString() ?? '') ?? 0.0))).toStringAsFixed(2)}${getSymbol(context)}",
+                                Builder(builder: (context) {
+                                  final double providerBalance =
+                                      double.tryParse(userModel
+                                              ?.providerWallet
+                                              ?.balance
+                                              ?.toString() ??
+                                          '') ??
+                                          0.0;
+                                  return Text(
+                                    formatCurrency(context, providerBalance),
                                     style: appCss.dmDenseBold20.textColor(
-                                        appColor(context).appTheme.whiteColor))
+                                      appColor(context).appTheme.whiteColor,
+                                    ),
+                                  );
+                                })
                               ])
                   ]),
                   isServiceman
-                      ? Text(
-                          appSettingModel?.general?.defaultCurrency
-                                      ?.symbolPosition ==
-                                  "left"
-                              ? "${getSymbol(context)}${(currency(context).currencyVal * double.parse(userModel!.servicemanWallet != null && userModel!.servicemanWallet!.balance != null ? userModel!.servicemanWallet!.balance.toString() : "00")).toStringAsFixed(2)}"
-                              : "${(currency(context).currencyVal * double.parse(userModel!.servicemanWallet != null && userModel!.servicemanWallet!.balance != null ? userModel!.servicemanWallet!.balance.toString() : "00")).toStringAsFixed(2)} ${getSymbol(context)}",
-                          style: appCss.dmDenseBold16
-                              .textColor(appColor(context).appTheme.whiteColor))
+                      ? Builder(builder: (context) {
+                          final double servicemanBalance = double.tryParse(
+                                userModel!.servicemanWallet != null &&
+                                        userModel!.servicemanWallet!.balance !=
+                                            null
+                                    ? userModel!.servicemanWallet!.balance
+                                        .toString()
+                                    : '0',
+                              ) ??
+                              0.0;
+                          return Text(
+                            formatCurrency(context, servicemanBalance),
+                            style: appCss.dmDenseBold16.textColor(
+                              appColor(context).appTheme.whiteColor,
+                            ),
+                          );
+                        })
                       : (userModel?.providerWallet?.balance ?? 0) <= 0.0
                           ? const SizedBox.shrink()
                           : Text(language(context, translations!.withdraw),

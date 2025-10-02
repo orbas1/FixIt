@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:fixit_provider/model/currency_model.dart';
 import 'package:fixit_provider/model/translation_model.dart';
 import 'package:fixit_provider/services/api_methods.dart';
 import 'package:fixit_provider/services/api_service.dart';
@@ -11,6 +12,7 @@ import '../common/app_fonts.dart';
 import '../common/languages/app_language.dart';
 import '../common/session.dart';
 import '../helper/navigation_class.dart';
+import '../utils/currency_formatter.dart';
 export 'package:fixit_provider/widgets/common_empty.dart';
 
 import 'config.dart';
@@ -27,6 +29,7 @@ export '../common/extension/widget_extension.dart';
 export '../../routes/screen_list.dart';
 export '../common/theme/theme_service.dart';
 export '../utils/general_utils.dart';
+export '../utils/currency_formatter.dart';
 export 'package:fixit_provider/services/common_list_services.dart';
 
 export '../helper/alert_class.dart';
@@ -108,6 +111,24 @@ getSymbol(context) {
       Provider.of<CurrencyProvider>(context, listen: true).priceSymbol;
 
   return currencyData;
+}
+
+String formatCurrency(
+  BuildContext context,
+  num amount, {
+  bool convert = true,
+  CurrencyModel? currencyOverride,
+  Locale? localeOverride,
+  bool includeCode = false,
+}) {
+  return CurrencyFormatter.format(
+    context,
+    amount,
+    convert: convert,
+    overrideCurrency: currencyOverride,
+    localeOverride: localeOverride,
+    includeCode: includeCode,
+  );
 }
 
 showLoading(context) async {

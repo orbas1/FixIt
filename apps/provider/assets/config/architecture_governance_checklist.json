@@ -1,0 +1,415 @@
+{
+  "generated_at": "2025-01-14T18:30:00Z",
+  "board": {
+    "charter_review_date": "2025-03-31",
+    "next_session": "2025-01-21T16:00:00Z",
+    "quorum": 5,
+    "escalation_policy": "Escalate material conflicts or blocking exceptions to the CTO office within 24 hours with CRO cc'd.",
+    "members": [
+      {
+        "id": "chief_architect",
+        "name": "Evelyn Parker",
+        "role": "Chief Architect",
+        "tenure_start": "2021-07-01",
+        "voting_member": true,
+        "responsibilities": [
+          "ARB chair and final tie-breaker",
+          "Maintains reference architecture catalog",
+          "Publishes annual charter retrospective"
+        ]
+      },
+      {
+        "id": "platform_lead_payments",
+        "name": "Santiago Rivas",
+        "role": "Platform Lead, Payments",
+        "tenure_start": "2022-02-15",
+        "voting_member": true,
+        "responsibilities": [
+          "Owns payment domain guardrails",
+          "Coordinates PCI remediation backlog",
+          "Maintains payment capability roadmap"
+        ]
+      },
+      {
+        "id": "platform_lead_marketplace",
+        "name": "Priya Desai",
+        "role": "Platform Lead, Marketplace",
+        "tenure_start": "2023-05-01",
+        "voting_member": true,
+        "responsibilities": [
+          "Chairs dependency reviews for marketplace capabilities",
+          "Maintains provider/buyer experience architecture",
+          "Sponsors experimentation guardrails"
+        ]
+      },
+      {
+        "id": "security_architect",
+        "name": "Noah Hart",
+        "role": "Principal Security Architect",
+        "tenure_start": "2022-11-07",
+        "voting_member": true,
+        "responsibilities": [
+          "Approves zero-trust control patterns",
+          "Ensures threat modeling evidence is attached to decisions",
+          "Owns identity pillar capability roadmap"
+        ]
+      },
+      {
+        "id": "data_architect",
+        "name": "Lina Osei",
+        "role": "Head of Data Architecture",
+        "tenure_start": "2021-11-18",
+        "voting_member": true,
+        "responsibilities": [
+          "Chairs data residency and sovereignty reviews",
+          "Maintains data platform capability alignment",
+          "Enforces governance standards for analytics"
+        ]
+      },
+      {
+        "id": "enterprise_pmo",
+        "name": "Marcus Hwang",
+        "role": "Director, Enterprise PMO",
+        "tenure_start": "2020-03-09",
+        "voting_member": false,
+        "responsibilities": [
+          "Runs intake triage and calendar",
+          "Publishes dependency heatmap",
+          "Tracks decision follow-ups"
+        ]
+      },
+      {
+        "id": "product_strategy",
+        "name": "Isabelle Fournier",
+        "role": "VP, Platform Strategy",
+        "tenure_start": "2019-10-01",
+        "voting_member": false,
+        "responsibilities": [
+          "Aligns roadmap with commercial priorities",
+          "Owns capability OKR alignment",
+          "Sponsors capability maturity reviews"
+        ]
+      }
+    ]
+  },
+  "cadences": {
+    "arb_biweekly": {
+      "description": "Formal ARB review with portfolio, decision, and backlog agenda.",
+      "frequency_days": 14,
+      "last_held": "2025-01-07T16:00:00Z",
+      "facilitator": "enterprise_pmo",
+      "artifacts": [
+        "ARB-INTAKE deck",
+        "Decision queue",
+        "Dependency heatmap"
+      ]
+    },
+    "roadmap_sync": {
+      "description": "Cross-functional capability roadmap sync across CRO, finance, product, and engineering.",
+      "frequency_days": 30,
+      "last_held": "2024-12-18T15:00:00Z",
+      "facilitator": "product_strategy",
+      "artifacts": [
+        "Quarterly roadmap snapshot",
+        "Capacity model",
+        "Risk register"
+      ]
+    }
+  },
+  "decisions": [
+    {
+      "id": "ADR-2024-019",
+      "title": "Adopt zero-trust service mesh for intra-service communication",
+      "status": "accepted",
+      "owner": "security_architect",
+      "enforcement_tier": "mandatory",
+      "decision_date": "2024-11-12",
+      "renewal_date": "2025-11-12",
+      "linked_capabilities": [
+        "zero-trust-access",
+        "multi-region-failover"
+      ],
+      "evidence": {
+        "repository": "storage/app/governance/2024-Q4/ADR-2024-019",
+        "artifacts": [
+          "threat-model.pdf",
+          "rollout-plan.md",
+          "telemetry-validation.json"
+        ]
+      }
+    },
+    {
+      "id": "ADR-2024-022",
+      "title": "Standardize decision record lifecycle with automated renewal alerts",
+      "status": "accepted",
+      "owner": "enterprise_pmo",
+      "enforcement_tier": "advisory",
+      "decision_date": "2024-12-05",
+      "renewal_date": "2025-06-05",
+      "linked_capabilities": [
+        "governance-automation"
+      ],
+      "evidence": {
+        "repository": "storage/app/governance/2024-Q4/ADR-2024-022",
+        "artifacts": [
+          "decision-template.md",
+          "notification-playbook.md"
+        ]
+      }
+    },
+    {
+      "id": "ADR-2025-003",
+      "title": "Approve modular capability roadmap format with dependency heatmap integration",
+      "status": "accepted",
+      "owner": "product_strategy",
+      "enforcement_tier": "mandatory",
+      "decision_date": "2025-01-09",
+      "renewal_date": "2026-01-09",
+      "linked_capabilities": [
+        "governance-automation",
+        "provider-experience-refresh"
+      ],
+      "evidence": {
+        "repository": "storage/app/governance/2025-Q1/ADR-2025-003",
+        "artifacts": [
+          "capability-catalog.xlsx",
+          "heatmap-schema.json"
+        ]
+      }
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "zero-trust-access",
+      "title": "Zero-Trust Access Foundation",
+      "summary": "Roll out unified policy engine, device posture enforcement, and continuous authentication across internal services.",
+      "owners": [
+        "security_architect",
+        "platform_lead_payments"
+      ],
+      "roadmap_quarter": "2025-Q2",
+      "dependencies": [
+        "identity-governance"
+      ],
+      "readiness": {
+        "architecture_review": "approved",
+        "security": "in-progress",
+        "operations": "amber",
+        "last_updated": "2025-01-12T10:15:00Z"
+      },
+      "metrics": [
+        {
+          "id": "policy-coverage",
+          "name": "Services behind zero-trust policy",
+          "baseline": 0.35,
+          "target": 0.85,
+          "unit": "ratio"
+        },
+        {
+          "id": "access-incidents",
+          "name": "Monthly privileged access incidents",
+          "baseline": 5,
+          "target": 1,
+          "unit": "count"
+        }
+      ]
+    },
+    {
+      "id": "multi-region-failover",
+      "title": "Multi-Region Failover Automation",
+      "summary": "Automate failover orchestration, database replication validation, and customer communications.",
+      "owners": [
+        "platform_lead_marketplace",
+        "enterprise_pmo"
+      ],
+      "roadmap_quarter": "2025-Q3",
+      "dependencies": [
+        "zero-trust-access",
+        "observability-unification"
+      ],
+      "readiness": {
+        "architecture_review": "pending",
+        "security": "not-started",
+        "operations": "amber",
+        "last_updated": "2025-01-12T09:00:00Z"
+      },
+      "metrics": [
+        {
+          "id": "failover-rto",
+          "name": "Failover execution RTO",
+          "baseline": 240,
+          "target": 60,
+          "unit": "minutes"
+        },
+        {
+          "id": "customer-notification",
+          "name": "Customer notification lead time",
+          "baseline": 45,
+          "target": 15,
+          "unit": "minutes"
+        }
+      ]
+    },
+    {
+      "id": "identity-governance",
+      "title": "Identity Governance Automation",
+      "summary": "Centralize identity lifecycle, access reviews, and fine-grained authorization telemetry.",
+      "owners": [
+        "security_architect",
+        "enterprise_pmo"
+      ],
+      "roadmap_quarter": "2025-Q1",
+      "dependencies": [],
+      "readiness": {
+        "architecture_review": "approved",
+        "security": "green",
+        "operations": "green",
+        "last_updated": "2025-01-10T14:45:00Z"
+      },
+      "metrics": [
+        {
+          "id": "access-review-cycle",
+          "name": "Access review cycle time",
+          "baseline": 30,
+          "target": 10,
+          "unit": "days"
+        },
+        {
+          "id": "manual-provisioning",
+          "name": "Manual provisioning rate",
+          "baseline": 0.4,
+          "target": 0.1,
+          "unit": "ratio"
+        }
+      ]
+    },
+    {
+      "id": "observability-unification",
+      "title": "Observability Unification",
+      "summary": "Consolidate tracing, logging, and metrics platforms with shared SLO dashboards.",
+      "owners": [
+        "data_architect",
+        "platform_lead_marketplace"
+      ],
+      "roadmap_quarter": "2024-Q4",
+      "dependencies": [
+        "identity-governance"
+      ],
+      "readiness": {
+        "architecture_review": "approved",
+        "security": "green",
+        "operations": "green",
+        "last_updated": "2025-01-12T12:30:00Z"
+      },
+      "metrics": [
+        {
+          "id": "trace-coverage",
+          "name": "Services emitting distributed traces",
+          "baseline": 0.5,
+          "target": 0.9,
+          "unit": "ratio"
+        },
+        {
+          "id": "alert-noise",
+          "name": "Noise ratio of observability alerts",
+          "baseline": 0.4,
+          "target": 0.15,
+          "unit": "ratio"
+        }
+      ]
+    },
+    {
+      "id": "governance-automation",
+      "title": "Governance Automation Platform",
+      "summary": "Automate evidence capture, renewal alerts, and governance scorecards across domains.",
+      "owners": [
+        "enterprise_pmo",
+        "product_strategy"
+      ],
+      "roadmap_quarter": "2025-Q2",
+      "dependencies": [
+        "identity-governance"
+      ],
+      "readiness": {
+        "architecture_review": "approved",
+        "security": "amber",
+        "operations": "amber",
+        "last_updated": "2025-01-11T11:20:00Z"
+      },
+      "metrics": [
+        {
+          "id": "evidence-latency",
+          "name": "Average evidence submission latency",
+          "baseline": 5,
+          "target": 1,
+          "unit": "days"
+        },
+        {
+          "id": "automation-coverage",
+          "name": "Governance controls with automated evidence",
+          "baseline": 0.25,
+          "target": 0.75,
+          "unit": "ratio"
+        }
+      ]
+    },
+    {
+      "id": "provider-experience-refresh",
+      "title": "Provider Experience Refresh",
+      "summary": "Modernize provider mobile app onboarding, compliance prompts, and governance awareness.",
+      "owners": [
+        "platform_lead_marketplace",
+        "product_strategy"
+      ],
+      "roadmap_quarter": "2025-Q3",
+      "dependencies": [
+        "governance-automation",
+        "observability-unification"
+      ],
+      "readiness": {
+        "architecture_review": "in-review",
+        "security": "not-started",
+        "operations": "amber",
+        "last_updated": "2025-01-13T17:05:00Z"
+      },
+      "metrics": [
+        {
+          "id": "onboarding-duration",
+          "name": "Provider onboarding task duration",
+          "baseline": 18,
+          "target": 8,
+          "unit": "minutes"
+        },
+        {
+          "id": "governance-adherence",
+          "name": "Providers acknowledging governance policies",
+          "baseline": 0.62,
+          "target": 0.95,
+          "unit": "ratio"
+        }
+      ]
+    }
+  ],
+  "risk_register": [
+    {
+      "id": "cadence-lapse",
+      "description": "Roadmap sync cadence slipped by 3 days due to holiday scheduling.",
+      "severity": "medium",
+      "owner": "enterprise_pmo",
+      "mitigation": "Adjust calendar invites and rotate facilitation backup.",
+      "due_date": "2025-01-20"
+    },
+    {
+      "id": "readiness-stale",
+      "description": "Multi-region failover readiness has not been updated in 6 days.",
+      "severity": "high",
+      "owner": "platform_lead_marketplace",
+      "mitigation": "Trigger follow-up with operations lead and enforce weekly update reminder.",
+      "due_date": "2025-01-16"
+    }
+  ],
+  "quality_gates": {
+    "readiness_stale_days": 7,
+    "decision_renewal_warning_days": 30
+  }
+}

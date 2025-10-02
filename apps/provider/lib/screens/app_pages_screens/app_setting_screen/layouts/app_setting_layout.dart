@@ -47,7 +47,7 @@ class AppSettingLayout extends StatelessWidget {
                           onToggle: (val) =>
                               settingCtrl.onNotification(val, context)));
                 }),
-              if (e.key == 0 || e.key == 2 || e.key == 3 || e.key == 4)
+              if (e.key == 0 || e.key == 2 || e.key == 3 || e.key == 4 || e.key == 5)
                 SvgPicture.asset(
                     rtl(context) ? eSvgAssets.arrowLeft : eSvgAssets.arrowRight,
                     colorFilter: ColorFilter.mode(

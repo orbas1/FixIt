@@ -1,0 +1,479 @@
+{
+    "generated_at": "2025-10-03T09:30:00Z",
+    "namespaces": [
+        {
+            "id": "prod",
+            "name": "Production",
+            "tier": "tier0",
+            "owner": "Platform SRE",
+            "escalation": "PagerDuty: fixit-prod",
+            "delegates": [
+                "Compliance Lead",
+                "Mobile Lead"
+            ],
+            "regions": [
+                "us-east-1",
+                "eu-central-1"
+            ],
+            "description": "Live customer transactions, escrow settlements, payouts, and web socket fan-out.",
+            "secret_refs": [
+                "prod_app_key",
+                "prod_db_password",
+                "prod_pusher_key"
+            ],
+            "compliance_tier": "SOC2, PCI SAQ A",
+            "validations": [
+                {
+                    "description": "Verify Laravel APP_KEY matches Secrets Manager",
+                    "command": "php artisan secrets:doctor --check=app-key",
+                    "evidence_path": "storage/logs/env-doctor-report.json"
+                },
+                {
+                    "description": "Database credentials rotation audit",
+                    "command": "aws secretsmanager get-secret-value --secret-id fixit/prod/db",
+                    "evidence_path": "s3://fixit-audit/prod/db-rotation"
+                }
+            ]
+        },
+        {
+            "id": "stg",
+            "name": "Staging",
+            "tier": "tier1",
+            "owner": "Release Engineering",
+            "escalation": "Slack: #re-staging",
+            "delegates": [
+                "QA Manager",
+                "Mobile QA"
+            ],
+            "regions": [
+                "us-east-1"
+            ],
+            "description": "Pre-production staging, contract tests, and nightly regression packs.",
+            "secret_refs": [
+                "stg_app_key",
+                "stg_pusher_key"
+            ],
+            "compliance_tier": "SOC2",
+            "validations": [
+                {
+                    "description": "Ensure staging APP_KEY rotated",
+                    "command": "php artisan secrets:doctor --check=staging-app-key",
+                    "evidence_path": "storage/logs/env-doctor-report.json"
+                },
+                {
+                    "description": "Pusher key smoke test",
+                    "command": "npm run test:pusher -- --env=stg",
+                    "evidence_path": "s3://fixit-audit/stg/pusher"
+                }
+            ]
+        },
+        {
+            "id": "qa",
+            "name": "Quality Assurance",
+            "tier": "tier2",
+            "owner": "Quality Engineering",
+            "escalation": "PagerDuty: fixit-qa",
+            "delegates": [
+                "Automation Lead"
+            ],
+            "regions": [
+                "us-west-2"
+            ],
+            "description": "Chaos drills, QA automation, and synthetic dispute workflows.",
+            "secret_refs": [
+                "qa_shippo_token",
+                "qa_app_key"
+            ],
+            "compliance_tier": "Internal",
+            "validations": [
+                {
+                    "description": "Shippo sandbox rotation",
+                    "command": "vault read secret/qa/shippo",
+                    "evidence_path": "vault://secret/qa/shippo"
+                }
+            ]
+        },
+        {
+            "id": "dev",
+            "name": "Developer Experience",
+            "tier": "tier3",
+            "owner": "Developer Experience",
+            "escalation": "Slack: #dx-help",
+            "delegates": [
+                "Security Champion",
+                "Mobile Platform"
+            ],
+            "regions": [
+                "local",
+                "docker"
+            ],
+            "description": "Local Docker, preview apps, feature-branch testing, and demos.",
+            "secret_refs": [
+                "dev_default_user",
+                "dev_mailhog"
+            ],
+            "compliance_tier": "Internal",
+            "validations": [
+                {
+                    "description": "Ensure .env.example contains non-production defaults",
+                    "command": "scripts/env_secrets_doctor.sh --mode=ci",
+                    "evidence_path": "storage/logs/env-doctor-report.json"
+                }
+            ]
+        },
+        {
+            "id": "support",
+            "name": "Support",
+            "tier": "tier2",
+            "owner": "Customer Support Ops",
+            "escalation": "PagerDuty: fixit-support",
+            "delegates": [
+                "Trust & Safety"
+            ],
+            "regions": [
+                "us-east-1"
+            ],
+            "description": "CRM/ITSM integrations, dispute chat mirroring, and escalation tooling.",
+            "secret_refs": [
+                "support_zendesk_oauth",
+                "support_sso"
+            ],
+            "compliance_tier": "SOC2",
+            "validations": [
+                {
+                    "description": "Zendesk OAuth validation",
+                    "command": "az keyvault secret show --vault-name fixit-support --name zendesk",
+                    "evidence_path": "azure://fixit-support/zendesk"
+                }
+            ]
+        },
+        {
+            "id": "mobile",
+            "name": "Mobile Platform",
+            "tier": "tier1",
+            "owner": "Mobile Platform",
+            "escalation": "PagerDuty: fixit-mobile",
+            "delegates": [
+                "Android Lead",
+                "iOS Lead"
+            ],
+            "regions": [
+                "global"
+            ],
+            "description": "Firebase, push messaging, feature flags, and Sentry instrumentation for Flutter provider app.",
+            "secret_refs": [
+                "mobile_firebase_key",
+                "mobile_sentry_dsn"
+            ],
+            "compliance_tier": "SOC2, GDPR",
+            "validations": [
+                {
+                    "description": "Firebase admin key expiry check",
+                    "command": "gcloud secrets versions describe firebase-admin --secret=projects/fixit-mobile/secrets/firebase-admin",
+                    "evidence_path": "gs://fixit-mobile-secrets/firebase-admin"
+                },
+                {
+                    "description": "Verify Sentry DSN from remote config",
+                    "command": "flutter test test/config/sentry_validation_test.dart",
+                    "evidence_path": "gs://fixit-mobile-secrets/sentry-dsn"
+                }
+            ]
+        }
+    ],
+    "secrets": [
+        {
+            "id": "prod_app_key",
+            "name": "Laravel APP_KEY",
+            "env_key": "APP_KEY",
+            "owner": "Platform Security",
+            "source": "AWS Secrets Manager: fixit/prod/app-key",
+            "last_rotated_at": "2025-09-01T00:00:00Z",
+            "next_rotation_due_at": "2025-10-16T00:00:00Z",
+            "last_validated_at": "2025-09-25T11:30:00Z",
+            "rotation_interval_days": 45,
+            "criticality": "tier0",
+            "systems": [
+                "laravel-api",
+                "horizon",
+                "octane"
+            ],
+            "notes": "Mirrored into SSM Parameter Store for ECS tasks via rotation lambda.",
+            "validators": [
+                {
+                    "description": "Check APP_KEY entropy",
+                    "command": "php artisan secrets:doctor --check=app-key"
+                }
+            ]
+        },
+        {
+            "id": "prod_db_password",
+            "name": "Production DB Password",
+            "env_key": "DB_PASSWORD",
+            "owner": "Database Engineering",
+            "source": "AWS Secrets Manager: fixit/prod/db",
+            "last_rotated_at": "2025-09-20T00:00:00Z",
+            "next_rotation_due_at": "2025-10-20T00:00:00Z",
+            "last_validated_at": "2025-09-29T13:00:00Z",
+            "rotation_interval_days": 30,
+            "criticality": "tier0",
+            "systems": [
+                "aurora",
+                "reporting-etl"
+            ],
+            "notes": "Aurora rotation lambda restarts reader endpoints after secret promotion.",
+            "validators": [
+                {
+                    "description": "Validate DB connectivity",
+                    "command": "php artisan db:monitor --database=mysql"
+                }
+            ]
+        },
+        {
+            "id": "prod_pusher_key",
+            "name": "Pusher App Key",
+            "env_key": "PUSHER_APP_KEY",
+            "owner": "Messaging Guild",
+            "source": "HashiCorp Vault: secret/prod/pusher",
+            "last_rotated_at": "2025-08-28T00:00:00Z",
+            "next_rotation_due_at": "2025-10-27T00:00:00Z",
+            "last_validated_at": "2025-09-30T16:00:00Z",
+            "rotation_interval_days": 60,
+            "criticality": "tier1",
+            "systems": [
+                "websocket-gateway",
+                "mobile-push"
+            ],
+            "notes": "Rotation requires reloading websocket gateway pods; automated via Argo Rollouts.",
+            "validators": [
+                {
+                    "description": "Integration smoke test",
+                    "command": "npm run test:pusher -- --env=prod"
+                }
+            ]
+        },
+        {
+            "id": "stg_app_key",
+            "name": "Staging APP_KEY",
+            "env_key": "APP_KEY",
+            "owner": "Release Engineering",
+            "source": "AWS Secrets Manager: fixit/stg/app-key",
+            "last_rotated_at": "2025-09-25T00:00:00Z",
+            "next_rotation_due_at": "2025-10-25T00:00:00Z",
+            "last_validated_at": "2025-09-29T09:00:00Z",
+            "rotation_interval_days": 30,
+            "criticality": "tier1",
+            "systems": [
+                "staging-api",
+                "contract-tests"
+            ],
+            "notes": "Used for staging session encryption and contract snapshots.",
+            "validators": [
+                {
+                    "description": "Check APP_KEY entropy",
+                    "command": "php artisan secrets:doctor --check=staging-app-key"
+                }
+            ]
+        },
+        {
+            "id": "stg_pusher_key",
+            "name": "Staging Pusher Key",
+            "env_key": "PUSHER_APP_KEY",
+            "owner": "Messaging Guild",
+            "source": "HashiCorp Vault: secret/stg/pusher",
+            "last_rotated_at": "2025-09-22T00:00:00Z",
+            "next_rotation_due_at": "2025-10-22T00:00:00Z",
+            "last_validated_at": "2025-09-29T15:00:00Z",
+            "rotation_interval_days": 30,
+            "criticality": "tier2",
+            "systems": [
+                "staging-websocket"
+            ],
+            "notes": "Vault dynamic secrets expire automatically after 30 days.",
+            "validators": [
+                {
+                    "description": "Pusher staging smoke test",
+                    "command": "npm run test:pusher -- --env=stg"
+                }
+            ]
+        },
+        {
+            "id": "qa_shippo_token",
+            "name": "QA Shippo Token",
+            "env_key": "SHIPPO_API_TOKEN",
+            "owner": "Logistics Integrations",
+            "source": "Vault: secret/qa/shippo",
+            "last_rotated_at": "2025-10-02T00:00:00Z",
+            "next_rotation_due_at": "2025-10-15T00:00:00Z",
+            "last_validated_at": "2025-10-03T08:00:00Z",
+            "rotation_interval_days": 7,
+            "criticality": "tier2",
+            "systems": [
+                "qa-fulfilment-smoke"
+            ],
+            "notes": "Synthetic order fulfilment relies on Shippo sandbox.",
+            "validators": [
+                {
+                    "description": "Shippo API heartbeat",
+                    "command": "php artisan logistics:test --env=qa"
+                }
+            ]
+        },
+        {
+            "id": "qa_app_key",
+            "name": "QA APP_KEY",
+            "env_key": "APP_KEY",
+            "owner": "Quality Engineering",
+            "source": "Vault: secret/qa/app-key",
+            "last_rotated_at": "2025-09-18T00:00:00Z",
+            "next_rotation_due_at": "2025-10-18T00:00:00Z",
+            "last_validated_at": "2025-09-26T10:00:00Z",
+            "rotation_interval_days": 30,
+            "criticality": "tier2",
+            "systems": [
+                "qa-api"
+            ],
+            "notes": "Used for QA automation and nightly builds.",
+            "validators": [
+                {
+                    "description": "QA APP_KEY entropy",
+                    "command": "php artisan secrets:doctor --check=qa-app-key"
+                }
+            ]
+        },
+        {
+            "id": "dev_default_user",
+            "name": "Developer Default Credentials",
+            "env_key": "DEMO_USER_TOKEN",
+            "owner": "Developer Experience",
+            "source": "Vault: secret/dev/demo-user",
+            "last_rotated_at": "2025-09-15T00:00:00Z",
+            "next_rotation_due_at": "2025-10-15T00:00:00Z",
+            "last_validated_at": "2025-09-30T07:00:00Z",
+            "rotation_interval_days": 30,
+            "criticality": "tier3",
+            "systems": [
+                "demo-seed",
+                "storybook"
+            ],
+            "notes": "Used for demo data seeding and local smoke tests.",
+            "validators": [
+                {
+                    "description": "Seed login validation",
+                    "command": "php artisan demo:login-check"
+                }
+            ]
+        },
+        {
+            "id": "dev_mailhog",
+            "name": "Mailhog Credentials",
+            "env_key": "MAIL_PASSWORD",
+            "owner": "Developer Experience",
+            "source": "Vault: secret/dev/mailhog",
+            "last_rotated_at": "2025-09-10T00:00:00Z",
+            "next_rotation_due_at": "2025-10-10T00:00:00Z",
+            "last_validated_at": "2025-09-25T09:30:00Z",
+            "rotation_interval_days": 30,
+            "criticality": "tier3",
+            "systems": [
+                "local-mailhog"
+            ],
+            "notes": "Ensures test emails are scoped to developer environments only.",
+            "validators": [
+                {
+                    "description": "Mailhog authentication",
+                    "command": "curl -u fixit:$(op read op://dev/mailhog/password) http://localhost:8025/api/v2/messages"
+                }
+            ]
+        },
+        {
+            "id": "support_zendesk_oauth",
+            "name": "Zendesk OAuth Token",
+            "env_key": "ZENDESK_OAUTH_TOKEN",
+            "owner": "Support Ops",
+            "source": "Azure Key Vault: fixit-support/zendesk",
+            "last_rotated_at": "2025-08-15T00:00:00Z",
+            "next_rotation_due_at": "2025-11-13T00:00:00Z",
+            "last_validated_at": "2025-09-30T18:15:00Z",
+            "rotation_interval_days": 90,
+            "criticality": "tier2",
+            "systems": [
+                "zendesk-integration",
+                "dispute-escalation"
+            ],
+            "notes": "Token rotation triggers webhook re-authorization in Zendesk.",
+            "validators": [
+                {
+                    "description": "Zendesk integration health",
+                    "command": "php artisan support:zendesk:ping"
+                }
+            ]
+        },
+        {
+            "id": "support_sso",
+            "name": "Support SSO Certificate",
+            "env_key": "SUPPORT_SSO_CERT",
+            "owner": "Support Ops",
+            "source": "Azure Key Vault: fixit-support/sso-cert",
+            "last_rotated_at": "2025-09-01T00:00:00Z",
+            "next_rotation_due_at": "2025-12-01T00:00:00Z",
+            "last_validated_at": "2025-09-27T20:00:00Z",
+            "rotation_interval_days": 90,
+            "criticality": "tier2",
+            "systems": [
+                "support-portal"
+            ],
+            "notes": "Certificate fingerprints stored in incident response runbook.",
+            "validators": [
+                {
+                    "description": "SSO metadata validation",
+                    "command": "scripts/env_secrets_doctor.sh --check=support-sso"
+                }
+            ]
+        },
+        {
+            "id": "mobile_firebase_key",
+            "name": "Firebase Admin Key",
+            "env_key": "FIREBASE_ADMIN_KEY",
+            "owner": "Mobile Platform",
+            "source": "Google Secret Manager: firebase-admin",
+            "last_rotated_at": "2025-09-05T00:00:00Z",
+            "next_rotation_due_at": "2025-11-04T00:00:00Z",
+            "last_validated_at": "2025-09-30T12:00:00Z",
+            "rotation_interval_days": 60,
+            "criticality": "tier1",
+            "systems": [
+                "firebase-functions",
+                "push-service"
+            ],
+            "notes": "Key is mirrored into CI/CD secure variables for provider app deployments.",
+            "validators": [
+                {
+                    "description": "Firebase admin SDK handshake",
+                    "command": "flutter test test/config/firebase_validation_test.dart"
+                }
+            ]
+        },
+        {
+            "id": "mobile_sentry_dsn",
+            "name": "Sentry DSN",
+            "env_key": "SENTRY_DSN",
+            "owner": "Mobile Platform",
+            "source": "Remote Config",
+            "last_rotated_at": "2025-09-28T00:00:00Z",
+            "next_rotation_due_at": "2025-10-28T00:00:00Z",
+            "last_validated_at": "2025-09-30T10:30:00Z",
+            "rotation_interval_days": 30,
+            "criticality": "tier1",
+            "systems": [
+                "flutter-provider"
+            ],
+            "notes": "Rotation executed alongside crash-free release gates.",
+            "validators": [
+                {
+                    "description": "Sentry DSN smoke test",
+                    "command": "flutter test test/config/sentry_validation_test.dart"
+                }
+            ]
+        }
+    ]
+}

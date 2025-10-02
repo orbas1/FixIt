@@ -26,11 +26,10 @@ class HistoryLayout extends StatelessWidget {
       ]),
       Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
         Text(
-            symbolPosition
-                ? "${getSymbol(context)}${currency(context).currencyVal * data!.providerCommission!}"
-                : "${currency(context).currencyVal * data!.providerCommission!}${getSymbol(context)}",
-            style: appCss.dmDenseSemiBold14
-                .textColor(appColor(context).appTheme.darkText)),
+          formatCurrency(context, data?.providerCommission ?? 0),
+          style:
+              appCss.dmDenseSemiBold14.textColor(appColor(context).appTheme.darkText),
+        ),
         const VSpace(Sizes.s3),
         /*  Text(data["status"],
             style: appCss.dmDenseMedium12.textColor(data["status"] == "Credit"
