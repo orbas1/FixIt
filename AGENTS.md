@@ -1,6 +1,6 @@
 # Fixit + Taskup Full Upgrade Guide (Web + Mobile) — Developer Playbook for GPT‑Codex
 
-**Scope:** End‑to‑end upgrade of **Fixit** (local services marketplace) and companion **Taskup** components across **Laravel (PHP 8.2+) web app + Admin**, and **Flutter (Dart 3) iOS/Android user & provider Mobile apps**. Deliver: Airtasker‑style Live Feed, global tax & zones, unified search, escrow + disputes, storefront/eCommerce for tools, affiliates, ads, security, and full UI/UX overhaul. Includes database migrations, APIs, background jobs, analytics, observability, and CI/CD.
+**Scope:** End‑to‑end upgrade of **Fixit** (local services marketplace) and companion **Taskup** components across **Laravel (PHP 8.2+) web app + Admin**, and **Flutter (Dart 3) iOS/Android user & provider Mobile apps**. Deliver: Airtasker‑style Live Feed, global tax & zones, unified search, escrow + disputes, storefront/eCommerce for materials sales and tool rentals (heavy‑duty to light classes), affiliates, ads, security, and full UI/UX overhaul. Providers manage inventory, availability windows, rental pricing/deals, and safety checklists for tool lending. Includes database migrations, APIs, background jobs, analytics, observability, and CI/CD.
 
 > **Stack Assumptions**
 >
@@ -77,7 +77,7 @@ This section converts the phases into **actionable workstreams**, acceptance cri
 
 **Objective:** Implement REST + WebSocket with consistent pagination and filtering.
 
-* **Deliverables**: Versioned routes `/api/v1`, OpenAPI spec, Socket channels (`feed`, `job.{id}.*`).
+* **Deliverables**: Versioned routes `/api/v1`, OpenAPI spec, Socket channels (`feed`, `job.{id}.*`), plus marketplace materials sales + tool rental inventory/availability/pricing/safety endpoints and webhooks.
 * **Acceptance**: Postman collection passes; WebSocket broadcasts on create/bid/comment.
 
 ---
@@ -86,8 +86,8 @@ This section converts the phases into **actionable workstreams**, acceptance cri
 
 **Objective:** Landing‑before‑login, unified search grid, modern dashboards, admin redesign.
 
-* **Deliverables**: Tailwind tokens, component library (Cards, Grids), accessibility pass (WCAG 2.2 AA).
-* **Acceptance**: LCP < 2.5s; keyboard nav across critical flows.
+* **Deliverables**: Tailwind tokens, component library (Cards, Grids), accessibility pass (WCAG 2.2 AA), provider marketplace dashboards (materials inventory, tool rental calendars, pricing/deal editors, safety workflows).
+* **Acceptance**: LCP < 2.5s; keyboard nav across critical flows (including provider inventory, rental scheduling, and safety acknowledgement modals).
 
 ---
 
@@ -321,22 +321,37 @@ General rules for all migrations:
 
 ---
 
-## 1.8 Storefront: Provider Tools eCommerce
+## 1.8 Storefront: Provider Materials Sales & Tool Rentals
 
-**Purpose:** Allow providers to sell tools/products with shipping, tax, and disputes when needed.
+**Purpose:** Allow providers to sell consumable materials and rent tools (heavy‑duty, specialty, and light classes) with inventory tracking, scheduling, safety gating, shipping, tax, and dispute coverage.
 
 ### Tables & Fields
 
 * **stores**: `id`, `owner_id`, `slug`, `name`, `logo`, `about TEXT`, `policies JSON`.
-* **products**: `id`, `store_id` FK, `sku`, `name`, `desc TEXT`, `price DECIMAL(10,2)`, `currency`, `stock INT`, `weight DECIMAL(10,3)`, `dimensions JSON`, `shipping_profile_id FK`, `media JSON`, `attributes JSON`, `status ENUM('draft','active','paused')`.
+* **products**: `id`, `store_id` FK, `sku`, `name`, `desc TEXT`, `kind ENUM('material','tool_sale','tool_rental') DEFAULT 'material'`, `price DECIMAL(10,2)`, `currency`, `stock INT`, `weight DECIMAL(10,3)`, `dimensions JSON`, `shipping_profile_id FK`, `media JSON`, `attributes JSON`, `status ENUM('draft','active','paused')`, `safety_profile_id FK NULL`, `rental_only BOOLEAN DEFAULT 0`, `deposit_required DECIMAL(10,2) NULL`.
 * **shipping_profiles**: `id`, `store_id` FK, `rules JSON`, `carrier`, `flat_rate DECIMAL(10,2) NULL`, `free_over DECIMAL(10,2) NULL`.
 * **orders**: `id`, `store_id` FK, `buyer_id` FK, `total DECIMAL(10,2)`, `currency`, `status ENUM('pending','paid','packed','shipped','delivered','cancelled','refunded')`, `shipping_address JSON`, `billing_address JSON`, `tax_total DECIMAL(10,2)`, `shipping_total DECIMAL(10,2)`.
 * **order_items**: `id`, `order_id` FK, `product_id` FK, `qty INT`, `unit_price DECIMAL(10,2)`, `tax_rate DECIMAL(5,2)`.
 * **fulfillments**: `id`, `order_id` FK, `carrier`, `tracking_no`, `label_url`, `status ENUM('label_created','in_transit','delivered','returned')`.
+* **tool_inventory_units**: `id`, `product_id` FK, `serial_no VARCHAR(120)`, `condition ENUM('new','good','fair','needs_service')`, `status ENUM('available','reserved','rented','maintenance','retired')`, `location JSON`, `last_serviced_at DATETIME NULL`, `next_service_due_at DATETIME NULL`.
+* **tool_rental_rates**: `id`, `product_id` FK, `period ENUM('hour','day','week','month')`, `duration INT`, `base_price DECIMAL(10,2)`, `currency CHAR(3)`, `deposit DECIMAL(10,2) NULL`, `late_fee_per_period DECIMAL(10,2) NULL`.
+* **tool_rental_deals**: `id`, `product_id` FK, `name`, `description TEXT`, `period ENUM('weekend','weekday','custom')`, `duration_hours INT NULL`, `discount_pct DECIMAL(5,2) NULL`, `bundle_json JSON`, `active_from DATETIME`, `active_until DATETIME`.
+* **tool_rental_calendars**: `id`, `tool_inventory_unit_id` FK, `available_from DATETIME`, `available_until DATETIME`, `blackout_dates JSON`, `max_concurrent INT DEFAULT 1`.
+* **tool_rental_bookings**: `id`, `order_id` FK NULL, `tool_inventory_unit_id` FK, `renter_id` FK → users, `start_at DATETIME`, `end_at DATETIME`, `status ENUM('pending','confirmed','checked_out','returned','late','cancelled')`, `pickup_mode ENUM('delivery','pickup')`, `safety_acknowledged_at DATETIME NULL`.
+* **tool_safety_profiles**: `id`, `title`, `instructions TEXT`, `required_ppe JSON`, `certifications_required JSON`, `hazard_notes TEXT`, `inspection_checklist JSON`.
+* **tool_safety_acknowledgements**: `id`, `booking_id` FK, `user_id` FK, `acknowledged_at DATETIME`, `signature JSON`, `notes TEXT`.
+
+### Implementation Notes
+
+* Providers manage consumable `materials` by stock count; purchases immediately decrement inventory and trigger re‑order notifications when below threshold.
+* Tool rentals reference discrete `tool_inventory_units`; availability combines `tool_rental_calendars` with active bookings to prevent double bookings.
+* Pricing resolves base `tool_rental_rates` plus optional `tool_rental_deals` (weekend bundles, long‑term discounts) and deposit requirements. Support quoting multi‑period rentals with prorated extensions and late fees.
+* Safety profiles gate checkout: renters must acknowledge PPE requirements, upload certifications if flagged, and receive auto‑email with precautions. Maintenance reminders trigger when `next_service_due_at` passes or after `N` rentals.
+* Inventory actions (check‑out, check‑in, maintenance) log to audit trail; admin dashboard surfaces utilization, upcoming reservations, overdue returns, and safety compliance.
 
 ### Acceptance
 
-* End‑to‑end: create store → list product → place order → pay → generate label → track fulfillment.
+* End‑to‑end: create store → list materials + tool rentals → purchase material → book rental with availability + pricing + deposit → renter acknowledges safety → provider checks tool out/in with maintenance logging → disputes or refunds handled via orders/escrow.
 
 ---
 
@@ -416,7 +431,12 @@ For each table above, deliver:
 ### 2.7 Storefront
 
 * `GET /stores/{slug}`; `GET /products` (filters: tag, price, stock, ship_to, delivery_days).
-* `POST /orders` — create order; calculates tax, shipping, escrow if applicable for services.
+* `GET /tools` — list rentable tools with filters: class (heavy/medium/light), certifications required, availability window, pickup mode, deposit range.
+* `GET /tools/{id}/availability` — returns calendar slots, blackout dates, maintenance holds, and rental rate matrix.
+* `POST /orders` — create order; calculates tax, shipping, escrow if applicable for services/material purchases.
+* `POST /rentals` — book tool rental (multi‑period) with validation of availability, deposit, insurance, and safety acknowledgements.
+* `POST /rentals/{id}/check-in` & `/check-out` — provider actions to transition inventory units, capture condition photos, and trigger late fee timers.
+* `POST /rentals/{id}/safety-ack` — renter signs PPE + certification requirements (persist to acknowledgements).
 * `POST /orders/{id}/pay` — Stripe etc.; `POST /fulfillments`.
 
 ---
@@ -463,7 +483,12 @@ For each table above, deliver:
 
 ### 3.8 Storefront
 
-* Providers create store, list products, manage inventory; shipping rules by zone; labels via Shippo/EasyPost (pluggable).
+* **Materials sales:** Providers create store, list consumable materials with stock thresholds, shipping rules by zone, and optional auto‑replenishment alerts. Orders integrate Shippo/EasyPost (pluggable) for labels, tax calculation, and delivery status webhooks.
+* **Tool rental inventory service:** Manage discrete `tool_inventory_units`, enforce availability calendars, maintenance blocks, and status transitions (`available → reserved → checked_out → returned/maintenance`). Provider dashboard exposes bulk actions, import/export, and notifications for overdue returns.
+* **Rental booking workflow:** API validates requested window against calendars, calculates deposits and rental totals, locks unit, and issues checkout/check‑in tasks. Supports extensions, early returns, late fee accrual, and damage reporting tied to escrow claims.
+* **Pricing & deals engine:** Combine base rates with `tool_rental_deals` (weekend bundles, multi‑day discounts, bundle rentals) and promotional codes. Provide preview calculators for providers and renters; enforce minimum/maximum rental durations per class.
+* **Safety & compliance:** Surface `tool_safety_profiles` in checkout, collect renter acknowledgements & certifications, trigger PPE reminders, and block booking if required documentation missing. Generate printable/emailed safety sheets with QR code linking to digital checklist.
+* **Reporting & audits:** Material sales vs rental utilization dashboards, service intervals due, deposit liability tracking, and audit logs for inventory/safety actions surfaced in admin and exportable to CSV.
 ---
 
 # Fixit + Taskup — **Mobile & UX Upgrade Deep Spec** (Sections 4–6 Only)
