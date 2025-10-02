@@ -1,0 +1,157 @@
+%% Mermaid diagram describing current FixIt web application structure
+%% Scope: Website dashboards and flows across admin, customer, provider, support, security, and settings modules.
+
+flowchart TB
+    subgraph AdminPortal[Admin Dashboard]
+        direction TB
+        AdminHeader[["Global Header\nLogo | Env Switch | Quick Actions | Profile"]]
+        AdminSidebar[["Sidebar Navigation\n1 Overview\n2 Users\n3 Services & Work Orders\n4 Provider Onboarding\n5 Crew & Equipment Dispatch\n6 Payments & Escrow\n7 Disputes\n8 Content Moderation\n9 Analytics & Reports\n10 System Settings\n11 Support Inbox"]]
+        AdminOverview(("Overview Content"))
+        AdminKPIs[["KPI Cards\nActive Work Orders\nRevenue\nPending Disputes\nNew Crews"]]
+        AdminFunnel[["Service Demand Funnel"]]
+        AdminActivity[["Recent Activity Feed\nFilters: All | Admin | Automation"]]
+        AdminAlerts{{"Alerts Panel\nHigh priority disputes\nWarranty claims\nPayment failures"}}
+        AdminOverview --> AdminKPIs
+        AdminOverview --> AdminFunnel
+        AdminOverview --> AdminActivity
+        AdminOverview --> AdminAlerts
+        AdminHeader --> AdminOverview
+        AdminSidebar --> AdminOverview
+        AdminUsers[["Users Tab View\nSubtabs: Households | Facilities | Service Operators"]]
+        AdminSidebar --> AdminUsers
+        AdminUsers -->|"Row select"| AdminUserSlideOut[["Detail Slide-out\nPreserve table scroll"]]
+        AdminProvider[["Provider Onboarding Board\nStages: Applied → Compliance Review → Crew Training → Approved"]]
+        AdminSidebar --> AdminProvider
+        AdminProvider -->|"State change"| AdminWorkflow[["Workflow Engine\nCompliance checklist\nNotifications"]]
+        AdminDispatch[["Crew & Equipment Dispatch\nLive map\nCheckout logs\nIncident timeline"]]
+        AdminSidebar --> AdminDispatch
+        AdminDispatch --> AdminTelemetry[("Telematics & Mobile data")]
+        AdminQuickActions{{"Quick Actions\nCreate Announcement\nInvite Service Company\nRun Service Demand Report"}}
+        AdminHeader --> AdminQuickActions
+        AdminQuickActions -->|"Run Report"| AdminReports[("Reports Queue\nAsync job → Alerts")]
+        AdminEnvSwitch{{"Environment Switch\nProd/Sandbox"}}
+        AdminHeader --> AdminEnvSwitch
+        AdminEnvSwitch -->|"Confirm"| AdminAPI[("API Context Switch\nReadonly in Sandbox")]
+        AdminAlerts --> AdminAlertDeepLink[["Alert Click\nDeep link to module"]]
+    end
+
+    subgraph CustomerWeb[Customer Dashboard]
+        direction TB
+        CustomerTabs[["Dashboard Tabs\nMy Services | Browse Service Companies | Messages | Wallet"]]
+        CustomerMyServices[["My Services\nSummary cards\nFilterable table"]]
+        CustomerWorkOrderDetail[["Work Order Detail\nTabs: Overview | Crew Assignments | Materials | Payments | History"]]
+        CustomerActions{{"Actions\nReschedule | Cancel | Mark Completed"}}
+        CustomerWizard[["Service Booking Wizard\nDetails → Outcomes → Schedule Window → Crew Preferences → Confirmation"]]
+        CustomerBrowse[["Browse Service Companies\nSearch & Filters\nCompany cards"]]
+        CustomerBrowseCTA{{"Request Service Package"}}
+        CustomerBookVisit{{"Book Visit"}}
+        CustomerMessages[["Messages\nTwo-pane chat\nShare Access"]]
+        CustomerWallet[["Wallet\nBalance\nWarranty Indicator\nTransactions\nAdd Funds | Withdraw"]]
+        CustomerTabs --> CustomerMyServices
+        CustomerTabs --> CustomerBrowse
+        CustomerTabs --> CustomerMessages
+        CustomerTabs --> CustomerWallet
+        CustomerMyServices -->|"Row select"| CustomerWorkOrderDetail
+        CustomerWorkOrderDetail --> CustomerActions
+        CustomerActions -->|"Confirm"| EscrowRelease[("Escrow Release\nStart warranty timer")]
+        CustomerBrowse --> CustomerBrowseCTA
+        CustomerBrowse --> CustomerBookVisit
+        CustomerBrowseCTA --> CustomerPackageModal[["Service Package Modal\nBundle | Crew size | Equipment requirements"]]
+        CustomerBookVisit --> CustomerScheduling[["Scheduling Modal\nValidate against dispatch calendar"]]
+        CustomerWizard --> CustomerValidation{{"Validation\nEquipment warnings\nSchedule conflicts"}}
+        CustomerMessages --> MessageAlerts{{"Push + Email Notifications"}}
+        CustomerWallet --> PaymentFlow[("Payment Checkout")]
+        CustomerWallet --> WarrantyClaim[["Warranty Claim Form"]]
+        CustomerSettings[["Profile Settings\nPersonal info\nNotifications\nSaved addresses\nWarranty prefs"]]
+        CustomerTabs --> CustomerSettings
+        CustomerNotifications[["Notification Controls\nMute per thread\nEmergency alerts immutable"]]
+        CustomerMessages --> CustomerNotifications
+    end
+
+    subgraph ProviderWeb[Service Provider Portal]
+        direction TB
+        ProviderTabs[["Dashboard | Jobs & Leads | Crew Dispatch | Inventory | Billing"]]
+        ProviderDashboard[["Dashboard\nMetrics\nCrew availability\nOutstanding compliance tasks"]]
+        ProviderLeads[["Jobs & Leads\nKanban: Incoming → Reviewing → Scheduled → Completed"]]
+        ProviderLeadDetail[["Lead Detail\nAccept/Decline\nSuggest alternate package\nRefer partner"]]
+        ProviderDispatch[["Crew Dispatch\nMap\nCrew roster\nStandby assignments"]]
+        ProviderInventory[["Inventory\nConsumables\nEquipment checkout\nReorder triggers"]]
+        ProviderBilling[["Billing & Documents\nPayout schedule\nCompliance docs\nWarranties"]]
+        ProviderTabs --> ProviderDashboard
+        ProviderTabs --> ProviderLeads
+        ProviderTabs --> ProviderDispatch
+        ProviderTabs --> ProviderInventory
+        ProviderTabs --> ProviderBilling
+        ProviderLeads --> ProviderLeadDetail
+        ProviderLeadDetail -->|"Accept"| JobWorkflow[("Job Workflow\nDispatch crew\nNotify customer")]
+        ProviderLeadDetail -->|"Decline"| DeclineReasons{{"Decline Reasons\nBusy | Out of Scope | Price"}}
+        DeclineReasons --> PriceCounter[["Price Counteroffer\nSuggest package or refer"]]
+        ProviderInventory --> ReorderFlow{{"Reorder Flow\nPurchase orders\nPreferred suppliers"}}
+        ProviderBilling --> PlaidFlow[("Plaid / Manual Bank Linking")]
+    end
+
+    subgraph SupportWeb[Support Agent Console]
+        direction TB
+        SupportQueue[["Ticket Queue\nSegments by category & region"]]
+        SupportMacros[["Macros Library\nService-category variants"]]
+        SupportEscalate{{"Escalate to Admin\nRequires reason"}}
+        SupportRouting{{"Routing Filters\nPriority | Channel | Topic | Region"}}
+        SupportIntake[["Field Incident Intake\nPhotos\nSafety checklist"]]
+        SupportQueue -->|"Accept"| SupportWork[["Active Ticket\nAssign to self\n10 min auto-release"]]
+        SupportWork --> SupportMacros
+        SupportWork --> SupportEscalate
+        SupportEscalate --> AdminAlerts
+        SupportRouting --> SupportQueue
+        SupportIntake --> SupportEscalate
+    end
+
+    subgraph SecurityConsole[Security & Compliance]
+        direction TB
+        SecurityTabs[["Dashboards | Controls | Incident Response | Audit Logs"]]
+        LoginAttempts[["Login Attempts Dashboard\nCharts + Table"]]
+        SuspiciousFeed[["Suspicious Activity Feed"]]
+        VulnStatus[["Vulnerability Scan Status"]]
+        MFAControl{{"MFA Enforcement\nToggle per role"}}
+        PasswordPolicy[["Password Policy Editor"]]
+        IPAllowlist[["IP Allowlist Manager\nCIDR input"]]
+        SessionRevoke[["Session & Device Revocation"]]
+        Playbooks[["Incident Playbooks Dropdown"]]
+        Runbooks[["Runbook Steps Checklist"]]
+        Postmortems[["Postmortem Templates"]]
+        AuditExport{{"Export Audit Logs\nCSV | JSON"}}
+        SIEMWebhook[["SIEM Webhook URL\nTest payload"]]
+        SecurityTabs --> LoginAttempts
+        SecurityTabs --> SuspiciousFeed
+        SecurityTabs --> VulnStatus
+        SecurityTabs --> MFAControl
+        SecurityTabs --> PasswordPolicy
+        SecurityTabs --> IPAllowlist
+        SecurityTabs --> SessionRevoke
+        SecurityTabs --> Playbooks
+        SecurityTabs --> Runbooks
+        SecurityTabs --> Postmortems
+        SecurityTabs --> AuditExport
+        SecurityTabs --> SIEMWebhook
+        MFAControl -->|"Toggle"| UserNotify[["Notify impacted users"]]
+        AuditExport --> SignedChecksum[("Signed checksum generation")]
+    end
+
+    subgraph SettingsMatrix[Global Settings Matrix]
+        direction TB
+        NotificationsSettings[["Notifications\nEmail | SMS | Push per event"]]
+        PaymentsSettings[["Payments\nDefault method\nAuto-pay\nPayout accounts\nWarranty deductible"]]
+        PrivacySettings[["Privacy\nData download\nDelete account\nVisibility toggles\nHousehold sharing"]]
+        LocalizationSettings[["Localization\nTimezone\nLanguage\nUnits"]]
+        SupportPreferences[["Support Preferences\nContact channel\nSupport PIN\nAccessibility requests\nEmergency contact"]]
+        IntegrationsSettings[["Integrations\nCalendars\nSmart home\nAnalytics opt-in\nFacilities CMMS linkage"]]
+        NotificationsSettings --> VerifiedChannels[("Requires verified email/phone & device token")]
+        PaymentsSettings --> StripeData[("Stripe IDs\nCustomer & Account")] 
+        PrivacySettings --> ComplianceJob[("Compliance job queue\nDual sign-off for exports")]
+        IntegrationsSettings --> OAuthStore[("Encrypted OAuth tokens\nRevocation available")]
+    end
+
+    AdminPortal --> SettingsMatrix
+    CustomerWeb --> SettingsMatrix
+    ProviderWeb --> SettingsMatrix
+    SupportWeb --> AdminPortal
+    SecurityConsole --> SettingsMatrix
